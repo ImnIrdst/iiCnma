@@ -2,19 +2,16 @@ package com.imn.iicnma.ui.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.imn.iicnma.R
 import com.imn.iicnma.databinding.HomeListItemBinding
 import com.imn.iicnma.model.Movie
 
-class HomeAdapter : RecyclerView.Adapter<HomeItemViewHolder>() {
+class HomeAdapter : PagingDataAdapter<Movie, HomeItemViewHolder>(MOVIE_COMPARATOR) {
 
-    var data = listOf<Movie>()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeItemViewHolder =
         HomeItemViewHolder(
@@ -25,13 +22,18 @@ class HomeAdapter : RecyclerView.Adapter<HomeItemViewHolder>() {
 
 
     override fun onBindViewHolder(holder: HomeItemViewHolder, position: Int) {
-        holder.onBind(data[position])
+        getItem(position)?.let { holder.onBind(it) }
     }
 
-    override fun getItemCount(): Int {
-        return data.size
-    }
+    companion object {
+        private val MOVIE_COMPARATOR = object : DiffUtil.ItemCallback<Movie>() {
+            override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean =
+                oldItem.id == newItem.id
 
+            override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean =
+                oldItem == newItem
+        }
+    }
 }
 
 class HomeItemViewHolder(

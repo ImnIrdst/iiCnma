@@ -28,7 +28,7 @@ object NetworkModule {
 
         val apiKeyInterceptor: (Interceptor.Chain) -> Response = { chain ->
             val originalRequest = chain.request()
-            val originalUrl = originalRequest.url()
+            val originalUrl = originalRequest.url
 
             val newUrl: HttpUrl = originalUrl.newBuilder()
                 .addQueryParameter("api_key", BuildConfig.API_KEY)
