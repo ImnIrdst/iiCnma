@@ -16,24 +16,40 @@
             android:id="@+id/poster_image_view"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/ic_launcher_background"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_place_holder_24dp"
+            app:layout_constraintDimensionRatio="0.6666666"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintDimensionRatio="0.6666666" />
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/title_text_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:padding="@dimen/spacing_normal"
-            android:textSize="@dimen/text_normal"
+            android:padding="@dimen/spacing_small"
+            android:textStyle="bold"
+            android:lines="1"
+            android:ellipsize="end"
+            android:textSize="@dimen/text_xxsmall"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/poster_image_view"
             tools:text="Sponge Bob" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/date_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/spacing_small"
+            android:paddingBottom="@dimen/spacing_small"
+            android:textSize="@dimen/text_xsmall"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/title_text_view"
+            tools:text="2019" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

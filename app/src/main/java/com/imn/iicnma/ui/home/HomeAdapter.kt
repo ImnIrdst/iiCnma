@@ -3,6 +3,8 @@ package com.imn.iicnma.ui.home
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.imn.iicnma.R
 import com.imn.iicnma.databinding.HomeListItemBinding
 import com.imn.iicnma.model.Movie
 
@@ -11,7 +13,6 @@ class HomeAdapter : RecyclerView.Adapter<HomeItemViewHolder>() {
     var data = listOf<Movie>()
         set(value) {
             field = value
-            println("imnimn $data")
             notifyDataSetChanged()
         }
 
@@ -39,8 +40,11 @@ class HomeItemViewHolder(
 
     fun onBind(movie: Movie) {
         binding.titleTextView.text = movie.originalTitle
-//        Glide.with(binding.root.context)
-//            .load(url)
-//            .into(binding.imageView)
+        binding.dateTextView.text = movie.releaseDate
+
+        Glide.with(binding.root.context)
+            .load(movie.posterUrl)
+            .placeholder(R.drawable.ic_place_holder_24dp)
+            .into(binding.posterImageView)
     }
 }

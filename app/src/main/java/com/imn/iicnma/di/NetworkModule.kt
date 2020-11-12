@@ -1,6 +1,7 @@
 package com.imn.iicnma.di
 
 import com.imn.iicnma.BuildConfig
+import com.imn.iicnma.data.remote.API_BASE_URL
 import com.imn.iicnma.data.remote.MovieService
 import com.imn.iicnma.data.repository.MovieRemoteDataSource
 import dagger.Module
@@ -41,7 +42,7 @@ object NetworkModule {
         }
 
         return Retrofit.Builder()
-            .baseUrl("https://api.themoviedb.org/3/")
+            .baseUrl(API_BASE_URL)
             .client(
                 OkHttpClient.Builder()
                     .addInterceptor(
