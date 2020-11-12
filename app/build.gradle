@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -55,6 +57,14 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:3.12.3"
     implementation 'com.squareup.okhttp3:logging-interceptor:3.12.3'
     implementation 'com.google.code.gson:gson:2.8.6'
+
+    def hilt_lifecycle_version = "1.0.0-SNAPSHOT"
+    implementation "androidx.hilt:hilt-common:$hilt_lifecycle_version"
+    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_lifecycle_version"
+    kapt "androidx.hilt:hilt-compiler:$hilt_lifecycle_version"
+
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
 
     testImplementation 'junit:junit:4.13.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
