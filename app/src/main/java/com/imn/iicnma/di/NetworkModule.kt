@@ -2,6 +2,7 @@ package com.imn.iicnma.di
 
 import com.imn.iicnma.BuildConfig
 import com.imn.iicnma.data.remote.MovieService
+import com.imn.iicnma.data.repository.MovieRemoteDataSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -58,4 +59,8 @@ object NetworkModule {
     @Singleton
     fun provideMovieService(retrofit: Retrofit): MovieService =
         retrofit.create(MovieService::class.java)
+
+    @Provides
+    @Singleton
+    fun bindMovieRemoteDataSource(movieService: MovieService): MovieRemoteDataSource = movieService
 }
