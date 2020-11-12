@@ -9,6 +9,6 @@ data class Movie(
 )
 
 interface MovieService {
-    @GET("movie/550?api_key=1f058b502c1b3371e7e38ea1e151e007")
+    @GET("movie/550")
     suspend fun getMovie(): Movie
 }
