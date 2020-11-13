@@ -12,11 +12,11 @@
         android:layout_height="0dp"
         android:layout_margin="@dimen/spacing_double"
         android:scaleType="fitCenter"
-        android:src="@drawable/ic_place_holder_24dp"
         app:layout_constraintDimensionRatio="0.6666666"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:background="@color/orange_700" />
+        tools:background="@color/orange_700"
+        tools:src="@drawable/ic_place_holder_24dp" />
 
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -77,8 +77,7 @@
         android:id="@+id/overview_text_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/spacing_double"
-        android:layout_marginVertical="@dimen/spacing_normal"
+        android:layout_margin="@dimen/spacing_normal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/heading_overview"
