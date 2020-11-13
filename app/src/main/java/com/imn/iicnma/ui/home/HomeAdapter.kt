@@ -7,10 +7,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.imn.iicnma.R
+import com.imn.iicnma.data.local.movie.MovieEntity
 import com.imn.iicnma.databinding.HomeListItemBinding
-import com.imn.iicnma.model.Movie
 
-class HomeAdapter : PagingDataAdapter<Movie, HomeItemViewHolder>(MOVIE_COMPARATOR) {
+class HomeAdapter : PagingDataAdapter<MovieEntity, HomeItemViewHolder>(MOVIE_COMPARATOR) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeItemViewHolder =
@@ -22,11 +22,11 @@ class HomeAdapter : PagingDataAdapter<Movie, HomeItemViewHolder>(MOVIE_COMPARATO
     }
 
     companion object {
-        private val MOVIE_COMPARATOR = object : DiffUtil.ItemCallback<Movie>() {
-            override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean =
+        private val MOVIE_COMPARATOR = object : DiffUtil.ItemCallback<MovieEntity>() {
+            override fun areItemsTheSame(oldItem: MovieEntity, newItem: MovieEntity): Boolean =
                 oldItem.id == newItem.id
 
-            override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean =
+            override fun areContentsTheSame(oldItem: MovieEntity, newItem: MovieEntity): Boolean =
                 oldItem == newItem
         }
     }
@@ -36,7 +36,7 @@ class HomeItemViewHolder(
     private val binding: HomeListItemBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun onBind(movie: Movie) {
+    fun onBind(movie: MovieEntity) {
         binding.titleTextView.text = movie.originalTitle
         binding.dateTextView.text = movie.releaseDate
 

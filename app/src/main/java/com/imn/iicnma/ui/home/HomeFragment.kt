@@ -41,8 +41,8 @@ class HomeFragment : Fragment() {
                     spanSizeLookup = object : SpanSizeLookup() {
                         override fun getSpanSize(position: Int): Int {
                             return when ((adapter as ConcatAdapter).getItemViewType(position)) {
-                                0 -> 1 // TODO make this better
-                                else -> 2
+//                                0 -> 1 // TODO make this better
+                                else -> 1
                             }
                         }
                     }
