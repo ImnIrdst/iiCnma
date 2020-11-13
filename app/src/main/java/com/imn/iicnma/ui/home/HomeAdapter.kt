@@ -14,11 +14,7 @@ class HomeAdapter : PagingDataAdapter<Movie, HomeItemViewHolder>(MOVIE_COMPARATO
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeItemViewHolder =
-        HomeItemViewHolder(
-            HomeListItemBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false
-            )
-        )
+        HomeItemViewHolder.create(parent)
 
 
     override fun onBindViewHolder(holder: HomeItemViewHolder, position: Int) {
@@ -48,5 +44,13 @@ class HomeItemViewHolder(
             .load(movie.posterUrl)
             .placeholder(R.drawable.ic_place_holder_24dp)
             .into(binding.posterImageView)
+    }
+
+    companion object {
+        fun create(parent: ViewGroup) = HomeItemViewHolder(
+            HomeListItemBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false
+            )
+        )
     }
 }
