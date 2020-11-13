@@ -60,6 +60,7 @@ class HomeFragment : Fragment() {
         }
 
         loadStateLayout.retryButton.setOnClickListener { homeAdapter.retry() }
+        topMessageTextView.setOnClickListener { homeAdapter.retry() }
 
         homeAdapter.addLoadStateListener { loadState ->
             recyclerView.isVisible = loadState.source.refresh is LoadState.NotLoading
@@ -77,9 +78,10 @@ class HomeFragment : Fragment() {
 
             val mediatorErrorState = loadState.mediator?.refresh as? LoadState.Error
             mediatorErrorState?.let {
-                // TODO its better to show retry button here
                 showToast(getString(R.string.api_error_prefix) + mediatorErrorState.error.toString())
             }
+
+            topMessageTextView.isVisible = (mediatorErrorState != null && sourceErrorState == null)
         }
     }
 }

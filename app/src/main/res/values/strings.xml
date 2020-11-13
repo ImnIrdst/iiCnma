@@ -5,4 +5,5 @@
     <string name="title_notifications">Notifications</string>
     <string name="retry">Retry</string>
     <string name="api_error_prefix">Error while reading data from api: </string>
+    <string name="offline_mode">Offline mode (tap to retry)</string>
 </resources>
