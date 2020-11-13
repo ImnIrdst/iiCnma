@@ -36,14 +36,14 @@ class HomeItemViewHolder(
     private val binding: HomeListItemBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun onBind(movie: MovieEntity) {
-        binding.titleTextView.text = movie.originalTitle
-        binding.dateTextView.text = movie.releaseDate
+    fun onBind(movie: MovieEntity) = with(binding) {
+        titleTextView.text = movie.originalTitle
+        dateTextView.text = movie.releaseDate
 
-        Glide.with(binding.root.context)
+        Glide.with(root.context)
             .load(movie.posterUrl)
             .placeholder(R.drawable.ic_place_holder_24dp)
-            .into(binding.posterImageView)
+            .into(posterImageView)
     }
 
     companion object {

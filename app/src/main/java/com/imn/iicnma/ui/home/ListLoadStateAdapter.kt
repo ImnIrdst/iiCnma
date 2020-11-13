@@ -28,13 +28,13 @@ class LoadStateViewHolder(
         binding.retryButton.setOnClickListener { retry.invoke() }
     }
 
-    fun bind(loadState: LoadState) {
+    fun bind(loadState: LoadState) = with(binding) {
         if (loadState is LoadState.Error) {
-            binding.messageTextView.text = loadState.error.localizedMessage
+            messageTextView.text = loadState.error.localizedMessage
         }
-        binding.progressBar.isVisible = loadState is LoadState.Loading
-        binding.retryButton.isVisible = loadState !is LoadState.Loading
-        binding.messageTextView.isVisible = loadState !is LoadState.Loading
+        progressBar.isVisible = loadState is LoadState.Loading
+        retryButton.isVisible = loadState !is LoadState.Loading
+        messageTextView.isVisible = loadState !is LoadState.Loading
     }
 
     companion object {
