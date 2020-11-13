@@ -10,11 +10,13 @@ import com.imn.iicnma.R
 import com.imn.iicnma.data.local.movie.MovieEntity
 import com.imn.iicnma.databinding.HomeListItemBinding
 
-class HomeAdapter : PagingDataAdapter<MovieEntity, HomeItemViewHolder>(MOVIE_COMPARATOR) {
+class HomeAdapter(
+    private val onItemClick: (Long) -> Unit
+) : PagingDataAdapter<MovieEntity, HomeItemViewHolder>(MOVIE_COMPARATOR) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeItemViewHolder =
-        HomeItemViewHolder.create(parent)
+        HomeItemViewHolder.create(parent, onItemClick)
 
 
     override fun onBindViewHolder(holder: HomeItemViewHolder, position: Int) {
@@ -33,10 +35,21 @@ class HomeAdapter : PagingDataAdapter<MovieEntity, HomeItemViewHolder>(MOVIE_COM
 }
 
 class HomeItemViewHolder(
-    private val binding: HomeListItemBinding
+    private val binding: HomeListItemBinding,
+    private val onItemClick: (Long) -> Unit
 ) : RecyclerView.ViewHolder(binding.root) {
 
+    private var _movie: MovieEntity? = null
+
+    init {
+        binding.root.setOnClickListener {
+            _movie?.let { onItemClick.invoke(it.id) }
+        }
+    }
+
     fun onBind(movie: MovieEntity) = with(binding) {
+        _movie = movie
+
         titleTextView.text = movie.title
         dateTextView.text = movie.releaseDate
 
@@ -47,10 +60,11 @@ class HomeItemViewHolder(
     }
 
     companion object {
-        fun create(parent: ViewGroup) = HomeItemViewHolder(
+        fun create(parent: ViewGroup, onItemClick: (Long) -> Unit) = HomeItemViewHolder(
             HomeListItemBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
-            )
+            ),
+            onItemClick
         )
     }
 }

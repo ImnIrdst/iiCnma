@@ -7,4 +7,5 @@
     <string name="api_error_prefix">Error while reading data from api: </string>
     <string name="offline_mode">Offline mode (tap to retry)</string>
     <string name="overview">Overview</string>
+    <string name="title_movie_details">Movie Details</string>
 </resources>

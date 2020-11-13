@@ -9,11 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.imn.iicnma.R
 
 class MovieDetailFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = MovieDetailFragment()
-    }
-
+    
     private lateinit var viewModel: MovieDetailViewModel
 
     override fun onCreateView(
