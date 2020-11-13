@@ -37,7 +37,7 @@ class HomeItemViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun onBind(movie: MovieEntity) = with(binding) {
-        titleTextView.text = movie.originalTitle
+        titleTextView.text = movie.title
         dateTextView.text = movie.releaseDate
 
         Glide.with(root.context)

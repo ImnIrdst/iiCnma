@@ -9,10 +9,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
-import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
+import com.imn.iicnma.R
 import com.imn.iicnma.databinding.FragmentHomeBinding
+import com.imn.iicnma.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -40,10 +41,7 @@ class HomeFragment : Fragment() {
                 layoutManager = GridLayoutManager(context, 2).apply {
                     spanSizeLookup = object : SpanSizeLookup() {
                         override fun getSpanSize(position: Int): Int {
-                            return when ((adapter as ConcatAdapter).getItemViewType(position)) {
-//                                0 -> 1 // TODO make this better
-                                else -> 1
-                            }
+                            return if (position >= homeAdapter.itemCount) 2 else 1
                         }
                     }
                 }
@@ -64,17 +62,23 @@ class HomeFragment : Fragment() {
         loadStateLayout.retryButton.setOnClickListener { homeAdapter.retry() }
 
         homeAdapter.addLoadStateListener { loadState ->
-
             recyclerView.isVisible = loadState.source.refresh is LoadState.NotLoading
-            loadStateLayout.progressBar.isVisible =
-                loadState.source.refresh is LoadState.Loading
+                    || loadState.mediator?.refresh is LoadState.NotLoading
+            loadStateLayout.progressBar.isVisible = loadState.source.refresh is LoadState.Loading
+                    && loadState.mediator?.refresh is LoadState.Loading
 
-            val errorState = loadState.source.refresh as? LoadState.Error
+            val sourceErrorState = loadState.source.refresh as? LoadState.Error
 
-            loadStateLayout.retryButton.isVisible = (errorState != null)
+            loadStateLayout.retryButton.isVisible = (sourceErrorState != null)
             loadStateLayout.messageTextView.apply {
-                isVisible = (errorState != null)
-                text = errorState?.error.toString()
+                isVisible = (sourceErrorState != null)
+                text = sourceErrorState?.error.toString()
+            }
+
+            val mediatorErrorState = loadState.mediator?.refresh as? LoadState.Error
+            mediatorErrorState?.let {
+                // TODO its better to show retry button here
+                showToast(getString(R.string.api_error_prefix) + mediatorErrorState.error.toString())
             }
         }
     }

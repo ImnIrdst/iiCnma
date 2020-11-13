@@ -24,43 +24,41 @@ class MoviePagerMediator(
         loadType: LoadType,
         state: PagingState<Int, MovieEntity>
     ): MediatorResult {
-        val page = when (loadType) {
+        val pageKey = when (loadType) {
             LoadType.REFRESH -> {
-                val remoteKeys = getRemoteKeyClosestToCurrentPosition(state)
-                remoteKeys?.nextKey?.minus(1) ?: STARTING_PAGE_INDEX
+                val remoteKey = getRemoteKeyClosestToCurrentPosition(state)
+                remoteKey?.nextKey?.minus(1) ?: STARTING_PAGE_INDEX
             }
             LoadType.PREPEND -> {
-                val remoteKeys = getRemoteKeyForFirstItem(state)
+                val remoteKey = getRemoteKeyForFirstItem(state)
                     ?: throw InvalidObjectException("Remote key and the prevKey should not be null")
-                remoteKeys.prevKey
-                    ?: return MediatorResult.Success(endOfPaginationReached = false)
+                remoteKey.prevKey
+                    ?: return MediatorResult.Success(endOfPaginationReached = true)
             }
             LoadType.APPEND -> {
-                val remoteKeys = getRemoteKeyForLastItem(state)
-                if (remoteKeys?.nextKey == null) {
+                val remoteKey = getRemoteKeyForLastItem(state)
+                if (remoteKey?.nextKey == null) {
                     throw InvalidObjectException("Remote key should not be null for $loadType")
                 }
-                remoteKeys.nextKey
+                remoteKey.nextKey
             }
         }
 
         try {
-            val apiResponse = service.getPopularMovies(page)
+            val apiResponse = service.getPopularMovies(pageKey)
 
-            val movies = apiResponse.results
             movieDatabase.withTransaction {
-                // clear all tables in the database
                 if (loadType == LoadType.REFRESH) {
                     movieDatabase.remoteKeysDao().clearRemoteKeys()
                     movieDatabase.moviesDao().clearMovies()
                 }
-                val prevKey = if (page == STARTING_PAGE_INDEX) null else page - 1
-                val nextKey = if (page >= apiResponse.totalPages) null else page + 1
-                val keys = movies.map { RemoteKeysEntity(it.id, prevKey, nextKey) }
+                val prevKey = if (pageKey == STARTING_PAGE_INDEX) null else pageKey - 1
+                val nextKey = if (pageKey >= apiResponse.totalPages) null else pageKey + 1
+                val keys = apiResponse.results.map { RemoteKeysEntity(it.id, prevKey, nextKey) }
                 movieDatabase.remoteKeysDao().insertAll(keys)
-                movieDatabase.moviesDao().insertAll(movies.map { it.toMovieEntity() })
+                movieDatabase.moviesDao().insertAll(apiResponse.toMovieEntityList())
             }
-            return MediatorResult.Success(endOfPaginationReached = page >= apiResponse.totalPages)
+            return MediatorResult.Success(endOfPaginationReached = pageKey >= apiResponse.totalPages)
         } catch (exception: IOException) {
             return MediatorResult.Error(exception)
         } catch (exception: HttpException) {
@@ -80,9 +78,8 @@ class MoviePagerMediator(
 
     private suspend fun getRemoteKeyClosestToCurrentPosition(state: PagingState<Int, MovieEntity>): RemoteKeysEntity? {
         return state.anchorPosition?.let { position ->
-            state.closestItemToPosition(position)?.id?.let { movieId ->
-                movieDatabase.remoteKeysDao().remoteKeysMovieId(movieId)
-            }
+            state.closestItemToPosition(position)
+                ?.id?.let { movieId -> movieDatabase.remoteKeysDao().remoteKeysMovieId(movieId) }
         }
     }
 }
