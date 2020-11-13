@@ -4,8 +4,11 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="spacing_normal">16dp</dimen>
     <dimen name="spacing_huge">64dp</dimen>
+    <dimen name="spacing_double">32dp</dimen>
     <dimen name="spacing_small">8dp</dimen>
 
+    <dimen name="text_double">32sp</dimen>
+    <dimen name="text_xnormal">24sp</dimen>
     <dimen name="text_normal">16sp</dimen>
     <dimen name="text_xxsmall">14sp</dimen>
     <dimen name="text_xsmall">12sp</dimen>

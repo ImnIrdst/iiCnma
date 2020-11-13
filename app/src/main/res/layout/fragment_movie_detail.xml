@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.movie_detail.MovieDetailFragment">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/poster_image_view"
+        android:layout_width="128dp"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/spacing_double"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_place_holder_24dp"
+        app:layout_constraintDimensionRatio="0.6666666"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:background="@color/orange_700" />
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/title_text_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/spacing_normal"
+        android:layout_marginVertical="@dimen/spacing_small"
+        android:ellipsize="end"
+        android:lines="1"
+        android:textSize="@dimen/text_normal"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/date_text_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/poster_image_view"
+        tools:text="Sponge Bob" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/date_text_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/spacing_normal"
+        android:textSize="@dimen/text_xxsmall"
+        app:layout_constraintBottom_toBottomOf="@id/poster_image_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/poster_image_view"
+        tools:text="2019" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/genre_text_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/spacing_double"
+        android:background="@color/black"
+        android:gravity="center"
+        android:paddingHorizontal="@dimen/spacing_double"
+        android:paddingVertical="@dimen/spacing_normal"
+        android:textSize="@dimen/text_xxsmall"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/poster_image_view"
+        tools:text="Thriller, Action, Drama, Crime" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/heading_overview"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/spacing_normal"
+        android:layout_marginVertical="@dimen/spacing_double"
+        android:text="@string/overview"
+        android:textSize="@dimen/text_xnormal"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/genre_text_view" />
+
+    <TextView
+        android:id="@+id/overview_text_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/spacing_double"
+        android:layout_marginVertical="@dimen/spacing_normal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/heading_overview"
+        tools:text="Caught in the crosshairs of police corruption and Marseille’s warring gangs, a loyal cop must protect his squad by taking matters into his own hands." />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
