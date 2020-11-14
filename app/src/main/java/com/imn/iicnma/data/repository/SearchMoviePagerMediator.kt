@@ -12,7 +12,6 @@ import com.imn.iicnma.data.local.movie.MovieEntity
 import com.imn.iicnma.data.remote.MovieService
 import com.imn.iicnma.data.remote.STARTING_PAGE_INDEX
 import java.io.IOException
-import java.io.InvalidObjectException
 
 @OptIn(ExperimentalPagingApi::class)
 class SearchMoviePagerMediator(
@@ -32,7 +31,7 @@ class SearchMoviePagerMediator(
             }
             LoadType.PREPEND -> {
                 val remoteKey = getRemoteKeyForFirstItem(state)
-                    ?: throw InvalidObjectException("Remote key and the prevKey should not be null")
+                    ?: return MediatorResult.Success(endOfPaginationReached = true)
                 remoteKey.prevKey
                     ?: return MediatorResult.Success(endOfPaginationReached = true)
             }

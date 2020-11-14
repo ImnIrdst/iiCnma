@@ -75,22 +75,31 @@ class FavoritesFragment : Fragment() {
 
         loadStateLayout.retryButton.setOnClickListener { favoritesAdapter.retry() }
         favoritesAdapter.addLoadStateListener { loadState ->
-            recyclerView.isVisible = loadState.source.refresh is LoadState.NotLoading
-                    || loadState.mediator?.refresh is LoadState.NotLoading
-            loadStateLayout.progressBar.isVisible = loadState.source.refresh is LoadState.Loading
-                    && loadState.mediator?.refresh is LoadState.Loading
+            recyclerView.isVisible = loadState.refresh is LoadState.NotLoading
+            loadStateLayout.progressBar.isVisible = loadState.refresh is LoadState.Loading
 
-            val sourceErrorState = loadState.source.refresh as? LoadState.Error
+            if (loadState.refresh is LoadState.Error) {
 
-            loadStateLayout.retryButton.isVisible = (sourceErrorState != null)
-            loadStateLayout.messageTextView.apply {
-                isVisible = (sourceErrorState != null)
-                text = sourceErrorState?.error.toString()
-            }
+                val sourceErrorState = loadState.source.refresh as? LoadState.Error
 
-            val mediatorErrorState = loadState.mediator?.refresh as? LoadState.Error
-            mediatorErrorState?.let {
-                showToast(getString(R.string.api_error_prefix) + mediatorErrorState.error.toString())
+                if (sourceErrorState != null) {
+                    loadStateLayout.retryButton.isVisible = true
+                    loadStateLayout.messageTextView.apply {
+                        isVisible = true
+                        text = sourceErrorState.error.toString()
+                    }
+                } else {
+                    recyclerView.isVisible = true
+                    loadStateLayout.retryButton.isVisible = false
+                    loadStateLayout.messageTextView.isVisible = false
+                }
+
+                (loadState.mediator?.refresh as? LoadState.Error)?.let {
+                    showToast(getString(R.string.api_error_prefix) + it.error.toString())
+                }
+            } else {
+                loadStateLayout.retryButton.isVisible = false
+                loadStateLayout.messageTextView.isVisible = false
             }
         }
     }
