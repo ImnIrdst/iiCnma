@@ -9,4 +9,5 @@
     <string name="offline_mode">Offline mode (tap to retry)</string>
     <string name="overview">Overview</string>
     <string name="search_hint">Begin searching</string>
+    <string name="popular_movies">Popular Movies</string>
 </resources>

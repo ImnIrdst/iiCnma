@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_favorites">
+    app:startDestination="@+id/navigation_home">
     <!--    TODO revert this-->
 
     <fragment

@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -68,7 +67,6 @@ class SearchFragment : Fragment() {
     }
 
     private fun populateUI(query: String?) = with(binding) {
-        (requireActivity() as? AppCompatActivity)?.supportActionBar?.hide()
 
         editText.apply {
             requestFocus()
@@ -76,7 +74,7 @@ class SearchFragment : Fragment() {
             query?.let { setText(it) }
             setOnClickListener { isCursorVisible = true }
             setOnEditorActionListener { _, actionId, _ ->
-                if (actionId == EditorInfo.IME_ACTION_GO) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     updateSearchFromInput()
                     true
                 } else {
@@ -87,8 +85,6 @@ class SearchFragment : Fragment() {
 
         searchButton.setOnClickListener {
             updateSearchFromInput()
-            editText.hideKeyboard()
-            editText.isCursorVisible = false
         }
 
         backButton.setOnClickListener {
@@ -129,8 +125,10 @@ class SearchFragment : Fragment() {
         }
     }
 
-    private fun updateSearchFromInput() = with(binding) {
-        editText.text?.trim()?.let {
+    private fun updateSearchFromInput() = with(binding.editText) {
+        hideKeyboard()
+        isCursorVisible = false
+        text?.trim()?.let {
             if (it.isNotEmpty()) {
                 search(it.toString())
             }

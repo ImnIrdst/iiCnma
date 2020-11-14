@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -64,7 +63,6 @@ class FavoritesFragment : Fragment() {
     }
 
     private fun populateUI() = with(binding) {
-        (requireActivity() as? AppCompatActivity)?.supportActionBar?.show()
 
         recyclerView.apply {
             adapter = favoritesAdapter.withLoadStateHeaderAndFooter(
