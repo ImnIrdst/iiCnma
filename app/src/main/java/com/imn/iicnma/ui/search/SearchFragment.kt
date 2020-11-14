@@ -67,6 +67,10 @@ class SearchFragment : Fragment() {
     }
 
     private fun populateUI(query: String?) = with(binding) {
+        searchViewModel.getSavedQuery()?.let {
+            editText.setText(it)
+            updateSearchFromInput()
+        }
 
         editText.apply {
             requestFocus()
@@ -134,9 +138,9 @@ class SearchFragment : Fragment() {
     }
 
     private fun updateSearchFromInput() = with(binding.editText) {
-        hideKeyboard()
-        isCursorVisible = false
         text?.trim()?.let {
+            hideKeyboard()
+            isCursorVisible = false
             if (it.isNotEmpty()) {
                 search(it.toString())
             }

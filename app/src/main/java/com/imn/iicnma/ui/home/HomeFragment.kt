@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
 import androidx.recyclerview.widget.RecyclerView
 import com.imn.iicnma.R
 import com.imn.iicnma.databinding.FragmentHomeBinding
+import com.imn.iicnma.utils.isPortrait
 import com.imn.iicnma.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -59,10 +60,10 @@ class HomeFragment : Fragment() {
                     header = ListLoadStateAdapter { homeAdapter.retry() },
                     footer = ListLoadStateAdapter { homeAdapter.retry() }
                 )
-                layoutManager = GridLayoutManager(context, 2).apply {
+                layoutManager = GridLayoutManager(context, getSpansCount()).apply {
                     spanSizeLookup = object : SpanSizeLookup() {
                         override fun getSpanSize(position: Int): Int {
-                            return if (position >= homeAdapter.itemCount) 2 else 1
+                            return if (position >= homeAdapter.itemCount) getSpansCount() else 1
                         }
                     }
                 }
@@ -72,6 +73,7 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
+    private fun getSpansCount() = if (isPortrait()) 2 else 4
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(binding) {
         super.onViewCreated(view, savedInstanceState)
@@ -115,9 +117,23 @@ class HomeFragment : Fragment() {
         }
 
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+
+            private var dySum = 0
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                when (newState) {
+                    RecyclerView.SCROLL_STATE_IDLE,
+                    RecyclerView.SCROLL_STATE_SETTLING -> {
+                        pageTitle.isVisible = (dySum <= 0)
+                        dySum = 0
+                    }
+                }
+            }
+
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                pageTitle.isVisible = (dy <= 0)
+                dySum += dy
             }
         })
     }
