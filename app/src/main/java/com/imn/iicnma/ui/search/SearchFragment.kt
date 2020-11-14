@@ -27,7 +27,10 @@ class SearchFragment : Fragment() {
 
     private val searchAdapter = SearchAdapter(::onMovieClicked)
 
-    fun onMovieClicked(movieId: Long) {
+    private fun onMovieClicked(movieId: Long) {
+        findNavController().navigate(
+            SearchFragmentDirections.actionNavigationSearchToMovieDetails(movieId)
+        )
     }
 
     override fun onCreateView(

@@ -30,7 +30,15 @@
         android:id="@+id/navigation_search"
         android:name="com.imn.iicnma.ui.search.SearchFragment"
         android:label="@string/title_search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search">
+        <action
+            android:id="@+id/action_navigation_search_to_movie_details"
+            app:destination="@id/movie_details"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
 
     <fragment
         android:id="@+id/movie_details"
