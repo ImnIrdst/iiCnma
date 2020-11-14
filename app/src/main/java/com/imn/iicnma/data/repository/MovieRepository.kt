@@ -8,6 +8,7 @@ import com.imn.iicnma.data.local.movie.MovieEntity
 import com.imn.iicnma.data.remote.MovieService
 import com.imn.iicnma.data.remote.NETWORK_PAGE_SIZE
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class MovieRepository @Inject constructor(
@@ -45,4 +46,22 @@ class MovieRepository @Inject constructor(
             movieEntity
         }
     }
+
+    suspend fun addToFavorites(movieId: Long) {
+        movieDatabase.moviesDao().getMovie(movieId)?.let {
+            movieDatabase.favoritesDao().insert(it.toFavoriteEntity())
+        }
+    }
+
+    suspend fun removeFromFavorites(movieId: Long) {
+        movieDatabase.favoritesDao().delete(movieId)
+    }
+
+    fun getFavoriteMovies() = Pager(
+        config = PagingConfig(pageSize = NETWORK_PAGE_SIZE, enablePlaceholders = false),
+        pagingSourceFactory = { movieDatabase.favoritesDao().getAll() },
+        remoteMediator = null
+    ).flow
+
+    fun isFavored(movieId: Long) = movieDatabase.favoritesDao().getMovie(movieId).map { it != null }
 }

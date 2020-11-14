@@ -1,6 +1,8 @@
 package com.imn.iicnma.utils
 
 import android.widget.Toast
+import androidx.annotation.ColorRes
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 
 fun Fragment.showToast(text: String?) {
@@ -8,3 +10,6 @@ fun Fragment.showToast(text: String?) {
         Toast.makeText(it, text, Toast.LENGTH_LONG).apply { show() }
     }
 }
+
+fun Fragment.getColorCompat(@ColorRes colorId: Int) =
+    ContextCompat.getColor(requireContext(), colorId)

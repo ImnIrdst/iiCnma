@@ -1,12 +1,12 @@
 <resources>
     <string name="app_name">iiCnma</string>
     <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
+    <string name="title_favorites">Favorites</string>
     <string name="title_search">Search</string>
     <string name="title_movie_details">Details</string>
     <string name="retry">Retry</string>
     <string name="api_error_prefix">Error while reading data from api: </string>
     <string name="offline_mode">Offline mode (tap to retry)</string>
     <string name="overview">Overview</string>
-    <string name="search_hint">Begin searching ...</string>
+    <string name="search_hint">Begin searching</string>
 </resources>

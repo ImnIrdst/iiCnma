@@ -18,6 +18,9 @@ interface MovieDao {
     @Query("SELECT * FROM movies ORDER BY page ASC, popularity DESC, title ASC")
     fun getAll(): PagingSource<Int, MovieEntity>
 
+    @Query("SELECT * FROM movies ORDER BY page ASC, popularity DESC, title ASC")
+    fun getFavorites(): PagingSource<Int, MovieEntity>
+
     @Query("SELECT * FROM movies WHERE id=:id")
     suspend fun getMovie(id: Long): MovieEntity?
 

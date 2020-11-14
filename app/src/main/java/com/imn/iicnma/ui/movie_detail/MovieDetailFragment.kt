@@ -1,5 +1,6 @@
 package com.imn.iicnma.ui.movie_detail
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.imn.iicnma.R
 import com.imn.iicnma.data.local.movie.MovieEntity
 import com.imn.iicnma.databinding.FragmentMovieDetailBinding
+import com.imn.iicnma.utils.getColorCompat
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -32,6 +34,14 @@ class MovieDetailFragment : Fragment() {
         viewModel.apply {
             loadMovie(args.movieId)
             movie.observe(viewLifecycleOwner, { populateUi(it) })
+            isFavoredStatus(args.movieId).observe(viewLifecycleOwner, {
+                val fabColor = if (it) {
+                    getColorCompat(R.color.orange_200)
+                } else {
+                    getColorCompat(R.color.gray)
+                }
+                binding.favoriteButton.backgroundTintList = ColorStateList.valueOf(fabColor)
+            })
         }
     }
 
@@ -39,6 +49,10 @@ class MovieDetailFragment : Fragment() {
         movie ?: return
 
         with(binding) {
+            favoriteButton.setOnClickListener {
+                viewModel.toggleFavorite(args.movieId)
+            }
+
             Glide.with(requireContext())
                 .load(movie.posterUrl)
                 .placeholder(R.drawable.ic_place_holder_24dp)

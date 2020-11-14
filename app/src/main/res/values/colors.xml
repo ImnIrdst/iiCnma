@@ -6,4 +6,5 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="ripple_color">#7F717171</color>
+    <color name="gray">#ccc</color>
 </resources>

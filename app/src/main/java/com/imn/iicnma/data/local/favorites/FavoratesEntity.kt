@@ -1,13 +1,12 @@
-package com.imn.iicnma.data.local.movie
+package com.imn.iicnma.data.local.favorites
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
-import com.imn.iicnma.data.local.favorites.FavoritesEntity
 import com.imn.iicnma.data.remote.CDN_BASE_URL
 
-@Entity(tableName = "movies")
-data class MovieEntity(
+@Entity(tableName = "favorites")
+data class FavoritesEntity(
     @PrimaryKey @field:SerializedName("id") val id: Long,
     @field:SerializedName("title") val title: String,
     @field:SerializedName("overview") val overview: String,
@@ -19,17 +18,4 @@ data class MovieEntity(
 ) {
     val posterUrl: String
         get() = CDN_BASE_URL + posterPath
-
-    fun isDetailLoaded() = genres != null
-
-    fun toFavoriteEntity() = FavoritesEntity(
-        id = id,
-        title = title,
-        overview = overview,
-        genres = genres,
-        releaseDate = releaseDate,
-        posterPath = posterPath,
-        popularity = popularity,
-        page = page,
-    )
 }
