@@ -67,6 +67,12 @@ class HomeItemViewHolder(
         titleTextView.text = movie.title
         dateTextView.text = movie.releaseDate
 
+        ratingView.rateProgress.apply {
+            isIndeterminate = false
+            progress = movie.rate100
+            max = 100
+        }
+        ratingView.rateText.text = movie.rate100.toString()
         posterImageView.transitionName = posterTransitionName(movie.id)
         titleTextView.transitionName = titleTransitionName(movie.id)
         dateTextView.transitionName = dateTransitionName(movie.id)

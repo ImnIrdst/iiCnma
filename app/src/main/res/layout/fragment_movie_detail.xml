@@ -9,7 +9,7 @@
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/poster_image_view"
         android:layout_width="128dp"
-        android:layout_height="210dp"
+        android:layout_height="0dp"
         android:layout_margin="@dimen/spacing_double"
         android:scaleType="fitCenter"
         android:transitionName="poster_image_view"
@@ -24,12 +24,12 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/spacing_normal"
-        android:layout_marginVertical="@dimen/spacing_small"
+        android:layout_marginTop="@dimen/spacing_normal"
         android:textSize="@dimen/text_normal"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/date_text_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/poster_image_view"
+        app:layout_constraintTop_toTopOf="@id/poster_image_view"
         tools:text="Sponge Bob" />
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -37,11 +37,22 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/spacing_normal"
+        android:layout_marginVertical="@dimen/spacing_small"
         android:textSize="@dimen/text_xxsmall"
-        app:layout_constraintBottom_toBottomOf="@id/poster_image_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/poster_image_view"
+        app:layout_constraintTop_toBottomOf="@id/title_text_view"
         tools:text="2019" />
+
+    <include
+        android:id="@+id/rating_view"
+        layout="@layout/rating_layout"
+        android:layout_width="48dp"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/spacing_small"
+        app:layout_constraintBottom_toBottomOf="@id/poster_image_view"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintStart_toEndOf="@id/poster_image_view" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/genre_text_view"

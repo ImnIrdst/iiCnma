@@ -13,6 +13,7 @@ data class MoviePagedList(
             id = it.id,
             title = it.title,
             overview = it.overview,
+            rate = it.rate,
             genres = null,
             releaseDate = it.releaseDate,
             posterPath = it.posterPath,

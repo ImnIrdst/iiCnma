@@ -71,6 +71,9 @@ class MovieDetailFragment : Fragment() {
                 .placeholder(R.drawable.ic_place_holder_24dp)
                 .into(posterImageView)
 
+            ratingView.rateProgress.progress = movie.rate100
+            ratingView.rateText.text = movie.rate100.toString()
+
             titleTextView.text = movie.title
             dateTextView.text = movie.releaseDate
             genreTextView.text = movie.genres

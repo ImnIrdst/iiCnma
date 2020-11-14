@@ -12,6 +12,7 @@ data class MovieEntity(
     @field:SerializedName("title") val title: String,
     @field:SerializedName("overview") val overview: String,
     @field:SerializedName("genres") val genres: String?,
+    @field:SerializedName("vote_average") val rate: Float,
     @field:SerializedName("release_date") val releaseDate: String,
     @field:SerializedName("poster_path") val posterPath: String?,
     @field:SerializedName("popularity") val popularity: Float,
@@ -20,6 +21,9 @@ data class MovieEntity(
     val posterUrl: String
         get() = CDN_BASE_URL + posterPath
 
+    val rate100: Int
+        get() = (rate * 10).toInt()
+
     fun isDetailLoaded() = genres != null
 
     fun toFavoriteEntity() = FavoritesEntity(
@@ -27,6 +31,7 @@ data class MovieEntity(
         title = title,
         overview = overview,
         genres = genres,
+        rate = rate,
         releaseDate = releaseDate,
         posterPath = posterPath,
         popularity = popularity,

@@ -19,7 +19,6 @@
             android:layout_margin="@dimen/spacing_normal"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_place_holder_24dp"
-            android:transitionName="poster_image_view"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="0.6666666"
             app:layout_constraintStart_toStartOf="parent"
