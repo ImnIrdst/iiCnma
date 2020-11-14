@@ -6,15 +6,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager.VERTICAL
+import com.imn.iicnma.R
 import com.imn.iicnma.databinding.FragmentSearchBinding
+import com.imn.iicnma.ui.home.ListLoadStateAdapter
 import com.imn.iicnma.utils.hideKeyboard
 import com.imn.iicnma.utils.showKeyboard
+import com.imn.iicnma.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
@@ -78,8 +83,36 @@ class SearchFragment : Fragment() {
         }
 
         recyclerView.apply {
-            adapter = searchAdapter
+            adapter = searchAdapter.withLoadStateHeaderAndFooter(
+                header = ListLoadStateAdapter { searchAdapter.retry() },
+                footer = ListLoadStateAdapter { searchAdapter.retry() }
+            )
             layoutManager = LinearLayoutManager(requireContext(), VERTICAL, false)
+        }
+
+        loadStateLayout.retryButton.setOnClickListener { searchAdapter.retry() }
+        topMessageTextView.setOnClickListener { searchAdapter.retry() }
+
+        searchAdapter.addLoadStateListener { loadState ->
+            recyclerView.isVisible = loadState.source.refresh is LoadState.NotLoading
+                    || loadState.mediator?.refresh is LoadState.NotLoading
+            loadStateLayout.progressBar.isVisible = loadState.source.refresh is LoadState.Loading
+                    && loadState.mediator?.refresh is LoadState.Loading
+
+            val sourceErrorState = loadState.source.refresh as? LoadState.Error
+
+            loadStateLayout.retryButton.isVisible = (sourceErrorState != null)
+            loadStateLayout.messageTextView.apply {
+                isVisible = (sourceErrorState != null)
+                text = sourceErrorState?.error.toString()
+            }
+
+            val mediatorErrorState = loadState.mediator?.refresh as? LoadState.Error
+            mediatorErrorState?.let {
+                showToast(getString(R.string.api_error_prefix) + mediatorErrorState.error.toString())
+            }
+
+            topMessageTextView.isVisible = (mediatorErrorState != null && sourceErrorState == null)
         }
     }
 

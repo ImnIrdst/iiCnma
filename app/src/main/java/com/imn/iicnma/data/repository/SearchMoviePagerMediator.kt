@@ -48,8 +48,6 @@ class SearchMoviePagerMediator(
         try {
             val apiResponse = service.searchMovies(query, pageKey)
 
-            println("imnimn ${apiResponse.results[0]}")
-
             movieDatabase.withTransaction {
                 if (loadType == LoadType.REFRESH) {
                     movieDatabase.remoteKeysDao().clearRemoteKeys()
