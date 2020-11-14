@@ -1,4 +1,4 @@
-package com.imn.iicnma.ui.home
+package com.imn.iicnma.ui.widget
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

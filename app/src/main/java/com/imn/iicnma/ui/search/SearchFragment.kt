@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager.VERTICAL
 import com.imn.iicnma.R
 import com.imn.iicnma.databinding.FragmentSearchBinding
-import com.imn.iicnma.ui.home.ListLoadStateAdapter
+import com.imn.iicnma.ui.widget.ListLoadStateAdapter
 import com.imn.iicnma.utils.hideKeyboard
 import com.imn.iicnma.utils.showKeyboard
 import com.imn.iicnma.utils.showToast

@@ -1,10 +1,10 @@
-package com.imn.iicnma.model
+package com.imn.iicnma.data.remote.model
 
 import com.google.gson.annotations.SerializedName
 import com.imn.iicnma.data.local.movie.MovieEntity
 import com.imn.iicnma.data.remote.CDN_BASE_URL
 
-data class MovieDetail(
+data class MovieDetailResponse(
     @SerializedName("id") val id: Long,
     @SerializedName("title") val title: String,
     @SerializedName("overview") val overview: String,

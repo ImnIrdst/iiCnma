@@ -3,7 +3,7 @@ package com.imn.iicnma.di
 import com.imn.iicnma.BuildConfig
 import com.imn.iicnma.data.remote.API_BASE_URL
 import com.imn.iicnma.data.remote.MovieService
-import com.imn.iicnma.data.repository.MovieRemoteDataSource
+import com.imn.iicnma.data.repository.datasource.MovieRemoteDataSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

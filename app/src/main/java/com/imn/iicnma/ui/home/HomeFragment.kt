@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
 import androidx.recyclerview.widget.RecyclerView
 import com.imn.iicnma.R
 import com.imn.iicnma.databinding.FragmentHomeBinding
+import com.imn.iicnma.ui.widget.ListLoadStateAdapter
 import com.imn.iicnma.utils.isPortrait
 import com.imn.iicnma.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint

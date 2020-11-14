@@ -1,4 +1,4 @@
-package com.imn.iicnma.data.repository
+package com.imn.iicnma.data.repository.mediator
 
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
@@ -9,14 +9,14 @@ import com.bumptech.glide.load.HttpException
 import com.imn.iicnma.data.local.MovieDatabase
 import com.imn.iicnma.data.local.keys.RemoteKeysEntity
 import com.imn.iicnma.data.local.movie.MovieEntity
-import com.imn.iicnma.data.remote.MovieService
 import com.imn.iicnma.data.remote.STARTING_PAGE_INDEX
+import com.imn.iicnma.data.repository.datasource.MovieRemoteDataSource
 import java.io.IOException
 
 @OptIn(ExperimentalPagingApi::class)
 class SearchMoviePagerMediator(
     private val query: String,
-    private val service: MovieService,
+    private val service: MovieRemoteDataSource,
     private val movieDatabase: MovieDatabase
 ) : RemoteMediator<Int, MovieEntity>() {
 
@@ -49,6 +49,7 @@ class SearchMoviePagerMediator(
 
             movieDatabase.withTransaction {
                 if (loadType == LoadType.REFRESH) {
+                    // TODO it's better to separate popular movies and search data sources
                     movieDatabase.remoteKeysDao().clearRemoteKeys()
                     movieDatabase.moviesDao().clearMovies()
                 }

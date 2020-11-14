@@ -6,8 +6,10 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.imn.iicnma.data.local.MovieDatabase
 import com.imn.iicnma.data.local.movie.MovieEntity
-import com.imn.iicnma.data.remote.MovieService
 import com.imn.iicnma.data.remote.NETWORK_PAGE_SIZE
+import com.imn.iicnma.data.repository.datasource.MovieRemoteDataSource
+import com.imn.iicnma.data.repository.mediator.MoviePagerMediator
+import com.imn.iicnma.data.repository.mediator.SearchMoviePagerMediator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
@@ -18,8 +20,8 @@ import retrofit2.HttpException
 import javax.inject.Inject
 
 class MovieRepository @Inject constructor(
-    private val movieService: MovieService,
     private val movieDatabase: MovieDatabase,
+    private val movieRemoteDataSource: MovieRemoteDataSource,
 ) {
 
     private val movieDetailsScope = CoroutineScope(Dispatchers.IO)
@@ -29,7 +31,7 @@ class MovieRepository @Inject constructor(
             pageSize = NETWORK_PAGE_SIZE,
             enablePlaceholders = false
         ),
-        remoteMediator = MoviePagerMediator(movieService, movieDatabase),
+        remoteMediator = MoviePagerMediator(movieRemoteDataSource, movieDatabase),
         pagingSourceFactory = { movieDatabase.moviesDao().getAll() }
     ).flow
 
@@ -39,7 +41,7 @@ class MovieRepository @Inject constructor(
 
         return Pager(
             config = PagingConfig(pageSize = NETWORK_PAGE_SIZE, enablePlaceholders = false),
-            remoteMediator = SearchMoviePagerMediator(query, movieService, movieDatabase),
+            remoteMediator = SearchMoviePagerMediator(query, movieRemoteDataSource, movieDatabase),
             pagingSourceFactory = pagingSourceFactory
         ).flow
     }
@@ -49,7 +51,7 @@ class MovieRepository @Inject constructor(
             movieDetailsScope.launch {
                 try {
                     if (localMovie == null || !localMovie.isDetailLoaded()) {
-                        var movieEntity = movieService.getMovie(id).toMovieEntity()
+                        var movieEntity = movieRemoteDataSource.getMovie(id).toMovieEntity()
                         if (localMovie != null) movieEntity =
                             movieEntity.copy(page = localMovie.page)
                         movieDatabase.moviesDao().insert(movieEntity)

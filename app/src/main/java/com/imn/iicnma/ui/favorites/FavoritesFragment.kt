@@ -16,7 +16,7 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.imn.iicnma.R
 import com.imn.iicnma.databinding.FragmentFavoritesBinding
-import com.imn.iicnma.ui.home.ListLoadStateAdapter
+import com.imn.iicnma.ui.widget.ListLoadStateAdapter
 import com.imn.iicnma.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
