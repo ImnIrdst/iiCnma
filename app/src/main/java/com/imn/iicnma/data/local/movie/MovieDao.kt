@@ -5,6 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface MovieDao {
@@ -20,6 +21,9 @@ interface MovieDao {
 
     @Query("SELECT * FROM movies ORDER BY page ASC, popularity DESC, title ASC")
     fun getFavorites(): PagingSource<Int, MovieEntity>
+
+    @Query("SELECT * FROM movies WHERE id=:id")
+    fun getMovieFlow(id: Long): Flow<MovieEntity?>
 
     @Query("SELECT * FROM movies WHERE id=:id")
     suspend fun getMovie(id: Long): MovieEntity?

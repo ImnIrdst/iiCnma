@@ -4,11 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
@@ -27,11 +30,21 @@ class HomeFragment : Fragment() {
 
     private val homeViewModel: HomeViewModel by viewModels()
 
-    private val homeAdapter = HomeAdapter(::navigateToMovieDetails)
+    private val homeAdapter = HomeAdapter(::onMovieClicked)
 
-    private fun navigateToMovieDetails(movieId: Long) {
+    private fun onMovieClicked(
+        movieId: Long,
+        posterImageView: ImageView,
+        titleTextView: TextView,
+        dateTextView: TextView
+    ) {
+        val extras = FragmentNavigatorExtras(
+            posterImageView to posterImageView.transitionName,
+            titleTextView to titleTextView.transitionName,
+            dateTextView to dateTextView.transitionName,
+        )
         findNavController().navigate(
-            HomeFragmentDirections.actionNavigationHomeToMovieDetails(movieId)
+            HomeFragmentDirections.actionNavigationHomeToMovieDetails(movieId), extras
         )
     }
 

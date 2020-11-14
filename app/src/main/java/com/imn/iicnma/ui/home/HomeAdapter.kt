@@ -2,6 +2,8 @@ package com.imn.iicnma.ui.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -9,9 +11,12 @@ import com.bumptech.glide.Glide
 import com.imn.iicnma.R
 import com.imn.iicnma.data.local.movie.MovieEntity
 import com.imn.iicnma.databinding.HomeListItemBinding
+import com.imn.iicnma.utils.dateTransitionName
+import com.imn.iicnma.utils.posterTransitionName
+import com.imn.iicnma.utils.titleTransitionName
 
 class HomeAdapter(
-    private val onItemClick: (Long) -> Unit
+    private val onItemClick: (Long, ImageView, TextView, TextView) -> Unit
 ) : PagingDataAdapter<MovieEntity, HomeItemViewHolder>(MOVIE_COMPARATOR) {
 
 
@@ -36,14 +41,23 @@ class HomeAdapter(
 
 class HomeItemViewHolder(
     private val binding: HomeListItemBinding,
-    private val onItemClick: (Long) -> Unit
+    private val onItemClick: (Long, ImageView, TextView, TextView) -> Unit
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private var _movie: MovieEntity? = null
 
     init {
-        binding.root.setOnClickListener {
-            _movie?.let { onItemClick.invoke(it.id) }
+        with(binding) {
+            root.setOnClickListener {
+                _movie?.let {
+                    onItemClick.invoke(
+                        it.id,
+                        posterImageView,
+                        titleTextView,
+                        dateTextView
+                    )
+                }
+            }
         }
     }
 
@@ -53,6 +67,10 @@ class HomeItemViewHolder(
         titleTextView.text = movie.title
         dateTextView.text = movie.releaseDate
 
+        posterImageView.transitionName = posterTransitionName(movie.id)
+        titleTextView.transitionName = titleTransitionName(movie.id)
+        dateTextView.transitionName = dateTransitionName(movie.id)
+
         Glide.with(root.context)
             .load(movie.posterUrl)
             .placeholder(R.drawable.ic_place_holder_24dp)
@@ -60,11 +78,12 @@ class HomeItemViewHolder(
     }
 
     companion object {
-        fun create(parent: ViewGroup, onItemClick: (Long) -> Unit) = HomeItemViewHolder(
-            HomeListItemBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false
-            ),
-            onItemClick
-        )
+        fun create(parent: ViewGroup, onItemClick: (Long, ImageView, TextView, TextView) -> Unit) =
+            HomeItemViewHolder(
+                HomeListItemBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                ),
+                onItemClick
+            )
     }
 }

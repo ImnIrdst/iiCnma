@@ -2,6 +2,8 @@ package com.imn.iicnma.ui.favorites
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -9,9 +11,12 @@ import com.bumptech.glide.Glide
 import com.imn.iicnma.R
 import com.imn.iicnma.data.local.favorites.FavoritesEntity
 import com.imn.iicnma.databinding.FavoritesListItemBinding
+import com.imn.iicnma.utils.dateTransitionName
+import com.imn.iicnma.utils.posterTransitionName
+import com.imn.iicnma.utils.titleTransitionName
 
 class FavoritesAdapter(
-    private val onItemClick: (Long) -> Unit
+    private val onItemClick: (Long, ImageView, TextView, TextView) -> Unit
 ) : PagingDataAdapter<FavoritesEntity, FavoritesItemViewHolder>(MOVIE_COMPARATOR) {
 
 
@@ -42,15 +47,25 @@ class FavoritesAdapter(
 
 class FavoritesItemViewHolder(
     private val binding: FavoritesListItemBinding,
-    private val onItemClick: (Long) -> Unit
+    private val onItemClick: (Long, ImageView, TextView, TextView) -> Unit
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private var _movie: FavoritesEntity? = null
 
     init {
-        binding.root.setOnClickListener {
-            _movie?.let { onItemClick.invoke(it.id) }
+        with(binding) {
+            root.setOnClickListener {
+                _movie?.let {
+                    onItemClick.invoke(
+                        it.id,
+                        posterImageView,
+                        titleTextView,
+                        dateTextView
+                    )
+                }
+            }
         }
+
     }
 
     fun onBind(movie: FavoritesEntity) = with(binding) {
@@ -60,6 +75,10 @@ class FavoritesItemViewHolder(
         dateTextView.text = movie.releaseDate
         overviewTextView.text = movie.overview
 
+        posterImageView.transitionName = posterTransitionName(movie.id)
+        titleTextView.transitionName = titleTransitionName(movie.id)
+        dateTextView.transitionName = dateTransitionName(movie.id)
+
         Glide.with(root.context)
             .load(movie.posterUrl)
             .placeholder(R.drawable.ic_place_holder_24dp)
@@ -67,11 +86,12 @@ class FavoritesItemViewHolder(
     }
 
     companion object {
-        fun create(parent: ViewGroup, onItemClick: (Long) -> Unit) = FavoritesItemViewHolder(
-            FavoritesListItemBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false
-            ),
-            onItemClick
-        )
+        fun create(parent: ViewGroup, onItemClick: (Long, ImageView, TextView, TextView) -> Unit) =
+            FavoritesItemViewHolder(
+                FavoritesListItemBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                ),
+                onItemClick
+            )
     }
 }

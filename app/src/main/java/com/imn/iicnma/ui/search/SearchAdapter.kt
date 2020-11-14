@@ -2,6 +2,8 @@ package com.imn.iicnma.ui.search
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -9,9 +11,12 @@ import com.bumptech.glide.Glide
 import com.imn.iicnma.R
 import com.imn.iicnma.data.local.movie.MovieEntity
 import com.imn.iicnma.databinding.SearchListItemBinding
+import com.imn.iicnma.utils.dateTransitionName
+import com.imn.iicnma.utils.posterTransitionName
+import com.imn.iicnma.utils.titleTransitionName
 
 class SearchAdapter(
-    private val onItemClick: (Long) -> Unit
+    private val onItemClick: (Long, ImageView, TextView, TextView) -> Unit
 ) : PagingDataAdapter<MovieEntity, SearchItemViewHolder>(MOVIE_COMPARATOR) {
 
 
@@ -36,15 +41,25 @@ class SearchAdapter(
 
 class SearchItemViewHolder(
     private val binding: SearchListItemBinding,
-    private val onItemClick: (Long) -> Unit
+    private val onItemClick: (Long, ImageView, TextView, TextView) -> Unit
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private var _movie: MovieEntity? = null
 
     init {
-        binding.root.setOnClickListener {
-            _movie?.let { onItemClick.invoke(it.id) }
+        with(binding) {
+            root.setOnClickListener {
+                _movie?.let {
+                    onItemClick.invoke(
+                        it.id,
+                        posterImageView,
+                        titleTextView,
+                        dateTextView
+                    )
+                }
+            }
         }
+
     }
 
     fun onBind(movie: MovieEntity) = with(binding) {
@@ -54,6 +69,10 @@ class SearchItemViewHolder(
         dateTextView.text = movie.releaseDate
         overviewTextView.text = movie.overview
 
+        posterImageView.transitionName = posterTransitionName(movie.id)
+        titleTextView.transitionName = titleTransitionName(movie.id)
+        dateTextView.transitionName = dateTransitionName(movie.id)
+
         Glide.with(root.context)
             .load(movie.posterUrl)
             .placeholder(R.drawable.ic_place_holder_24dp)
@@ -61,11 +80,12 @@ class SearchItemViewHolder(
     }
 
     companion object {
-        fun create(parent: ViewGroup, onItemClick: (Long) -> Unit) = SearchItemViewHolder(
-            SearchListItemBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false
-            ),
-            onItemClick
-        )
+        fun create(parent: ViewGroup, onItemClick: (Long, ImageView, TextView, TextView) -> Unit) =
+            SearchItemViewHolder(
+                SearchListItemBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                ),
+                onItemClick
+            )
     }
 }

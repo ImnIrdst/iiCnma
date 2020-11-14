@@ -7,14 +7,21 @@ import com.imn.iicnma.data.local.MovieDatabase
 import com.imn.iicnma.data.local.movie.MovieEntity
 import com.imn.iicnma.data.remote.MovieService
 import com.imn.iicnma.data.remote.NETWORK_PAGE_SIZE
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MovieRepository @Inject constructor(
     private val movieService: MovieService,
     private val movieDatabase: MovieDatabase,
 ) {
+
+    private val movieDetailsScope = CoroutineScope(Dispatchers.IO)
+
     fun getPopularMovies() = Pager(
         config = PagingConfig(
             pageSize = NETWORK_PAGE_SIZE,
@@ -35,17 +42,17 @@ class MovieRepository @Inject constructor(
         ).flow
     }
 
-    suspend fun getMovie(id: Long): MovieEntity {
-        val localMovie = movieDatabase.moviesDao().getMovie(id)
-        return if (localMovie?.isDetailLoaded() == true) {
+    fun getMovie(id: Long): Flow<MovieEntity?> =
+        movieDatabase.moviesDao().getMovieFlow(id).map { localMovie ->
+            movieDetailsScope.launch {
+                if (localMovie == null || !localMovie.isDetailLoaded()) {
+                    var movieEntity = movieService.getMovie(id).toMovieEntity()
+                    if (localMovie != null) movieEntity = movieEntity.copy(page = localMovie.page)
+                    movieDatabase.moviesDao().insert(movieEntity)
+                }
+            }
             localMovie
-        } else {
-            var movieEntity = movieService.getMovie(id).toMovieEntity()
-            if (localMovie != null) movieEntity = movieEntity.copy(page = localMovie.page)
-            movieDatabase.moviesDao().insert(movieEntity)
-            movieEntity
         }
-    }
 
     suspend fun addToFavorites(movieId: Long) {
         movieDatabase.moviesDao().getMovie(movieId)?.let {
@@ -64,4 +71,8 @@ class MovieRepository @Inject constructor(
     ).flow
 
     fun isFavored(movieId: Long) = movieDatabase.favoritesDao().getMovie(movieId).map { it != null }
+
+    fun cancelMovieDetailsScope() {
+        movieDetailsScope.coroutineContext.cancel()
+    }
 }

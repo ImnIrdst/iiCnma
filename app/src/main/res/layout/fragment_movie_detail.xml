@@ -9,25 +9,15 @@
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/poster_image_view"
         android:layout_width="128dp"
-        android:layout_height="0dp"
+        android:layout_height="210dp"
         android:layout_margin="@dimen/spacing_double"
         android:scaleType="fitCenter"
+        android:transitionName="poster_image_view"
         app:layout_constraintDimensionRatio="0.6666666"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:background="@color/orange_700"
         tools:src="@drawable/ic_place_holder_24dp" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/favoriteButton"
-        style="@style/RippleItemBackgroundStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/spacing_small"
-        android:contentDescription="@string/title_favorites"
-        android:src="@drawable/ic_favorite_24"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/title_text_view"
@@ -92,5 +82,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/heading_overview"
         tools:text="Caught in the crosshairs of police corruption and Marseille’s warring gangs, a loyal cop must protect his squad by taking matters into his own hands." />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/favoriteButton"
+        style="@style/RippleItemBackgroundStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/spacing_normal"
+        android:contentDescription="@string/title_favorites"
+        android:src="@drawable/ic_favorite_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
