@@ -13,4 +13,10 @@ interface MovieService : MovieRemoteDataSource {
 
     @GET("discover/movie?sort_by=popularity.desc")
     override suspend fun getPopularMovies(@Query("page") page: Int): MoviePagedList
+
+    @GET("search/movie")
+    override suspend fun searchMovies(
+        @Query("query") query: String,
+        @Query("page") page: Int
+    ): MoviePagedList
 }

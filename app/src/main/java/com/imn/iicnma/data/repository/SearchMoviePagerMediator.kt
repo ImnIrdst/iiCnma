@@ -15,7 +15,8 @@ import java.io.IOException
 import java.io.InvalidObjectException
 
 @OptIn(ExperimentalPagingApi::class)
-class MoviePagerMediator(
+class SearchMoviePagerMediator(
+    private val query: String,
     private val service: MovieService,
     private val movieDatabase: MovieDatabase
 ) : RemoteMediator<Int, MovieEntity>() {
@@ -45,7 +46,9 @@ class MoviePagerMediator(
         }
 
         try {
-            val apiResponse = service.getPopularMovies(pageKey)
+            val apiResponse = service.searchMovies(query, pageKey)
+
+            println("imnimn ${apiResponse.results[0]}")
 
             movieDatabase.withTransaction {
                 if (loadType == LoadType.REFRESH) {

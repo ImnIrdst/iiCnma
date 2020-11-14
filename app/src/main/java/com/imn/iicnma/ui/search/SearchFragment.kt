@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -14,8 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager.VERTICAL
 import com.imn.iicnma.databinding.FragmentSearchBinding
 import com.imn.iicnma.utils.hideKeyboard
 import com.imn.iicnma.utils.showKeyboard
-import com.imn.iicnma.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -42,26 +43,34 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        lifecycleScope.launch {
-            searchViewModel.movies.collectLatest { searchAdapter.submitData(it) }
-        }
+        val query = savedInstanceState?.getString(LAST_SEARCH_QUERY)
 
-        populateUI()
+        populateUI(query)
+        search(query)
     }
 
-    private fun populateUI() = with(binding) {
+    private fun populateUI(query: String?) = with(binding) {
         (requireActivity() as? AppCompatActivity)?.supportActionBar?.hide()
 
         editText.apply {
             requestFocus()
             showKeyboard()
+            query?.let { setText(it) }
             setOnClickListener { isCursorVisible = true }
+            setOnEditorActionListener { _, actionId, _ ->
+                if (actionId == EditorInfo.IME_ACTION_GO) {
+                    updateSearchFromInput()
+                    true
+                } else {
+                    false
+                }
+            }
         }
 
         searchButton.setOnClickListener {
+            updateSearchFromInput()
             editText.hideKeyboard()
             editText.isCursorVisible = false
-            showToast(editText.text?.toString())
         }
 
         backButton.setOnClickListener {
@@ -72,5 +81,27 @@ class SearchFragment : Fragment() {
             adapter = searchAdapter
             layoutManager = LinearLayoutManager(requireContext(), VERTICAL, false)
         }
+    }
+
+    private fun updateSearchFromInput() = with(binding) {
+        editText.text?.trim()?.let {
+            if (it.isNotEmpty()) {
+                search(it.toString())
+            }
+        }
+    }
+
+    private var searchJob: Job? = null
+
+    private fun search(query: String?) {
+        query ?: return
+        searchJob?.cancel()
+        searchJob = lifecycleScope.launch {
+            searchViewModel.search(query).collectLatest { searchAdapter.submitData(it) }
+        }
+    }
+
+    companion object {
+        private const val LAST_SEARCH_QUERY: String = "last_search_query"
     }
 }

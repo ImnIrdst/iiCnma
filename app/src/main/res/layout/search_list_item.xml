@@ -21,7 +21,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="0.6666666"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/search_card_view"
+            app:layout_constraintTop_toTopOf="parent"
             tools:background="@color/orange_700" />
 
 

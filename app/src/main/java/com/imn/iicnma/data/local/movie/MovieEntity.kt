@@ -12,7 +12,7 @@ data class MovieEntity(
     @field:SerializedName("overview") val overview: String,
     @field:SerializedName("genres") val genres: String?,
     @field:SerializedName("release_date") val releaseDate: String,
-    @field:SerializedName("poster_path") val posterPath: String,
+    @field:SerializedName("poster_path") val posterPath: String?,
     @field:SerializedName("popularity") val popularity: Float,
     @field:SerializedName("page") val page: Int, // this is used because of api bug
 ) {

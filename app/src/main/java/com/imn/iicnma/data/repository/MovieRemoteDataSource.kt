@@ -4,4 +4,5 @@ import com.imn.iicnma.model.MoviePagedList
 
 interface MovieRemoteDataSource {
     suspend fun getPopularMovies(page: Int): MoviePagedList
+    suspend fun searchMovies(query: String, page: Int): MoviePagedList
 }
