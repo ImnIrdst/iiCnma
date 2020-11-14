@@ -12,7 +12,7 @@ data class MoviePagedList(
         MovieEntity(
             id = it.id,
             title = it.title,
-            overview = null,
+            overview = it.overview,
             genres = null,
             releaseDate = it.releaseDate,
             posterPath = it.posterPath,
