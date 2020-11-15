@@ -2,7 +2,6 @@ package com.imn.iicnma.data.remote.model
 
 import com.google.gson.annotations.SerializedName
 import com.imn.iicnma.data.local.movie.MovieEntity
-import com.imn.iicnma.data.remote.CDN_BASE_URL
 
 data class MovieDetailResponse(
     @SerializedName("id") val id: Long,
@@ -14,8 +13,6 @@ data class MovieDetailResponse(
     @SerializedName("genres") val genres: List<Genre>,
     @SerializedName("popularity") val popularity: Float,
 ) {
-    val posterUrl: String
-        get() = CDN_BASE_URL + posterPath
 
     fun toMovieEntity() = MovieEntity(
         id = id,
