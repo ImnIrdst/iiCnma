@@ -11,4 +11,5 @@
     <string name="search_hint">Begin searching</string>
     <string name="popular_movies">Popular Movies</string>
     <string name="no_search_results">No results found.</string>
+    <string name="no_favorite_movies">You don\'t have any favorite movies.</string>
 </resources>

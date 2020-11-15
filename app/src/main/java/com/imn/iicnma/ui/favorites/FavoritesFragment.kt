@@ -101,6 +101,14 @@ class FavoritesFragment : Fragment() {
                 loadStateLayout.retryButton.isVisible = false
                 loadStateLayout.messageTextView.isVisible = false
             }
+
+            if (loadState.refresh is LoadState.NotLoading && favoritesAdapter.itemCount == 0) {
+                recyclerView.isVisible = false
+                loadStateLayout.messageTextView.apply {
+                    isVisible = true
+                    text = getString(R.string.no_favorite_movies)
+                }
+            }
         }
     }
 }
