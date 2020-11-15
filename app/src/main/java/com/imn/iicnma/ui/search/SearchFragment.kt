@@ -134,6 +134,17 @@ class SearchFragment : Fragment() {
                 loadStateLayout.retryButton.isVisible = false
                 loadStateLayout.messageTextView.isVisible = false
             }
+
+            if (searchViewModel.isSearchedAnyThing
+                && loadState.refresh is LoadState.NotLoading
+                && searchAdapter.itemCount == 0
+            ) {
+                recyclerView.isVisible = false
+                loadStateLayout.messageTextView.apply {
+                    isVisible = true
+                    text = getString(R.string.no_search_results)
+                }
+            }
         }
     }
 
@@ -153,7 +164,7 @@ class SearchFragment : Fragment() {
         query ?: return
         searchJob?.cancel()
         searchJob = lifecycleScope.launch {
-            searchViewModel.search(query).collectLatest { searchAdapter.submitData(it) }
+            searchViewModel.search(query)?.collectLatest { searchAdapter.submitData(it) }
         }
     }
 

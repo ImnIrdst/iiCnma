@@ -20,7 +20,12 @@ class SearchViewModel @ViewModelInject constructor(
 
     private var currentSearchResult: Flow<PagingData<MovieEntity>>? = null
 
-    fun search(query: String): Flow<PagingData<MovieEntity>> {
+    var isSearchedAnyThing = false
+
+    fun search(query: String): Flow<PagingData<MovieEntity>>? {
+        if (query.trim().isEmpty()) return null
+
+        isSearchedAnyThing = true
         val lastResult = currentSearchResult
         if (query == currentQueryValue && lastResult != null) {
             return lastResult
