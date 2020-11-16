@@ -20,7 +20,8 @@ class MovieDetailViewModel @ViewModelInject constructor(
             it
         }.asLiveData()
 
-    fun loadMovie(id: Long) = movieRepository.getMovie(id).asLiveData()
+    fun loadMovie(id: Long) =
+        movieRepository.getMovie(id).asLiveData(viewModelScope.coroutineContext)
 
     fun toggleFavorite(movieId: Long) = viewModelScope.launch {
         if (isFavored) {
@@ -28,10 +29,5 @@ class MovieDetailViewModel @ViewModelInject constructor(
         } else {
             movieRepository.addToFavorites(movieId)
         }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        movieRepository.cancelMovieDetailsScope()
     }
 }

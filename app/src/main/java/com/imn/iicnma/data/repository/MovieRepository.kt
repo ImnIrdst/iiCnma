@@ -10,12 +10,9 @@ import com.imn.iicnma.data.remote.NETWORK_PAGE_SIZE
 import com.imn.iicnma.data.repository.datasource.MovieRemoteDataSource
 import com.imn.iicnma.data.repository.mediator.MoviePagerMediator
 import com.imn.iicnma.data.repository.mediator.SearchMoviePagerMediator
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.transform
 import retrofit2.HttpException
 import javax.inject.Inject
 
@@ -23,8 +20,6 @@ class MovieRepository @Inject constructor(
     private val movieDatabase: MovieDatabase,
     private val movieRemoteDataSource: MovieRemoteDataSource,
 ) {
-
-    private val movieDetailsScope = CoroutineScope(Dispatchers.IO)
 
     fun getPopularMovies() = Pager(
         config = PagingConfig(
@@ -47,20 +42,18 @@ class MovieRepository @Inject constructor(
     }
 
     fun getMovie(id: Long): Flow<MovieEntity?> =
-        movieDatabase.moviesDao().getMovieFlow(id).map { localMovie ->
-            movieDetailsScope.launch {
-                try {
-                    if (localMovie == null || !localMovie.isDetailLoaded()) {
-                        var movieEntity = movieRemoteDataSource.getMovie(id).toMovieEntity()
-                        if (localMovie != null) movieEntity =
-                            movieEntity.copy(page = localMovie.page)
-                        movieDatabase.moviesDao().insert(movieEntity)
-                    }
-                } catch (e: HttpException) {
-                    Log.e("MovieRepository", "error happened when loading movie details", e)
+        movieDatabase.moviesDao().getMovieFlow(id).transform { localMovie ->
+            emit(localMovie)
+            try {
+                if (localMovie == null || !localMovie.isDetailLoaded()) {
+                    var movieEntity = movieRemoteDataSource.getMovie(id).toMovieEntity()
+                    if (localMovie != null) movieEntity =
+                        movieEntity.copy(page = localMovie.page)
+                    movieDatabase.moviesDao().insert(movieEntity)
                 }
+            } catch (e: HttpException) {
+                Log.e("MovieRepository", "error happened when loading movie details", e)
             }
-            localMovie
         }
 
     suspend fun addToFavorites(movieId: Long) {
@@ -80,8 +73,4 @@ class MovieRepository @Inject constructor(
     ).flow
 
     fun isFavored(movieId: Long) = movieDatabase.favoritesDao().getMovie(movieId).map { it != null }
-
-    fun cancelMovieDetailsScope() {
-        movieDetailsScope.coroutineContext.cancel()
-    }
 }
