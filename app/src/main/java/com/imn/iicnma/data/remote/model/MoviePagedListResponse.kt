@@ -18,7 +18,7 @@ data class MoviePagedListResponse(
             releaseDate = it.releaseDate,
             posterPath = it.posterPath,
             popularity = it.popularity,
-            page = page
+            page = page // TODO use flatMap for calculating this
         )
     }
 }

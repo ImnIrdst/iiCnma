@@ -64,5 +64,5 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun bindMovieRemoteDataSource(movieService: MovieService): MovieRemoteDataSource = movieService
+    fun providesMovieRemoteDataSource(service: MovieService): MovieRemoteDataSource = service
 }

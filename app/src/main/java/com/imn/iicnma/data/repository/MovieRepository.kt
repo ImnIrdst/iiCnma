@@ -8,7 +8,6 @@ import com.imn.iicnma.data.local.MovieDatabase
 import com.imn.iicnma.data.local.movie.MovieEntity
 import com.imn.iicnma.data.remote.NETWORK_PAGE_SIZE
 import com.imn.iicnma.data.repository.datasource.MovieRemoteDataSource
-import com.imn.iicnma.data.repository.mediator.MoviePagerMediator
 import com.imn.iicnma.data.repository.mediator.SearchMoviePagerMediator
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -20,15 +19,6 @@ class MovieRepository @Inject constructor(
     private val movieDatabase: MovieDatabase,
     private val movieRemoteDataSource: MovieRemoteDataSource,
 ) {
-
-    fun getPopularMovies() = Pager(
-        config = PagingConfig(
-            pageSize = NETWORK_PAGE_SIZE,
-            enablePlaceholders = false
-        ),
-        remoteMediator = MoviePagerMediator(movieRemoteDataSource, movieDatabase),
-        pagingSourceFactory = { movieDatabase.moviesDao().getAll() }
-    ).flow
 
     fun search(query: String): Flow<PagingData<MovieEntity>> {
         val dbQuery = "%${query.replace(' ', '%')}%"

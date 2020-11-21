@@ -4,11 +4,11 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import com.imn.iicnma.data.repository.MovieRepository
+import com.imn.iicnma.data.repository.PopularMovieRepository
 
 class HomeViewModel @ViewModelInject constructor(
-    movieRepository: MovieRepository,
+    repository: PopularMovieRepository,
 ) : ViewModel() {
 
-    val movies = movieRepository.getPopularMovies().cachedIn(viewModelScope)
+    val movies = repository.getPopularMovies().cachedIn(viewModelScope)
 }
