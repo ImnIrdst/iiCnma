@@ -10,7 +10,6 @@ import com.imn.iicnma.data.local.search.PopularMovieKeysEntity
 import com.imn.iicnma.data.remote.STARTING_PAGE_INDEX
 import com.imn.iicnma.data.repository.datasource.MovieRemoteDataSource
 import com.imn.iicnma.data.repository.datasource.PopularMoviesLocalDataSource
-import kotlinx.coroutines.delay
 import java.io.IOException
 import java.io.InvalidObjectException
 
@@ -37,23 +36,20 @@ class PopularMoviesPagerMediator(
             }
             LoadType.APPEND -> {
                 val remoteKey = getRemoteKeyForLastItem(state)
-                if (remoteKey?.nextKey == null) {
-                    return MediatorResult.Success(endOfPaginationReached = true)
-                }
+                    ?: throw InvalidObjectException("Remote key and the nextKey should not be null")
                 remoteKey.nextKey
+                    ?: return MediatorResult.Success(endOfPaginationReached = true)
             }
         }
 
-
-        try {
+        return try {
             val apiResponse = service.getPopularMovies(pageKey)
-            delay(2000) // TODO debug
             popularMoviesDao.cacheResponse(apiResponse, pageKey, loadType == LoadType.REFRESH)
-            return MediatorResult.Success(endOfPaginationReached = pageKey >= apiResponse.totalPages)
+            MediatorResult.Success(endOfPaginationReached = pageKey >= apiResponse.totalPages)
         } catch (exception: IOException) {
-            return MediatorResult.Error(exception)
+            MediatorResult.Error(exception)
         } catch (exception: HttpException) {
-            return MediatorResult.Error(exception)
+            MediatorResult.Error(exception)
         }
     }
 

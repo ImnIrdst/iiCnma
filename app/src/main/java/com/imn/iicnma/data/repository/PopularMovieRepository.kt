@@ -16,7 +16,7 @@ class PopularMovieRepository @Inject constructor(
     fun getPopularMovies() = Pager(
         config = PagingConfig(
             pageSize = NETWORK_PAGE_SIZE,
-            enablePlaceholders = false
+            enablePlaceholders = false,
         ),
         remoteMediator = PopularMoviesPagerMediator(remoteDS, localDS),
         pagingSourceFactory = { localDS.getAll() }
