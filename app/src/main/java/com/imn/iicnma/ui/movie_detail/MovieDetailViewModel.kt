@@ -4,7 +4,7 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.imn.iicnma.data.repository.MovieRepository
+import com.imn.iicnma.data.repository.movies.MovieRepository
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 

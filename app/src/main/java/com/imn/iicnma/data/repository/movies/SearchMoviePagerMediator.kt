@@ -1,4 +1,4 @@
-package com.imn.iicnma.data.repository.mediator
+package com.imn.iicnma.data.repository.movies
 
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
@@ -10,7 +10,6 @@ import com.imn.iicnma.data.local.MovieDatabase
 import com.imn.iicnma.data.local.keys.RemoteKeysEntity
 import com.imn.iicnma.data.local.movie.MovieEntity
 import com.imn.iicnma.data.remote.STARTING_PAGE_INDEX
-import com.imn.iicnma.data.repository.datasource.MovieRemoteDataSource
 import java.io.IOException
 
 @OptIn(ExperimentalPagingApi::class)

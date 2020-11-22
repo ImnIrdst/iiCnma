@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.imn.iicnma.data.local.movie.MovieEntity
-import com.imn.iicnma.data.repository.MovieRepository
+import com.imn.iicnma.data.repository.movies.MovieRepository
 import kotlinx.coroutines.flow.Flow
 
 class SearchViewModel @ViewModelInject constructor(

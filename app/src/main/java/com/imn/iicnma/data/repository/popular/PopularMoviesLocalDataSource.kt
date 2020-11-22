@@ -1,4 +1,4 @@
-package com.imn.iicnma.data.repository.datasource
+package com.imn.iicnma.data.repository.popular
 
 import androidx.paging.PagingSource
 import androidx.room.Query

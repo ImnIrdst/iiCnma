@@ -1,11 +1,9 @@
-package com.imn.iicnma.data.repository
+package com.imn.iicnma.data.repository.popular
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.imn.iicnma.data.remote.NETWORK_PAGE_SIZE
-import com.imn.iicnma.data.repository.datasource.MovieRemoteDataSource
-import com.imn.iicnma.data.repository.datasource.PopularMoviesLocalDataSource
-import com.imn.iicnma.data.repository.mediator.PopularMoviesPagerMediator
+import com.imn.iicnma.data.repository.movies.MovieRemoteDataSource
 import javax.inject.Inject
 
 class PopularMovieRepository @Inject constructor(

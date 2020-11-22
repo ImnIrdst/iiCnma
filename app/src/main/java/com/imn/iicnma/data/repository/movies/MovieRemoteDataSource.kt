@@ -1,4 +1,4 @@
-package com.imn.iicnma.data.repository.datasource
+package com.imn.iicnma.data.repository.movies
 
 import com.imn.iicnma.data.remote.model.MovieDetailResponse
 import com.imn.iicnma.data.remote.model.MoviePagedListResponse

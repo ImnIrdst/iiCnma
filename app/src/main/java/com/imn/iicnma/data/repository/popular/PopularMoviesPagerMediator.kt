@@ -1,4 +1,4 @@
-package com.imn.iicnma.data.repository.mediator
+package com.imn.iicnma.data.repository.popular
 
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
@@ -8,8 +8,7 @@ import com.bumptech.glide.load.HttpException
 import com.imn.iicnma.data.local.movie.MovieEntity
 import com.imn.iicnma.data.local.search.PopularMovieKeysEntity
 import com.imn.iicnma.data.remote.STARTING_PAGE_INDEX
-import com.imn.iicnma.data.repository.datasource.MovieRemoteDataSource
-import com.imn.iicnma.data.repository.datasource.PopularMoviesLocalDataSource
+import com.imn.iicnma.data.repository.movies.MovieRemoteDataSource
 import java.io.IOException
 import java.io.InvalidObjectException
 

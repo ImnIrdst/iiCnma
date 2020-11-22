@@ -5,7 +5,7 @@ import androidx.room.*
 import com.imn.iicnma.data.local.movie.MovieEntity
 import com.imn.iicnma.data.remote.STARTING_PAGE_INDEX
 import com.imn.iicnma.data.remote.model.MoviePagedListResponse
-import com.imn.iicnma.data.repository.datasource.PopularMoviesLocalDataSource
+import com.imn.iicnma.data.repository.popular.PopularMoviesLocalDataSource
 
 @Dao
 interface PopularMoviesDao: PopularMoviesLocalDataSource {
@@ -24,7 +24,6 @@ interface PopularMoviesDao: PopularMoviesLocalDataSource {
 
     @Query("SELECT * FROM movies ORDER BY page ASC, popularity DESC, title ASC")
     override fun getAll(): PagingSource<Int, MovieEntity> // TODO maybe you can use inheritance for these
-
 
     @Transaction
     override suspend fun cacheResponse(response: MoviePagedListResponse, pageKey: Int, isRefresh: Boolean) {

@@ -2,7 +2,7 @@ package com.imn.iicnma.data.remote
 
 import com.imn.iicnma.data.remote.model.MovieDetailResponse
 import com.imn.iicnma.data.remote.model.MoviePagedListResponse
-import com.imn.iicnma.data.repository.datasource.MovieRemoteDataSource
+import com.imn.iicnma.data.repository.movies.MovieRemoteDataSource
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
