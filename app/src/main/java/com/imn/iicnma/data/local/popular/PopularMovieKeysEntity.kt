@@ -1,4 +1,4 @@
-package com.imn.iicnma.data.local.search
+package com.imn.iicnma.data.local.popular
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

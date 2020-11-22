@@ -8,12 +8,15 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.imn.iicnma.data.local.movie.MovieEntity
-import com.imn.iicnma.data.repository.movies.MovieRepository
+import com.imn.iicnma.data.repository.search.SearchRepository
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.debounce
 
+@OptIn(FlowPreview::class)
 class SearchViewModel @ViewModelInject constructor(
-    private val movieRepository: MovieRepository,
-    @Assisted private val savedStateHandle: SavedStateHandle
+    private val searchRepository: SearchRepository,
+    @Assisted private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
     private var currentQueryValue: String? = null
@@ -33,7 +36,10 @@ class SearchViewModel @ViewModelInject constructor(
 
         savedStateHandle[KEY_QUERY_SAVED_STATE] = query
 
-        val newResult = movieRepository.search(query).cachedIn(viewModelScope)
+        val newResult = searchRepository.search(query)
+            .debounce(500)
+            .cachedIn(viewModelScope)
+
         currentSearchResult = newResult
         return newResult
     }

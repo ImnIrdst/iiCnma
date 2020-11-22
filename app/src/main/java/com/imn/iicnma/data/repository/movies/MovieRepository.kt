@@ -3,7 +3,6 @@ package com.imn.iicnma.data.repository.movies
 import android.util.Log
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
-import androidx.paging.PagingData
 import com.imn.iicnma.data.local.MovieDatabase
 import com.imn.iicnma.data.local.movie.MovieEntity
 import com.imn.iicnma.data.remote.NETWORK_PAGE_SIZE
@@ -17,17 +16,6 @@ class MovieRepository @Inject constructor(
     private val movieDatabase: MovieDatabase,
     private val movieRemoteDataSource: MovieRemoteDataSource,
 ) {
-
-    fun search(query: String): Flow<PagingData<MovieEntity>> {
-        val dbQuery = "%${query.replace(' ', '%')}%"
-        val pagingSourceFactory = { movieDatabase.moviesDao().searchMovies(dbQuery) }
-
-        return Pager(
-            config = PagingConfig(pageSize = NETWORK_PAGE_SIZE, enablePlaceholders = false),
-            remoteMediator = SearchMoviePagerMediator(query, movieRemoteDataSource, movieDatabase),
-            pagingSourceFactory = pagingSourceFactory
-        ).flow
-    }
 
     fun getMovie(id: Long): Flow<MovieEntity?> =
         movieDatabase.moviesDao().getMovieFlow(id).transform { localMovie ->

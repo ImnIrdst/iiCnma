@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.imn.iicnma.data.local.MovieDatabase
 import com.imn.iicnma.data.repository.popular.PopularMoviesLocalDataSource
+import com.imn.iicnma.data.repository.search.SearchLocalDataSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,5 +28,11 @@ object DatabaseModule {
     @Singleton
     fun providesPopularMoviesDataSource(
         database: MovieDatabase,
-    ): PopularMoviesLocalDataSource = database.searchDao()
+    ): PopularMoviesLocalDataSource = database.popularMoviesDao()
+
+    @Provides
+    @Singleton
+    fun providesSearchDataSource(
+        database: MovieDatabase,
+    ): SearchLocalDataSource = database.searchDao()
 }

@@ -30,11 +30,4 @@ interface MovieDao {
 
     @Query("DELETE FROM movies")
     suspend fun clearMovies()
-
-    @Query(
-        """SELECT * FROM movies WHERE
-                title LIKE :queryString OR overview LIKE :queryString 
-                ORDER BY popularity DESC, title ASC"""
-    )
-    fun searchMovies(queryString: String): PagingSource<Int, MovieEntity>
 }

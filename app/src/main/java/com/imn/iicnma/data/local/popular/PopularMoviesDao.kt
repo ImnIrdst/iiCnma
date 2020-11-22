@@ -1,20 +1,18 @@
-package com.imn.iicnma.data.local.search
+package com.imn.iicnma.data.local.popular
 
 import androidx.paging.PagingSource
 import androidx.room.*
+import com.imn.iicnma.data.local.common.CommonMovieListDao
 import com.imn.iicnma.data.local.movie.MovieEntity
 import com.imn.iicnma.data.remote.STARTING_PAGE_INDEX
 import com.imn.iicnma.data.remote.model.MoviePagedListResponse
 import com.imn.iicnma.data.repository.popular.PopularMoviesLocalDataSource
 
 @Dao
-interface PopularMoviesDao: PopularMoviesLocalDataSource {
+interface PopularMoviesDao : CommonMovieListDao, PopularMoviesLocalDataSource {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(remoteKey: List<PopularMovieKeysEntity>)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAllMovies(remoteKey: List<MovieEntity>)
 
     @Query("SELECT * FROM popular_movies_keys WHERE movieId = :id")
     override suspend fun getRemoteKeysForMovieId(id: Long): PopularMovieKeysEntity?
@@ -23,10 +21,14 @@ interface PopularMoviesDao: PopularMoviesLocalDataSource {
     suspend fun clearRemoteKeys()
 
     @Query("SELECT * FROM movies ORDER BY page ASC, popularity DESC, title ASC")
-    override fun getAll(): PagingSource<Int, MovieEntity> // TODO maybe you can use inheritance for these
+    override fun getAll(): PagingSource<Int, MovieEntity>
 
     @Transaction
-    override suspend fun cacheResponse(response: MoviePagedListResponse, pageKey: Int, isRefresh: Boolean) {
+    override suspend fun cacheResponse(
+        response: MoviePagedListResponse,
+        pageKey: Int,
+        isRefresh: Boolean,
+    ) {
         if (isRefresh) {
             clearRemoteKeys()
         }

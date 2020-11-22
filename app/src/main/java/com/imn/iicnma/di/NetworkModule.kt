@@ -3,7 +3,11 @@ package com.imn.iicnma.di
 import com.imn.iicnma.BuildConfig
 import com.imn.iicnma.data.remote.API_BASE_URL
 import com.imn.iicnma.data.remote.MovieService
+import com.imn.iicnma.data.remote.popular.PopularMoviesService
+import com.imn.iicnma.data.remote.search.SearchService
 import com.imn.iicnma.data.repository.movies.MovieRemoteDataSource
+import com.imn.iicnma.data.repository.popular.PopularMoviesRemoteDataSource
+import com.imn.iicnma.data.repository.search.SearchRemoteDataSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -64,5 +68,19 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun providesMovieRemoteDataSource(service: MovieService): MovieRemoteDataSource = service
+    fun providesMovieRemoteDataSource(
+        retrofit: Retrofit,
+    ): MovieRemoteDataSource = retrofit.create(MovieService::class.java)
+
+    @Provides
+    @Singleton
+    fun providesPopularMoviesRemoteDataSource(
+        retrofit: Retrofit,
+    ): PopularMoviesRemoteDataSource = retrofit.create(PopularMoviesService::class.java)
+
+    @Provides
+    @Singleton
+    fun providesSearchRemoteDataSource(
+        retrofit: Retrofit,
+    ): SearchRemoteDataSource = retrofit.create(SearchService::class.java)
 }

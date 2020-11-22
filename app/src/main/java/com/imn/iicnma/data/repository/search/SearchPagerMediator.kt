@@ -1,4 +1,4 @@
-package com.imn.iicnma.data.repository.popular
+package com.imn.iicnma.data.repository.search
 
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
@@ -6,15 +6,18 @@ import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import com.bumptech.glide.load.HttpException
 import com.imn.iicnma.data.local.movie.MovieEntity
-import com.imn.iicnma.data.local.popular.PopularMovieKeysEntity
+import com.imn.iicnma.data.local.search.SearchKeysEntity
 import com.imn.iicnma.data.remote.STARTING_PAGE_INDEX
 import java.io.IOException
 import java.io.InvalidObjectException
 
+// TODO this can leverage inheritance
+
 @OptIn(ExperimentalPagingApi::class)
-class PopularMoviesPagerMediator(
-    private val remote: PopularMoviesRemoteDataSource,
-    private val local: PopularMoviesLocalDataSource,
+class SearchPagerMediator(
+    private val query: String,
+    private val remote: SearchRemoteDataSource,
+    private val local: SearchLocalDataSource,
 ) : RemoteMediator<Int, MovieEntity>() {
 
     override suspend fun load(
@@ -41,7 +44,7 @@ class PopularMoviesPagerMediator(
         }
 
         return try {
-            val apiResponse = remote.getPopularMovies(pageKey)
+            val apiResponse = remote.searchMovies(query, pageKey)
             local.cacheResponse(apiResponse, pageKey, loadType == LoadType.REFRESH)
             MediatorResult.Success(endOfPaginationReached = pageKey >= apiResponse.totalPages)
         } catch (exception: IOException) {
@@ -51,20 +54,20 @@ class PopularMoviesPagerMediator(
         }
     }
 
-    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, MovieEntity>): PopularMovieKeysEntity? {
+    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, MovieEntity>): SearchKeysEntity? {
         return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()
-            ?.let { movie -> local.getRemoteKeysForMovieId(movie.id) }
+            ?.let { movie -> local.getSearchKeysForMovieId(movie.id) }
     }
 
-    private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, MovieEntity>): PopularMovieKeysEntity? {
+    private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, MovieEntity>): SearchKeysEntity? {
         return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()
-            ?.let { movie -> local.getRemoteKeysForMovieId(movie.id) }
+            ?.let { movie -> local.getSearchKeysForMovieId(movie.id) }
     }
 
-    private suspend fun getRemoteKeyClosestToCurrentPosition(state: PagingState<Int, MovieEntity>): PopularMovieKeysEntity? {
+    private suspend fun getRemoteKeyClosestToCurrentPosition(state: PagingState<Int, MovieEntity>): SearchKeysEntity? {
         return state.anchorPosition?.let { position ->
             state.closestItemToPosition(position)
-                ?.id?.let { movieId -> local.getRemoteKeysForMovieId(movieId) }
+                ?.id?.let { movieId -> local.getSearchKeysForMovieId(movieId) }
         }
     }
 }
