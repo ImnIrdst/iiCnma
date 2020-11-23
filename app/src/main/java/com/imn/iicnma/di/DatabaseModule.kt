@@ -3,6 +3,7 @@ package com.imn.iicnma.di
 import android.content.Context
 import androidx.room.Room
 import com.imn.iicnma.data.local.MovieDatabase
+import com.imn.iicnma.data.repository.favorites.FavoritesLocalDataSource
 import com.imn.iicnma.data.repository.popular.PopularMoviesLocalDataSource
 import com.imn.iicnma.data.repository.search.SearchLocalDataSource
 import dagger.Module
@@ -35,4 +36,10 @@ object DatabaseModule {
     fun providesSearchDataSource(
         database: MovieDatabase,
     ): SearchLocalDataSource = database.searchDao()
+
+    @Provides
+    @Singleton
+    fun providesFavoratesDataSource(
+        database: MovieDatabase,
+    ): FavoritesLocalDataSource = database.favoritesDao()
 }

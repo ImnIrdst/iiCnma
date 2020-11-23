@@ -5,20 +5,25 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.imn.iicnma.data.local.movie.MovieEntity
+import com.imn.iicnma.data.repository.favorites.FavoritesLocalDataSource
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface FavoritesDao {
+interface FavoritesDao : FavoritesLocalDataSource {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(movies: FavoritesEntity)
+    override suspend fun insert(movies: FavoritesEntity)
 
     @Query("DELETE FROM favorites WHERE id=:movieId")
-    suspend fun delete(movieId: Long)
+    override suspend fun delete(movieId: Long)
 
     @Query("SELECT * FROM favorites WHERE id=:id")
-    fun getMovie(id: Long): Flow<FavoritesEntity?>
+    override fun getMovieFlow(id: Long): Flow<FavoritesEntity?>
+
+    @Query("SELECT * FROM movies WHERE id=:id")
+    override suspend fun getMovie(id: Long): MovieEntity?
 
     @Query("SELECT * FROM favorites")
-    fun getAll(): PagingSource<Int, FavoritesEntity>
+    override fun getAll(): PagingSource<Int, FavoritesEntity>
 }

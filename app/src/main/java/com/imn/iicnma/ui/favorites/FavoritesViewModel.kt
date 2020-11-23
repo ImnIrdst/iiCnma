@@ -2,10 +2,11 @@ package com.imn.iicnma.ui.favorites
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
-import com.imn.iicnma.data.repository.movies.MovieRepository
+import com.imn.iicnma.data.repository.favorites.FavoritesRepository
 
 class FavoritesViewModel @ViewModelInject constructor(
-    val movieRepository: MovieRepository
+    favoritesRepository: FavoritesRepository,
 ) : ViewModel() {
-    val movies = movieRepository.getFavoriteMovies()
+
+    val movies = favoritesRepository.getFavoriteMovies()
 }

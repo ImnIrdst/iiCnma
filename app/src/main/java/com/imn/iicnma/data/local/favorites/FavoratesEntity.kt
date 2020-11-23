@@ -7,6 +7,7 @@ import com.imn.iicnma.data.remote.CDN_BASE_URL
 
 @Entity(tableName = "favorites")
 data class FavoritesEntity(
+    // TODO use relations
     @PrimaryKey @field:SerializedName("id") val id: Long,
     @field:SerializedName("title") val title: String,
     @field:SerializedName("overview") val overview: String,
