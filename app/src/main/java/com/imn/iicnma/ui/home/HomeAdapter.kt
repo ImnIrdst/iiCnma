@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.imn.iicnma.R
 import com.imn.iicnma.data.local.movie.MovieEntity
-import com.imn.iicnma.databinding.HomeListItemBinding
+import com.imn.iicnma.databinding.ListItemHomeBinding
 import com.imn.iicnma.utils.dateTransitionName
 import com.imn.iicnma.utils.posterTransitionName
 import com.imn.iicnma.utils.titleTransitionName
@@ -40,8 +40,8 @@ class HomeAdapter(
 }
 
 class HomeItemViewHolder(
-    private val binding: HomeListItemBinding,
-    private val onItemClick: (Long, ImageView, TextView, TextView) -> Unit
+    private val binding: ListItemHomeBinding,
+    private val onItemClick: (Long, ImageView, TextView, TextView) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private var _movie: MovieEntity? = null
@@ -86,7 +86,7 @@ class HomeItemViewHolder(
     companion object {
         fun create(parent: ViewGroup, onItemClick: (Long, ImageView, TextView, TextView) -> Unit) =
             HomeItemViewHolder(
-                HomeListItemBinding.inflate(
+                ListItemHomeBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false
                 ),
                 onItemClick

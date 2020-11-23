@@ -6,7 +6,7 @@ import androidx.core.view.isVisible
 import androidx.paging.LoadState
 import androidx.paging.LoadStateAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.imn.iicnma.databinding.LoadStateBinding
+import com.imn.iicnma.databinding.LayoutLoadStateBinding
 
 class ListLoadStateAdapter(
     private val retry: () -> Unit
@@ -20,8 +20,8 @@ class ListLoadStateAdapter(
 }
 
 class LoadStateViewHolder(
-    private val binding: LoadStateBinding,
-    retry: () -> Unit
+    private val binding: LayoutLoadStateBinding,
+    retry: () -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     init {
@@ -39,7 +39,7 @@ class LoadStateViewHolder(
 
     companion object {
         fun create(parent: ViewGroup, retry: () -> Unit): LoadStateViewHolder {
-            val binding = LoadStateBinding.inflate(
+            val binding = LayoutLoadStateBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
             )
             return LoadStateViewHolder(binding, retry)

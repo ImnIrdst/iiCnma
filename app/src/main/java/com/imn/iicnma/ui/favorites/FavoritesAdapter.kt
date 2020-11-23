@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.imn.iicnma.R
 import com.imn.iicnma.data.local.movie.MovieEntity
-import com.imn.iicnma.databinding.FavoritesListItemBinding
+import com.imn.iicnma.databinding.ListItemFavoritesBinding
 import com.imn.iicnma.utils.dateTransitionName
 import com.imn.iicnma.utils.posterTransitionName
 import com.imn.iicnma.utils.titleTransitionName
@@ -46,8 +46,8 @@ class FavoritesAdapter(
 }
 
 class FavoritesItemViewHolder(
-    private val binding: FavoritesListItemBinding,
-    private val onItemClick: (Long, ImageView, TextView, TextView) -> Unit
+    private val binding: ListItemFavoritesBinding,
+    private val onItemClick: (Long, ImageView, TextView, TextView) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private var _movie: MovieEntity? = null
@@ -88,7 +88,7 @@ class FavoritesItemViewHolder(
     companion object {
         fun create(parent: ViewGroup, onItemClick: (Long, ImageView, TextView, TextView) -> Unit) =
             FavoritesItemViewHolder(
-                FavoritesListItemBinding.inflate(
+                ListItemFavoritesBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false
                 ),
                 onItemClick

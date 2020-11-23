@@ -43,11 +43,11 @@
         app:layout_constraintTop_toBottomOf="@id/top_message_text_view"
         app:spanCount="2"
         tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        tools:listitem="@layout/home_list_item" />
+        tools:listitem="@layout/list_item_home" />
 
     <include
         android:id="@+id/load_state_layout"
-        layout="@layout/load_state"
+        layout="@layout/layout_load_state"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"

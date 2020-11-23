@@ -57,7 +57,7 @@
 
             <include
                 android:id="@+id/rating_view"
-                layout="@layout/rating_layout"
+                layout="@layout/layout_rating"
                 android:layout_width="48dp"
                 android:layout_height="0dp"
                 android:layout_margin="@dimen/spacing_small"
