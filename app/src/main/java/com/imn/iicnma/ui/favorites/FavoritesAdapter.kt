@@ -9,15 +9,15 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.imn.iicnma.R
-import com.imn.iicnma.data.local.favorites.FavoritesEntity
+import com.imn.iicnma.data.local.movie.MovieEntity
 import com.imn.iicnma.databinding.FavoritesListItemBinding
 import com.imn.iicnma.utils.dateTransitionName
 import com.imn.iicnma.utils.posterTransitionName
 import com.imn.iicnma.utils.titleTransitionName
 
 class FavoritesAdapter(
-    private val onItemClick: (Long, ImageView, TextView, TextView) -> Unit
-) : PagingDataAdapter<FavoritesEntity, FavoritesItemViewHolder>(MOVIE_COMPARATOR) {
+    private val onItemClick: (Long, ImageView, TextView, TextView) -> Unit,
+) : PagingDataAdapter<MovieEntity, FavoritesItemViewHolder>(MOVIE_COMPARATOR) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoritesItemViewHolder =
@@ -29,16 +29,16 @@ class FavoritesAdapter(
     }
 
     companion object {
-        private val MOVIE_COMPARATOR = object : DiffUtil.ItemCallback<FavoritesEntity>() {
+        private val MOVIE_COMPARATOR = object : DiffUtil.ItemCallback<MovieEntity>() {
             override fun areItemsTheSame(
-                oldItem: FavoritesEntity,
-                newItem: FavoritesEntity
+                oldItem: MovieEntity,
+                newItem: MovieEntity,
             ): Boolean =
                 oldItem.id == newItem.id
 
             override fun areContentsTheSame(
-                oldItem: FavoritesEntity,
-                newItem: FavoritesEntity
+                oldItem: MovieEntity,
+                newItem: MovieEntity,
             ): Boolean =
                 oldItem == newItem
         }
@@ -50,7 +50,7 @@ class FavoritesItemViewHolder(
     private val onItemClick: (Long, ImageView, TextView, TextView) -> Unit
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    private var _movie: FavoritesEntity? = null
+    private var _movie: MovieEntity? = null
 
     init {
         with(binding) {
@@ -68,7 +68,7 @@ class FavoritesItemViewHolder(
 
     }
 
-    fun onBind(movie: FavoritesEntity) = with(binding) {
+    fun onBind(movie: MovieEntity) = with(binding) {
         _movie = movie
 
         titleTextView.text = movie.title

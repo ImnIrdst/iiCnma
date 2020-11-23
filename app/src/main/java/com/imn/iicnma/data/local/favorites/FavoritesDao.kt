@@ -1,10 +1,7 @@
 package com.imn.iicnma.data.local.favorites
 
 import androidx.paging.PagingSource
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.imn.iicnma.data.local.movie.MovieEntity
 import com.imn.iicnma.data.repository.favorites.FavoritesLocalDataSource
 import kotlinx.coroutines.flow.Flow
@@ -13,17 +10,18 @@ import kotlinx.coroutines.flow.Flow
 interface FavoritesDao : FavoritesLocalDataSource {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    override suspend fun insert(movies: FavoritesEntity)
+    override suspend fun insert(favorite: FavoritesEntity)
 
-    @Query("DELETE FROM favorites WHERE id=:movieId")
+    @Query("DELETE FROM favorites WHERE movieId=:movieId")
     override suspend fun delete(movieId: Long)
 
-    @Query("SELECT * FROM favorites WHERE id=:id")
-    override fun getMovieFlow(id: Long): Flow<FavoritesEntity?>
+    @Query("SELECT * FROM favorites WHERE movieId=:id")
+    override fun getFavoriteFlow(id: Long): Flow<FavoritesEntity?>
 
     @Query("SELECT * FROM movies WHERE id=:id")
     override suspend fun getMovie(id: Long): MovieEntity?
 
-    @Query("SELECT * FROM favorites")
-    override fun getAll(): PagingSource<Int, FavoritesEntity>
+    @Transaction // TODO can order by favored date
+    @Query("SELECT * FROM movies INNER JOIN favorites ON movies.id=favorites.movieId")
+    override fun getAllFavoredMovies(): PagingSource<Int, FavoriteMovieRelation>
 }

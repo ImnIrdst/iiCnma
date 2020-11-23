@@ -8,7 +8,8 @@ import com.imn.iicnma.data.remote.CDN_BASE_URL
 
 @Entity(tableName = "movies")
 data class MovieEntity(
-    @PrimaryKey @field:SerializedName("id") val id: Long,
+    @PrimaryKey
+    @field:SerializedName("id") val id: Long,
     @field:SerializedName("title") val title: String,
     @field:SerializedName("overview") val overview: String,
     @field:SerializedName("genres") val genres: String?,
@@ -26,15 +27,5 @@ data class MovieEntity(
 
     fun isDetailLoaded() = genres != null
 
-    fun toFavoriteEntity() = FavoritesEntity(
-        id = id,
-        title = title,
-        overview = overview,
-        genres = genres,
-        rate = rate,
-        releaseDate = releaseDate,
-        posterPath = posterPath,
-        popularity = popularity,
-        page = page,
-    )
+    fun toFavoriteEntity() = FavoritesEntity(movieId = id)
 }
