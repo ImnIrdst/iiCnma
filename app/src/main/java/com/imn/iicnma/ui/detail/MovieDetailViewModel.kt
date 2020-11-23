@@ -1,4 +1,4 @@
-package com.imn.iicnma.ui.movie_detail
+package com.imn.iicnma.ui.detail
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel

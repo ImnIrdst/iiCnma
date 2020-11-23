@@ -51,7 +51,7 @@
 
     <fragment
         android:id="@+id/movie_details"
-        android:name="com.imn.iicnma.ui.movie_detail.MovieDetailFragment"
+        android:name="com.imn.iicnma.ui.detail.MovieDetailFragment"
         android:label="@string/title_movie_details"
         tools:layout="@layout/fragment_movie_detail">
         <argument

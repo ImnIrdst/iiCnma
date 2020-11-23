@@ -1,4 +1,4 @@
-package com.imn.iicnma.ui.movie_detail
+package com.imn.iicnma.ui.detail
 
 import android.content.res.ColorStateList
 import android.os.Bundle

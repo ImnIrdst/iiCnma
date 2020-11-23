@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.imn.iicnma.data.local.MovieDatabase
 import com.imn.iicnma.data.repository.favorites.FavoritesLocalDataSource
+import com.imn.iicnma.data.repository.movies.MoviesLocalDataSource
 import com.imn.iicnma.data.repository.popular.PopularMoviesLocalDataSource
 import com.imn.iicnma.data.repository.search.SearchLocalDataSource
 import dagger.Module
@@ -42,4 +43,10 @@ object DatabaseModule {
     fun providesFavoratesDataSource(
         database: MovieDatabase,
     ): FavoritesLocalDataSource = database.favoritesDao()
+
+    @Provides
+    @Singleton
+    fun providesMovieDataSource(
+        database: MovieDatabase,
+    ): MoviesLocalDataSource = database.moviesDao()
 }
