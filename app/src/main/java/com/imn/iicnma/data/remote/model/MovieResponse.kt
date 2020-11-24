@@ -3,14 +3,14 @@ package com.imn.iicnma.data.remote.model
 import com.google.gson.annotations.SerializedName
 import com.imn.iicnma.data.local.movie.MovieEntity
 
-data class MovieDetailResponse(
+data class MovieResponse(
     @SerializedName("id") val id: Long,
     @SerializedName("title") val title: String,
     @SerializedName("overview") val overview: String,
     @SerializedName("vote_average") val rate: Float,
     @SerializedName("release_date") val releaseDate: String, // TODO format date
     @SerializedName("poster_path") val posterPath: String,
-    @SerializedName("genres") val genres: List<Genre>,
+    @SerializedName("genres") val genreResponses: List<GenreResponse>,
     @SerializedName("popularity") val popularity: Float,
 ) {
 
@@ -22,13 +22,8 @@ data class MovieDetailResponse(
         rate = rate,
         posterPath = posterPath,
         popularity = popularity,
-        genres = genres.joinToString(", "),
+        genres = genreResponses.joinToString(", "),
         page = -1,
     )
 }
 
-data class Genre(
-    @SerializedName("name") val name: String,
-) {
-    override fun toString() = name
-}

@@ -3,7 +3,6 @@ package com.imn.iicnma.data.local.movie
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
-import com.imn.iicnma.data.local.favorites.FavoritesEntity
 import com.imn.iicnma.data.remote.CDN_BASE_URL
 
 @Entity(tableName = "movies")
@@ -26,6 +25,4 @@ data class MovieEntity(
         get() = (rate * 10).toInt()
 
     fun isDetailLoaded() = genres != null
-
-    fun toFavoriteEntity() = FavoritesEntity(movieId = id)
 }
