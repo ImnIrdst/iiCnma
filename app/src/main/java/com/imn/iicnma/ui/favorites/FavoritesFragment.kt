@@ -14,6 +14,7 @@ import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.imn.iicnma.R
 import com.imn.iicnma.databinding.FragmentFavoritesBinding
 import com.imn.iicnma.ui.widget.ListLoadStateAdapter
@@ -109,6 +110,28 @@ class FavoritesFragment : Fragment() {
                     text = getString(R.string.no_favorite_movies)
                 }
             }
+
+            recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+
+                private var dySum = 0
+
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
+                    when (newState) {
+                        RecyclerView.SCROLL_STATE_IDLE,
+                        RecyclerView.SCROLL_STATE_SETTLING,
+                        -> {
+                            pageTitle.isVisible = (dySum <= 0)
+                            dySum = 0
+                        }
+                    }
+                }
+
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    dySum += dy
+                }
+            })
         }
     }
 }
