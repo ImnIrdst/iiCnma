@@ -12,4 +12,7 @@
     <string name="popular_movies">Popular Movies</string>
     <string name="no_search_results">No results found.</string>
     <string name="no_favorite_movies">You don\'t have any favorite movies.</string>
+    <string name="no_internet">No internet connection</string>
+    <string name="general_network_error">Cannot connect to server</string>
+    <string name="unknown_error">Uknown error happened</string>
 </resources>

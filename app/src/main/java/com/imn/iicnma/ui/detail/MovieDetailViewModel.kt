@@ -6,9 +6,16 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.imn.iicnma.data.repository.favorites.FavoritesRepository
 import com.imn.iicnma.data.repository.movies.MovieRepository
-import kotlinx.coroutines.flow.onEach
+import com.imn.iicnma.domain.model.utils.failureState
+import com.imn.iicnma.domain.model.utils.loadingState
+import com.imn.iicnma.domain.model.utils.successState
+import com.imn.iicnma.domain.model.utils.toIIError
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
+@OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
 class MovieDetailViewModel @ViewModelInject constructor(
     private val movieRepository: MovieRepository,
     private val favoritesRepository: FavoritesRepository,
@@ -22,7 +29,12 @@ class MovieDetailViewModel @ViewModelInject constructor(
             .asLiveData()
 
     fun loadMovie(id: Long) =
-        movieRepository.getMovie(id).asLiveData(viewModelScope.coroutineContext)
+        movieRepository.getMovie(id)
+            .debounce(200)
+            .mapLatest { successState(it) }
+            .onStart { emit(loadingState()) }
+            .catch { emit(failureState(it.toIIError())) }
+            .asLiveData(viewModelScope.coroutineContext)
 
     fun toggleFavorite(movieId: Long) = viewModelScope.launch {
         if (isFavored) {

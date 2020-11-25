@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide
 import com.imn.iicnma.R
 import com.imn.iicnma.databinding.FragmentMovieDetailBinding
 import com.imn.iicnma.domain.model.Movie
+import com.imn.iicnma.domain.model.utils.State
 import com.imn.iicnma.utils.dateTransitionName
 import com.imn.iicnma.utils.getColorCompat
 import com.imn.iicnma.utils.posterTransitionName
@@ -48,7 +49,13 @@ class MovieDetailFragment : Fragment() {
         }
 
         viewModel.apply {
-            loadMovie(args.movieId).observe(viewLifecycleOwner, { populateUi(it) })
+            loadMovie(args.movieId).observe(viewLifecycleOwner) {
+                when (it) {
+                    is State.Success -> populateUi(it.value)
+                    is State.Loading -> Unit // TODO
+                    is State.Failure -> Unit // TODO
+                }
+            }
             isFavoredStatus(args.movieId).observe(viewLifecycleOwner, {
                 val fabColor = if (it) {
                     getColorCompat(R.color.orange_200)
