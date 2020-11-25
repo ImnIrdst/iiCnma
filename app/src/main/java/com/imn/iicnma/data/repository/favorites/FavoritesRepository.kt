@@ -25,7 +25,7 @@ class FavoritesRepository @Inject constructor(
         pagingSourceFactory = { local.getAllFavoredMovies() }, // TODO test this on large data
         remoteMediator = null
     ).flow.map { pagingData ->
-        pagingData.map { it.movieEntity }
+        pagingData.map { it.movieEntity.toMovie() }
     }
 
     fun isFavored(movieId: Long) = local.getFavoriteFlow(movieId).map { it != null }

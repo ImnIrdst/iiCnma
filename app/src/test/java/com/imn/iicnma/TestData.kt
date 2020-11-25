@@ -10,8 +10,11 @@ val pagedListResponse = Gson().fromJson(pagedListJson, MoviePagedListResponse::c
 val movieEntityList = pagedListResponse.toMovieEntityList()
 
 val movieItemEntity = movieEntityList[0]
+val movieItem = movieItemEntity.toMovie()
+
 
 val movieDetailResponse = Gson().fromJson(movieDetailJson, MovieResponse::class.java)
 val movieDetailEntity = movieDetailResponse.toMovieEntity()
+val movieDetail = movieDetailEntity.toMovie()
 val movieId = movieDetailResponse.id
 

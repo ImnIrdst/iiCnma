@@ -4,6 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import com.imn.iicnma.data.remote.CDN_BASE_URL
+import com.imn.iicnma.domain.model.Movie
 
 @Entity(tableName = "movies")
 data class MovieEntity(
@@ -18,11 +19,17 @@ data class MovieEntity(
     @field:SerializedName("popularity") val popularity: Float,
     @field:SerializedName("page") val page: Int, // this is used because of api bug
 ) {
-    val posterUrl: String
-        get() = CDN_BASE_URL + posterPath
-
-    val rate100: Int
-        get() = (rate * 10).toInt()
 
     fun isDetailLoaded() = genres != null
+
+    fun toMovie() = Movie(
+        id = id,
+        title = title,
+        overview = overview,
+        genres = genres,
+        rate100 = (rate * 10).toInt(),
+        releaseDate = releaseDate,
+        posterUrl = CDN_BASE_URL + posterPath,
+        popularity = popularity,
+    )
 }

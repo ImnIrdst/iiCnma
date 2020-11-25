@@ -9,15 +9,15 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.imn.iicnma.R
-import com.imn.iicnma.data.local.movie.MovieEntity
 import com.imn.iicnma.databinding.ListItemHomeBinding
+import com.imn.iicnma.domain.model.Movie
 import com.imn.iicnma.utils.dateTransitionName
 import com.imn.iicnma.utils.posterTransitionName
 import com.imn.iicnma.utils.titleTransitionName
 
 class HomeAdapter(
-    private val onItemClick: (Long, ImageView, TextView, TextView) -> Unit
-) : PagingDataAdapter<MovieEntity, HomeItemViewHolder>(MOVIE_COMPARATOR) {
+    private val onItemClick: (Long, ImageView, TextView, TextView) -> Unit,
+) : PagingDataAdapter<Movie, HomeItemViewHolder>(MOVIE_COMPARATOR) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeItemViewHolder =
@@ -29,11 +29,11 @@ class HomeAdapter(
     }
 
     companion object {
-        private val MOVIE_COMPARATOR = object : DiffUtil.ItemCallback<MovieEntity>() {
-            override fun areItemsTheSame(oldItem: MovieEntity, newItem: MovieEntity): Boolean =
+        private val MOVIE_COMPARATOR = object : DiffUtil.ItemCallback<Movie>() {
+            override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean =
                 oldItem.id == newItem.id
 
-            override fun areContentsTheSame(oldItem: MovieEntity, newItem: MovieEntity): Boolean =
+            override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean =
                 oldItem == newItem
         }
     }
@@ -44,7 +44,7 @@ class HomeItemViewHolder(
     private val onItemClick: (Long, ImageView, TextView, TextView) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    private var _movie: MovieEntity? = null
+    private var _movie: Movie? = null
 
     init {
         with(binding) {
@@ -61,7 +61,7 @@ class HomeItemViewHolder(
         }
     }
 
-    fun onBind(movie: MovieEntity) = with(binding) {
+    fun onBind(movie: Movie) = with(binding) {
         _movie = movie
 
         titleTextView.text = movie.title

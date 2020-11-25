@@ -35,7 +35,7 @@ class MovieResponseRepositoryTest : IITestCase() {
 
         movieRepository.getMovie(movieId)
             .toList()
-            .also { assertThat(it).isEqualTo(listOf(movieDetailEntity)) }
+            .also { assertThat(it).isEqualTo(listOf(movieDetail)) }
 
         coVerifySequence {
             local.getMovieFlow(movieId)
@@ -54,7 +54,7 @@ class MovieResponseRepositoryTest : IITestCase() {
         testScope.launch {
             movieRepository.getMovie(movieId)
                 .toList()
-                .also { assertThat(it).isEqualTo(listOf(movieItemEntity, movieDetailEntity)) }
+                .also { assertThat(it).isEqualTo(listOf(movieItem, movieDetail)) }
         }
 
         coVerifySequence {

@@ -7,8 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.imn.iicnma.data.local.movie.MovieEntity
 import com.imn.iicnma.data.repository.search.SearchRepository
+import com.imn.iicnma.domain.model.Movie
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.debounce
@@ -21,11 +21,11 @@ class SearchViewModel @ViewModelInject constructor(
 
     private var currentQueryValue: String? = null
 
-    private var currentSearchResult: Flow<PagingData<MovieEntity>>? = null
+    private var currentSearchResult: Flow<PagingData<Movie>>? = null
 
     var isSearchedAnyThing = false
 
-    fun search(query: String): Flow<PagingData<MovieEntity>>? {
+    fun search(query: String): Flow<PagingData<Movie>>? {
         if (query.trim().isEmpty()) return null
 
         isSearchedAnyThing = true

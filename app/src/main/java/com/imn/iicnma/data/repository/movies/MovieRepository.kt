@@ -1,7 +1,7 @@
 package com.imn.iicnma.data.repository.movies
 
 import android.util.Log
-import com.imn.iicnma.data.local.movie.MovieEntity
+import com.imn.iicnma.domain.model.Movie
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.transform
 import retrofit2.HttpException
@@ -12,10 +12,10 @@ class MovieRepository @Inject constructor(
     private val remote: MovieRemoteDataSource,
 ) {
 
-    fun getMovie(id: Long): Flow<MovieEntity?> =
+    fun getMovie(id: Long): Flow<Movie?> =
         local.getMovieFlow(id).transform { localMovie ->
 
-            emit(localMovie)
+            emit(localMovie?.toMovie())
 
             try { // TODO better error handling
                 if (localMovie == null || !localMovie.isDetailLoaded()) {

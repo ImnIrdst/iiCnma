@@ -13,8 +13,8 @@ import androidx.navigation.fragment.navArgs
 import androidx.transition.TransitionInflater
 import com.bumptech.glide.Glide
 import com.imn.iicnma.R
-import com.imn.iicnma.data.local.movie.MovieEntity
 import com.imn.iicnma.databinding.FragmentMovieDetailBinding
+import com.imn.iicnma.domain.model.Movie
 import com.imn.iicnma.utils.dateTransitionName
 import com.imn.iicnma.utils.getColorCompat
 import com.imn.iicnma.utils.posterTransitionName
@@ -31,8 +31,8 @@ class MovieDetailFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? = FragmentMovieDetailBinding.inflate(inflater).also {
+        savedInstanceState: Bundle?,
+    ): View = FragmentMovieDetailBinding.inflate(inflater).also {
         binding = it
         sharedElementEnterTransition =
             TransitionInflater.from(context).inflateTransition(android.R.transition.move)
@@ -60,7 +60,7 @@ class MovieDetailFragment : Fragment() {
         }
     }
 
-    private fun populateUi(movie: MovieEntity?) {
+    private fun populateUi(movie: Movie?) {
         movie ?: return
 
         with(binding) {

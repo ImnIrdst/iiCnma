@@ -2,7 +2,9 @@ package com.imn.iicnma.data.repository.popular
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
+import androidx.paging.map
 import com.imn.iicnma.data.remote.NETWORK_PAGE_SIZE
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class PopularMovieRepository @Inject constructor(
@@ -17,5 +19,7 @@ class PopularMovieRepository @Inject constructor(
         ),
         remoteMediator = PopularMoviesPagerMediator(remoteDS, localDS),
         pagingSourceFactory = { localDS.getAll() }
-    ).flow
+    ).flow.map { pagingData ->
+        pagingData.map { it.toMovie() }
+    }
 }
