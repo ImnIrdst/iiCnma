@@ -54,6 +54,7 @@ class MovieDetailFragment : Fragment() {
                     is State.Success -> populateUi(it.value)
                     is State.Loading -> Unit // TODO
                     is State.Failure -> Unit // TODO
+                    else -> throw IllegalStateException("bad state for load movie")
                 }
             }
             isFavoredStatus(args.movieId).observe(viewLifecycleOwner, {
