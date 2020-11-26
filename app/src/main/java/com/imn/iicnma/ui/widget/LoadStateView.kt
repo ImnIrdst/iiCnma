@@ -25,7 +25,7 @@ class LoadStateView @JvmOverloads constructor(
         binding.root.isVisible = false
     }
 
-    fun setErrorMessage(message: String, isRetryButtonVisible: Boolean = true) = with(binding) {
+    fun showErrorMessage(message: String, isRetryButtonVisible: Boolean = true) = with(binding) {
         root.isVisible = true
         progressBar.isVisible = false
         retryButton.isVisible = isRetryButtonVisible
@@ -35,11 +35,30 @@ class LoadStateView @JvmOverloads constructor(
         }
     }
 
+    fun hideErrorMessage() = with(binding) {
+        retryButton.isVisible = false
+        messageTextView.isVisible = true
+    }
+
+    var isLoadingVisible: Boolean = false
+        set(value) {
+            if (value) {
+                showLoading()
+            } else {
+                hideLoading()
+            }
+            field = value
+        }
+
     fun showLoading() = with(binding) {
         root.isVisible = true
         progressBar.isVisible = true
         retryButton.isVisible = false
         messageTextView.isVisible = false
+    }
+
+    fun hideLoading() = with(binding) {
+        progressBar.isVisible = false
     }
 
     fun setOnRetryListener(listener: (View) -> Unit) {

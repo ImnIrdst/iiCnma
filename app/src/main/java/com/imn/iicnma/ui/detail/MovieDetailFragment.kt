@@ -122,7 +122,7 @@ class MovieDetailFragment : Fragment() {
 
     private fun populateError(error: IIError) = with(binding) {
         startPostponedEnterTransition()
-        loadStateView.setErrorMessage(error.getHumanReadableText(requireContext()))
+        loadStateView.showErrorMessage(error.getHumanReadableText(requireContext()))
     }
 
     private fun showLoading() = with(binding) {

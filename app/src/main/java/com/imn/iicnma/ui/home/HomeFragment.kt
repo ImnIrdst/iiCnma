@@ -81,30 +81,47 @@ class HomeFragment : Fragment() {
                 }
             }
             viewTreeObserver.addOnPreDrawListener { startPostponedEnterTransition(); true }
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+
+                private var dySum = 0
+
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
+                    when (newState) {
+                        RecyclerView.SCROLL_STATE_IDLE,
+                        RecyclerView.SCROLL_STATE_SETTLING,
+                        -> {
+                            pageTitle.isVisible = (dySum <= 0)
+                            dySum = 0
+                        }
+                    }
+                }
+
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    dySum += dy
+                }
+            })
         }
 
-        loadStateLayout.retryButton.setOnClickListener { homeAdapter.retry() }
+        loadStateView.setOnRetryListener { homeAdapter.retry() }
         topMessageTextView.setOnClickListener { homeAdapter.retry() }
 
         homeAdapter.addLoadStateListener { loadState ->
+
             recyclerView.isVisible = loadState.refresh is LoadState.NotLoading
-            loadStateLayout.progressBar.isVisible = loadState.refresh is LoadState.Loading
+            loadStateView.isLoadingVisible = loadState.refresh is LoadState.Loading
 
             if (loadState.refresh is LoadState.Error) {
 
                 val sourceErrorState = loadState.source.refresh as? LoadState.Error
 
                 if (sourceErrorState != null) {
-                    loadStateLayout.retryButton.isVisible = true
-                    loadStateLayout.messageTextView.apply {
-                        isVisible = true
-                        text = sourceErrorState.error.toString()
-                    }
+                    loadStateView.showErrorMessage(sourceErrorState.error.toString())
                 } else {
                     recyclerView.isVisible = true
                     topMessageTextView.isVisible = true
-                    loadStateLayout.retryButton.isVisible = false
-                    loadStateLayout.messageTextView.isVisible = false
+                    loadStateView.hideErrorMessage()
                 }
 
                 (loadState.mediator?.refresh as? LoadState.Error)?.let {
@@ -112,32 +129,9 @@ class HomeFragment : Fragment() {
                 }
             } else {
                 topMessageTextView.isVisible = false
-                loadStateLayout.retryButton.isVisible = false
-                loadStateLayout.messageTextView.isVisible = false
+                loadStateView.hideErrorMessage()
             }
         }
-
-        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-
-            private var dySum = 0
-
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-                when (newState) {
-                    RecyclerView.SCROLL_STATE_IDLE,
-                    RecyclerView.SCROLL_STATE_SETTLING,
-                    -> {
-                        pageTitle.isVisible = (dySum <= 0)
-                        dySum = 0
-                    }
-                }
-            }
-
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                dySum += dy
-            }
-        })
     }
 
     private fun getSpansCount() = if (isPortrait()) 2 else 4

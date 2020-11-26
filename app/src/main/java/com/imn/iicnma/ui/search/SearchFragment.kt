@@ -89,27 +89,24 @@ class SearchFragment : Fragment() {
             viewTreeObserver.addOnPreDrawListener { startPostponedEnterTransition(); true }
         }
 
-        loadStateLayout.retryButton.setOnClickListener { searchAdapter.retry() }
+        loadStateView.setOnRetryListener { searchAdapter.retry() }
         topMessageTextView.setOnClickListener { searchAdapter.retry() }
+
         searchAdapter.addLoadStateListener { loadState ->
+
             recyclerView.isVisible = loadState.refresh is LoadState.NotLoading
-            loadStateLayout.progressBar.isVisible = loadState.refresh is LoadState.Loading
+            loadStateView.isLoadingVisible = loadState.refresh is LoadState.Loading
 
             if (loadState.refresh is LoadState.Error) {
 
                 val sourceErrorState = loadState.source.refresh as? LoadState.Error
 
                 if (sourceErrorState != null) {
-                    loadStateLayout.retryButton.isVisible = true
-                    loadStateLayout.messageTextView.apply {
-                        isVisible = true
-                        text = sourceErrorState.error.toString()
-                    }
+                    loadStateView.showErrorMessage(sourceErrorState.error.toString())
                 } else {
                     recyclerView.isVisible = true
                     topMessageTextView.isVisible = true
-                    loadStateLayout.retryButton.isVisible = false
-                    loadStateLayout.messageTextView.isVisible = false
+                    loadStateView.hideErrorMessage()
                 }
 
                 (loadState.mediator?.refresh as? LoadState.Error)?.let {
@@ -117,8 +114,7 @@ class SearchFragment : Fragment() {
                 }
             } else {
                 topMessageTextView.isVisible = false
-                loadStateLayout.retryButton.isVisible = false
-                loadStateLayout.messageTextView.isVisible = false
+                loadStateView.hideErrorMessage()
             }
 
             if (searchViewModel.isSearchedAnyThing
@@ -126,10 +122,8 @@ class SearchFragment : Fragment() {
                 && searchAdapter.itemCount == 0
             ) {
                 recyclerView.isVisible = false
-                loadStateLayout.messageTextView.apply {
-                    isVisible = true
-                    text = getString(R.string.no_search_results)
-                }
+                loadStateView.showErrorMessage(getString(R.string.no_search_results), false)
+
             }
         }
     }

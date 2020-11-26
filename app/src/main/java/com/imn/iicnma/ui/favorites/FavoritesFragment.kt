@@ -73,46 +73,7 @@ class FavoritesFragment : Fragment() {
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             viewTreeObserver.addOnPreDrawListener { startPostponedEnterTransition(); true }
-        }
-
-        loadStateLayout.retryButton.setOnClickListener { favoritesAdapter.retry() }
-        favoritesAdapter.addLoadStateListener { loadState ->
-            recyclerView.isVisible = loadState.refresh is LoadState.NotLoading
-            loadStateLayout.progressBar.isVisible = loadState.refresh is LoadState.Loading
-
-            if (loadState.refresh is LoadState.Error) {
-
-                val sourceErrorState = loadState.source.refresh as? LoadState.Error
-
-                if (sourceErrorState != null) {
-                    loadStateLayout.retryButton.isVisible = true
-                    loadStateLayout.messageTextView.apply {
-                        isVisible = true
-                        text = sourceErrorState.error.toString()
-                    }
-                } else {
-                    recyclerView.isVisible = true
-                    loadStateLayout.retryButton.isVisible = false
-                    loadStateLayout.messageTextView.isVisible = false
-                }
-
-                (loadState.mediator?.refresh as? LoadState.Error)?.let {
-                    showToast(getString(R.string.api_error_prefix) + it.error.toString())
-                }
-            } else {
-                loadStateLayout.retryButton.isVisible = false
-                loadStateLayout.messageTextView.isVisible = false
-            }
-
-            if (loadState.refresh is LoadState.NotLoading && favoritesAdapter.itemCount == 0) {
-                recyclerView.isVisible = false
-                loadStateLayout.messageTextView.apply {
-                    isVisible = true
-                    text = getString(R.string.no_favorite_movies)
-                }
-            }
-
-            recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
                 private var dySum = 0
 
@@ -133,6 +94,37 @@ class FavoritesFragment : Fragment() {
                     dySum += dy
                 }
             })
+        }
+
+        loadStateView.setOnRetryListener { favoritesAdapter.retry() }
+        favoritesAdapter.addLoadStateListener { loadState ->
+
+            recyclerView.isVisible = loadState.refresh is LoadState.NotLoading
+            loadStateView.isLoadingVisible = loadState.refresh is LoadState.Loading
+
+            if (loadState.refresh is LoadState.Error) {
+
+                val sourceErrorState = loadState.source.refresh as? LoadState.Error
+
+                if (sourceErrorState != null) {
+                    loadStateView.showErrorMessage(sourceErrorState.error.toString())
+                } else {
+                    recyclerView.isVisible = true
+                    loadStateView.hideErrorMessage()
+                }
+
+                (loadState.mediator?.refresh as? LoadState.Error)?.let {
+                    showToast(getString(R.string.api_error_prefix) + it.error.toString())
+                }
+            } else {
+                loadStateView.hideErrorMessage()
+            }
+
+            if (loadState.refresh is LoadState.NotLoading && favoritesAdapter.itemCount == 0) {
+                recyclerView.isVisible = false
+                loadStateView.showErrorMessage(getString(R.string.no_favorite_movies), false)
+            }
+
         }
     }
 }
