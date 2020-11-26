@@ -55,7 +55,7 @@
         android:label="@string/title_movie_details"
         tools:layout="@layout/fragment_movie_detail">
         <argument
-            android:name="movie_id"
-            app:argType="long" />
+            android:name="movie"
+            app:argType="com.imn.iicnma.domain.model.Movie" />
     </fragment>
 </navigation>

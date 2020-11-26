@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
 import androidx.recyclerview.widget.RecyclerView
 import com.imn.iicnma.R
 import com.imn.iicnma.databinding.FragmentHomeBinding
+import com.imn.iicnma.domain.model.Movie
 import com.imn.iicnma.ui.widget.ListLoadStateAdapter
 import com.imn.iicnma.utils.isPortrait
 import com.imn.iicnma.utils.showToast
@@ -35,10 +36,10 @@ class HomeFragment : Fragment() {
     private val homeAdapter = HomeAdapter(::onMovieClicked)
 
     private fun onMovieClicked(
-        movieId: Long,
+        movie: Movie,
         posterImageView: ImageView,
         titleTextView: TextView,
-        dateTextView: TextView
+        dateTextView: TextView,
     ) {
         val extras = FragmentNavigatorExtras(
             posterImageView to posterImageView.transitionName,
@@ -46,7 +47,7 @@ class HomeFragment : Fragment() {
             dateTextView to dateTextView.transitionName,
         )
         findNavController().navigate(
-            HomeFragmentDirections.actionNavigationHomeToMovieDetails(movieId), extras
+            HomeFragmentDirections.actionNavigationHomeToMovieDetails(movie), extras
         )
     }
 

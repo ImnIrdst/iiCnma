@@ -16,7 +16,7 @@ import com.imn.iicnma.utils.posterTransitionName
 import com.imn.iicnma.utils.titleTransitionName
 
 class HomeAdapter(
-    private val onItemClick: (Long, ImageView, TextView, TextView) -> Unit,
+    private val onItemClick: (Movie, ImageView, TextView, TextView) -> Unit,
 ) : PagingDataAdapter<Movie, HomeItemViewHolder>(MOVIE_COMPARATOR) {
 
 
@@ -41,7 +41,7 @@ class HomeAdapter(
 
 class HomeItemViewHolder(
     private val binding: ListItemHomeBinding,
-    private val onItemClick: (Long, ImageView, TextView, TextView) -> Unit,
+    private val onItemClick: (Movie, ImageView, TextView, TextView) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private var _movie: Movie? = null
@@ -51,7 +51,7 @@ class HomeItemViewHolder(
             root.setOnClickListener {
                 _movie?.let {
                     onItemClick.invoke(
-                        it.id,
+                        it,
                         posterImageView,
                         titleTextView,
                         dateTextView
@@ -84,7 +84,7 @@ class HomeItemViewHolder(
     }
 
     companion object {
-        fun create(parent: ViewGroup, onItemClick: (Long, ImageView, TextView, TextView) -> Unit) =
+        fun create(parent: ViewGroup, onItemClick: (Movie, ImageView, TextView, TextView) -> Unit) =
             HomeItemViewHolder(
                 ListItemHomeBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false

@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.imn.iicnma.R
 import com.imn.iicnma.databinding.FragmentFavoritesBinding
+import com.imn.iicnma.domain.model.Movie
 import com.imn.iicnma.ui.widget.ListLoadStateAdapter
 import com.imn.iicnma.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,10 +33,10 @@ class FavoritesFragment : Fragment() {
     private val favoritesAdapter = FavoritesAdapter(::onMovieClicked)
 
     private fun onMovieClicked(
-        movieId: Long,
+        movie: Movie,
         posterImageView: ImageView,
         titleTextView: TextView,
-        dateTextView: TextView
+        dateTextView: TextView,
     ) {
         val extras = FragmentNavigatorExtras(
             posterImageView to posterImageView.transitionName,
@@ -43,7 +44,7 @@ class FavoritesFragment : Fragment() {
             dateTextView to dateTextView.transitionName,
         )
         findNavController().navigate(
-            FavoritesFragmentDirections.actionNavigationFavoritesToMovieDetails(movieId), extras
+            FavoritesFragmentDirections.actionNavigationFavoritesToMovieDetails(movie), extras
         )
     }
 

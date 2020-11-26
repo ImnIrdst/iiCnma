@@ -41,7 +41,7 @@ class MovieDetailFragment : Fragment() {
 
     private fun loadData() {
         viewModel.apply {
-            loadMovie(args.movieId).observe(viewLifecycleOwner) { state ->
+            loadMovie(args.movie.id).observe(viewLifecycleOwner) { state ->
                 when (state) {
                     is State.Success -> state.value?.let { populateUi(it) }
                     is State.Loading -> showLoading()
@@ -49,31 +49,40 @@ class MovieDetailFragment : Fragment() {
                     else -> throw IllegalStateException("bad state for load movie")
                 }
             }
-            isFavoredStatus(args.movieId).observe(viewLifecycleOwner, {
+            isFavoredStatus(args.movie.id).observe(viewLifecycleOwner, {
                 it?.let { populateFavoriteButton(it) }
             })
         }
     }
 
     private fun initUI() = with(binding) {
+        val movie = args.movie
+
         sharedElementEnterTransition = DetailsTransition()
         sharedElementReturnTransition = DetailsTransition()
         postponeEnterTransition()
 
-        posterImageView.transitionName = posterTransitionName(args.movieId)
-        titleTextView.transitionName = titleTransitionName(args.movieId)
-        dateTextView.transitionName = dateTransitionName(args.movieId)
+        posterImageView.transitionName = posterTransitionName(movie.id)
+        titleTextView.transitionName = titleTransitionName(movie.id)
+        dateTextView.transitionName = dateTransitionName(movie.id)
+
+        titleTextView.text = movie.title
+        dateTextView.text = movie.releaseDate
+
+        Glide.with(requireContext())
+            .load(movie.posterUrl)
+            .dontAnimate()
+            .placeholder(R.drawable.ic_place_holder_24dp)
+            .doOnFinished { startPostponedEnterTransition() }
+            .into(posterImageView)
 
         loadStateView.setOnRetryListener { loadData() }
+        favoriteButton.setOnClickListener { viewModel.toggleFavorite(movie.id) }
     }
 
     private fun populateUi(movie: Movie) = with(binding) {
 
         loadStateView.hide()
-
-        favoriteButton.setOnClickListener {
-            viewModel.toggleFavorite(args.movieId)
-        }
 
         Glide.with(requireContext())
             .load(movie.posterUrl)

@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager.VERTICAL
 import com.imn.iicnma.R
 import com.imn.iicnma.databinding.FragmentSearchBinding
+import com.imn.iicnma.domain.model.Movie
 import com.imn.iicnma.ui.widget.ListLoadStateAdapter
 import com.imn.iicnma.utils.hideKeyboard
 import com.imn.iicnma.utils.setOnKeyActionListener
@@ -37,10 +38,10 @@ class SearchFragment : Fragment() {
     private val searchAdapter = SearchAdapter(::onMovieClicked)
 
     private fun onMovieClicked(
-        movieId: Long,
+        movie: Movie,
         posterImageView: ImageView,
         titleTextView: TextView,
-        dateTextView: TextView
+        dateTextView: TextView,
     ) {
         val extras = FragmentNavigatorExtras(
             posterImageView to posterImageView.transitionName,
@@ -48,7 +49,7 @@ class SearchFragment : Fragment() {
             dateTextView to dateTextView.transitionName,
         )
         findNavController().navigate(
-            SearchFragmentDirections.actionNavigationSearchToMovieDetails(movieId), extras
+            SearchFragmentDirections.actionNavigationSearchToMovieDetails(movie), extras
         )
     }
 

@@ -1,5 +1,9 @@
 package com.imn.iicnma.domain.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class Movie(
     val id: Long,
     val title: String,
@@ -9,4 +13,4 @@ data class Movie(
     val releaseDate: String,
     val posterUrl: String?,
     val popularity: Float,
-)
+) : Parcelable
