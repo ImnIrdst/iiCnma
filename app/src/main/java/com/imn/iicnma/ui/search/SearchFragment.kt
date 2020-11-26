@@ -20,6 +20,7 @@ import com.imn.iicnma.R
 import com.imn.iicnma.databinding.FragmentSearchBinding
 import com.imn.iicnma.ui.widget.ListLoadStateAdapter
 import com.imn.iicnma.utils.hideKeyboard
+import com.imn.iicnma.utils.setOnKeyActionListener
 import com.imn.iicnma.utils.showKeyboard
 import com.imn.iicnma.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
@@ -73,15 +74,8 @@ class SearchFragment : Fragment() {
         editText.apply {
             requestFocus()
             showKeyboard()
+            setOnKeyActionListener(EditorInfo.IME_ACTION_SEARCH) { updateSearchFromInput() }
             setOnClickListener { isCursorVisible = true }
-            setOnEditorActionListener { _, actionId, _ ->
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    updateSearchFromInput()
-                    true
-                } else {
-                    false
-                }
-            }
         }
 
         postponeEnterTransition()
