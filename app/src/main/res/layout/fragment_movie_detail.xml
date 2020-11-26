@@ -61,9 +61,11 @@
                 android:layout_width="48dp"
                 android:layout_height="0dp"
                 android:layout_margin="@dimen/spacing_small"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@id/poster_image_view"
                 app:layout_constraintDimensionRatio="1"
-                app:layout_constraintStart_toEndOf="@id/poster_image_view" />
+                app:layout_constraintStart_toEndOf="@id/poster_image_view"
+                tools:visibility="visible" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/genre_text_view"
@@ -89,9 +91,11 @@
                 android:text="@string/overview"
                 android:textSize="@dimen/text_xnormal"
                 android:textStyle="bold"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/genre_text_view" />
+                app:layout_constraintTop_toBottomOf="@id/genre_text_view"
+                tools:visibility="visible" />
 
             <TextView
                 android:id="@+id/overview_text_view"
@@ -102,6 +106,14 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/heading_overview"
                 tools:text="Caught in the cross hairs of police corruption and Marseille’s warring gangs, a loyal cop must protect his squad by taking matters into his own hands." />
+
+            <com.imn.iicnma.ui.widget.LoadStateView
+                android:id="@+id/load_state_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/overview_text_view" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

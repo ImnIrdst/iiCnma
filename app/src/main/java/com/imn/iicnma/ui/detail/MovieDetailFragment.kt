@@ -14,7 +14,9 @@ import com.bumptech.glide.Glide
 import com.imn.iicnma.R
 import com.imn.iicnma.databinding.FragmentMovieDetailBinding
 import com.imn.iicnma.domain.model.Movie
+import com.imn.iicnma.domain.model.utils.IIError
 import com.imn.iicnma.domain.model.utils.State
+import com.imn.iicnma.domain.model.utils.getHumanReadableText
 import com.imn.iicnma.ui.DetailsTransition
 import com.imn.iicnma.utils.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -30,72 +32,91 @@ class MovieDetailFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View = FragmentMovieDetailBinding.inflate(inflater).also {
-        binding = it
-        sharedElementEnterTransition = DetailsTransition()
-        sharedElementReturnTransition = DetailsTransition()
-        postponeEnterTransition()
-    }.root
+    ) = FragmentMovieDetailBinding.inflate(inflater).also { binding = it; initUI() }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        loadData()
+    }
 
-        with(binding) {
-            posterImageView.transitionName = posterTransitionName(args.movieId)
-            titleTextView.transitionName = titleTransitionName(args.movieId)
-            dateTextView.transitionName = dateTransitionName(args.movieId)
-        }
-
+    private fun loadData() {
         viewModel.apply {
-            loadMovie(args.movieId).observe(viewLifecycleOwner) {
-                when (it) {
-                    is State.Success -> populateUi(it.value)
-                    is State.Loading -> Unit // TODO
-                    is State.Failure -> Unit // TODO
+            loadMovie(args.movieId).observe(viewLifecycleOwner) { state ->
+                when (state) {
+                    is State.Success -> state.value?.let { populateUi(it) }
+                    is State.Loading -> showLoading()
+                    is State.Failure -> populateError(state.error)
                     else -> throw IllegalStateException("bad state for load movie")
                 }
             }
             isFavoredStatus(args.movieId).observe(viewLifecycleOwner, {
-                val fabColor = if (it) {
-                    getColorCompat(R.color.orange_200)
-                } else {
-                    getColorCompat(R.color.gray)
-                }
-                binding.favoriteButton.backgroundTintList = ColorStateList.valueOf(fabColor)
+                it?.let { populateFavoriteButton(it) }
             })
         }
     }
 
-    private fun populateUi(movie: Movie?) {
-        movie ?: return
+    private fun initUI() = with(binding) {
+        sharedElementEnterTransition = DetailsTransition()
+        sharedElementReturnTransition = DetailsTransition()
+        postponeEnterTransition()
 
-        with(binding) {
-            favoriteButton.setOnClickListener {
-                viewModel.toggleFavorite(args.movieId)
-            }
+        posterImageView.transitionName = posterTransitionName(args.movieId)
+        titleTextView.transitionName = titleTransitionName(args.movieId)
+        dateTextView.transitionName = dateTransitionName(args.movieId)
 
-            Glide.with(requireContext())
-                .load(movie.posterUrl)
-                .dontAnimate()
-                .placeholder(R.drawable.ic_place_holder_24dp)
-                .doOnFinished { startPostponedEnterTransition() }
-                .into(posterImageView)
+        loadStateView.setOnRetryListener { loadData() }
+    }
 
-            ratingView.rateProgress.progress = movie.rate100
-            ratingView.rateText.text = movie.rate100.toString()
+    private fun populateUi(movie: Movie) = with(binding) {
 
-            titleTextView.text = movie.title
-            dateTextView.text = movie.releaseDate
-            genreTextView.text = movie.genres
-            overviewTextView.text = movie.overview
+        loadStateView.hide()
 
-            scrollView.setOnScrollChangeListener(
-                NestedScrollView.OnScrollChangeListener { _, _, dy, _, oldDy ->
-                    favoriteButton.isVisible = (dy <= oldDy)
-                }
-            )
+        favoriteButton.setOnClickListener {
+            viewModel.toggleFavorite(args.movieId)
         }
+
+        Glide.with(requireContext())
+            .load(movie.posterUrl)
+            .dontAnimate()
+            .placeholder(R.drawable.ic_place_holder_24dp)
+            .doOnFinished { startPostponedEnterTransition() }
+            .into(posterImageView)
+
+        ratingView.apply {
+            root.isVisible = true
+            rateProgress.progress = movie.rate100
+            rateText.text = movie.rate100.toString()
+        }
+
+        titleTextView.text = movie.title
+        dateTextView.text = movie.releaseDate
+        genreTextView.text = movie.genres
+        overviewTextView.text = movie.overview
+        headingOverview.isVisible = true
+
+        scrollView.setOnScrollChangeListener(
+            NestedScrollView.OnScrollChangeListener { _, _, dy, _, oldDy ->
+                favoriteButton.isVisible = (dy <= oldDy)
+            }
+        )
 
     }
 
+    private fun populateFavoriteButton(state: Boolean) {
+        val fabColor = if (state) {
+            getColorCompat(R.color.orange_200)
+        } else {
+            getColorCompat(R.color.gray)
+        }
+        binding.favoriteButton.backgroundTintList = ColorStateList.valueOf(fabColor)
+    }
+
+    private fun populateError(error: IIError) = with(binding) {
+        startPostponedEnterTransition()
+        loadStateView.setErrorMessage(error.getHumanReadableText(requireContext()))
+    }
+
+    private fun showLoading() = with(binding) {
+        loadStateView.showLoading()
+    }
 }
