@@ -53,34 +53,33 @@ class HomeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentHomeBinding.inflate(inflater).apply {
-            recyclerView.apply {
-                adapter = homeAdapter.withLoadStateHeaderAndFooter(
-                    header = ListLoadStateAdapter { homeAdapter.retry() },
-                    footer = ListLoadStateAdapter { homeAdapter.retry() }
-                )
-                layoutManager = GridLayoutManager(context, getSpansCount()).apply {
-                    spanSizeLookup = object : SpanSizeLookup() {
-                        override fun getSpanSize(position: Int): Int {
-                            return if (position >= homeAdapter.itemCount) getSpansCount() else 1
-                        }
-                    }
-                }
-            }
+        savedInstanceState: Bundle?,
+    ) = FragmentHomeBinding.inflate(inflater).also { binding = it; initUI() }.root
 
-        }
-        return binding.root
-    }
-
-    private fun getSpansCount() = if (isPortrait()) 2 else 4
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(binding) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         lifecycleScope.launch {
             homeViewModel.movies.collectLatest { homeAdapter.submitData(it) }
+        }
+    }
+
+    private fun initUI() = with(binding) {
+        postponeEnterTransition()
+
+        recyclerView.apply {
+            adapter = homeAdapter.withLoadStateHeaderAndFooter(
+                header = ListLoadStateAdapter { homeAdapter.retry() },
+                footer = ListLoadStateAdapter { homeAdapter.retry() }
+            )
+            layoutManager = GridLayoutManager(context, getSpansCount()).apply {
+                spanSizeLookup = object : SpanSizeLookup() {
+                    override fun getSpanSize(position: Int): Int {
+                        return if (position >= homeAdapter.itemCount) getSpansCount() else 1
+                    }
+                }
+            }
+            viewTreeObserver.addOnPreDrawListener { startPostponedEnterTransition(); true }
         }
 
         loadStateLayout.retryButton.setOnClickListener { homeAdapter.retry() }
@@ -125,7 +124,8 @@ class HomeFragment : Fragment() {
                 super.onScrollStateChanged(recyclerView, newState)
                 when (newState) {
                     RecyclerView.SCROLL_STATE_IDLE,
-                    RecyclerView.SCROLL_STATE_SETTLING -> {
+                    RecyclerView.SCROLL_STATE_SETTLING,
+                    -> {
                         pageTitle.isVisible = (dySum <= 0)
                         dySum = 0
                     }
@@ -138,4 +138,6 @@ class HomeFragment : Fragment() {
             }
         })
     }
+
+    private fun getSpansCount() = if (isPortrait()) 2 else 4
 }

@@ -54,28 +54,25 @@ class SearchFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? = FragmentSearchBinding.inflate(inflater).also { binding = it }.root
+        savedInstanceState: Bundle?,
+    ) = FragmentSearchBinding.inflate(inflater).also { binding = it; initUI() }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val query = savedInstanceState?.getString(LAST_SEARCH_QUERY)
-
-        populateUI(query)
-        search(query)
+        searchViewModel.getSavedQuery().let {
+            populateUI(it)
+            search(it)
+        }
     }
 
-    private fun populateUI(query: String?) = with(binding) {
-        searchViewModel.getSavedQuery()?.let {
-            editText.setText(it)
-            updateSearchFromInput()
-        }
+    private fun initUI() = with(binding) {
+        searchButton.setOnClickListener { updateSearchFromInput() }
+        backButton.setOnClickListener { findNavController().navigateUp() }
 
         editText.apply {
             requestFocus()
             showKeyboard()
-            query?.let { setText(it) }
             setOnClickListener { isCursorVisible = true }
             setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
@@ -87,20 +84,14 @@ class SearchFragment : Fragment() {
             }
         }
 
-        searchButton.setOnClickListener {
-            updateSearchFromInput()
-        }
-
-        backButton.setOnClickListener {
-            findNavController().navigateUp()
-        }
-
+        postponeEnterTransition()
         recyclerView.apply {
             adapter = searchAdapter.withLoadStateHeaderAndFooter(
                 header = ListLoadStateAdapter { searchAdapter.retry() },
                 footer = ListLoadStateAdapter { searchAdapter.retry() }
             )
             layoutManager = LinearLayoutManager(requireContext(), VERTICAL, false)
+            viewTreeObserver.addOnPreDrawListener { startPostponedEnterTransition(); true }
         }
 
         loadStateLayout.retryButton.setOnClickListener { searchAdapter.retry() }
@@ -148,6 +139,13 @@ class SearchFragment : Fragment() {
         }
     }
 
+    private fun populateUI(query: String?) = with(binding) {
+        query?.let {
+            editText.setText(it)
+            updateSearchFromInput()
+        }
+    }
+
     private fun updateSearchFromInput() = with(binding.editText) {
         text?.trim()?.let {
             hideKeyboard()
@@ -166,9 +164,5 @@ class SearchFragment : Fragment() {
         searchJob = lifecycleScope.launch {
             searchViewModel.search(query)?.collectLatest { searchAdapter.submitData(it) }
         }
-    }
-
-    companion object {
-        private const val LAST_SEARCH_QUERY: String = "last_search_query"
     }
 }

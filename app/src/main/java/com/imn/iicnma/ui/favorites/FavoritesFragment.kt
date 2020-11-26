@@ -50,8 +50,8 @@ class FavoritesFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? = FragmentFavoritesBinding.inflate(inflater).also { binding = it }.root
+        savedInstanceState: Bundle?,
+    ) = FragmentFavoritesBinding.inflate(inflater).also { binding = it; initUi() }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -59,11 +59,10 @@ class FavoritesFragment : Fragment() {
         lifecycleScope.launch {
             favoritesViewModel.movies.collectLatest { favoritesAdapter.submitData(it) }
         }
-
-        populateUI()
     }
 
-    private fun populateUI() = with(binding) {
+    private fun initUi() = with(binding) {
+        postponeEnterTransition()
 
         recyclerView.apply {
             adapter = favoritesAdapter.withLoadStateHeaderAndFooter(
@@ -72,6 +71,7 @@ class FavoritesFragment : Fragment() {
             )
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            viewTreeObserver.addOnPreDrawListener { startPostponedEnterTransition(); true }
         }
 
         loadStateLayout.retryButton.setOnClickListener { favoritesAdapter.retry() }

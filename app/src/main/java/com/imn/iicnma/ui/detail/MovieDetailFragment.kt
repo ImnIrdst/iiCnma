@@ -10,16 +10,13 @@ import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
-import androidx.transition.TransitionInflater
 import com.bumptech.glide.Glide
 import com.imn.iicnma.R
 import com.imn.iicnma.databinding.FragmentMovieDetailBinding
 import com.imn.iicnma.domain.model.Movie
 import com.imn.iicnma.domain.model.utils.State
-import com.imn.iicnma.utils.dateTransitionName
-import com.imn.iicnma.utils.getColorCompat
-import com.imn.iicnma.utils.posterTransitionName
-import com.imn.iicnma.utils.titleTransitionName
+import com.imn.iicnma.ui.DetailsTransition
+import com.imn.iicnma.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -35,8 +32,9 @@ class MovieDetailFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View = FragmentMovieDetailBinding.inflate(inflater).also {
         binding = it
-        sharedElementEnterTransition =
-            TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+        sharedElementEnterTransition = DetailsTransition()
+        sharedElementReturnTransition = DetailsTransition()
+        postponeEnterTransition()
     }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -78,7 +76,9 @@ class MovieDetailFragment : Fragment() {
 
             Glide.with(requireContext())
                 .load(movie.posterUrl)
+                .dontAnimate()
                 .placeholder(R.drawable.ic_place_holder_24dp)
+                .doOnFinished { startPostponedEnterTransition() }
                 .into(posterImageView)
 
             ratingView.rateProgress.progress = movie.rate100
