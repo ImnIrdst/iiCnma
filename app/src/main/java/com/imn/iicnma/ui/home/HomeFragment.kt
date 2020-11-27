@@ -20,9 +20,7 @@ import com.imn.iicnma.R
 import com.imn.iicnma.databinding.FragmentHomeBinding
 import com.imn.iicnma.domain.model.Movie
 import com.imn.iicnma.ui.widget.ListLoadStateAdapter
-import com.imn.iicnma.utils.isPortrait
-import com.imn.iicnma.utils.navigateSafe
-import com.imn.iicnma.utils.showToast
+import com.imn.iicnma.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -63,6 +61,9 @@ class HomeFragment : Fragment() {
 
         lifecycleScope.launch {
             homeViewModel.movies.collectLatest { homeAdapter.submitData(it) }
+        }
+        lifecycleScope.launch {
+            homeAdapter.listenOnLoadStates()
         }
     }
 
@@ -107,10 +108,14 @@ class HomeFragment : Fragment() {
 
         loadStateView.setOnRetryListener { homeAdapter.retry() }
         topMessageTextView.setOnClickListener { homeAdapter.retry() }
+    }
 
-        homeAdapter.addLoadStateListener { loadState ->
+    private suspend fun HomeAdapter.listenOnLoadStates() = with(binding) {
+        getLoadStateFlow().collectLatest { loadState ->
+            loadState ?: return@collectLatest
 
             recyclerView.isVisible = loadState.refresh is LoadState.NotLoading
+                    || loadState.source.refresh is LoadState.NotLoading
             loadStateView.isLoadingVisible = loadState.refresh is LoadState.Loading
 
             if (loadState.refresh is LoadState.Error) {

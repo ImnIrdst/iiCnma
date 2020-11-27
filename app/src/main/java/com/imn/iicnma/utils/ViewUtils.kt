@@ -4,6 +4,13 @@ import android.app.Activity
 import android.view.KeyEvent
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import androidx.paging.CombinedLoadStates
+import androidx.paging.PagingDataAdapter
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.debounce
 
 fun EditText.hideKeyboard(): Boolean {
     return (context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager)
@@ -32,4 +39,16 @@ fun EditText.setOnKeyActionListener(actionId: Int, block: () -> Unit) {
             false
         }
     }
+}
+
+@OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
+fun PagingDataAdapter<*, *>.getLoadStateFlow(): Flow<CombinedLoadStates?> {
+
+    val loadStateFlow = MutableStateFlow<CombinedLoadStates?>(null)
+
+    this.addLoadStateListener {
+        loadStateFlow.value = it
+    }
+
+    return loadStateFlow.debounce(500)
 }
