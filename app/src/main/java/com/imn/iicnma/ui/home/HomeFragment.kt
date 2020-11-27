@@ -21,6 +21,7 @@ import com.imn.iicnma.databinding.FragmentHomeBinding
 import com.imn.iicnma.domain.model.Movie
 import com.imn.iicnma.ui.widget.ListLoadStateAdapter
 import com.imn.iicnma.utils.isPortrait
+import com.imn.iicnma.utils.navigateSafe
 import com.imn.iicnma.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -46,7 +47,7 @@ class HomeFragment : Fragment() {
             titleTextView to titleTextView.transitionName,
             dateTextView to dateTextView.transitionName,
         )
-        findNavController().navigate(
+        findNavController().navigateSafe(
             HomeFragmentDirections.actionNavigationHomeToMovieDetails(movie), extras
         )
     }

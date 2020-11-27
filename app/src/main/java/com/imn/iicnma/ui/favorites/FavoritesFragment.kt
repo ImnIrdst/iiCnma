@@ -19,6 +19,7 @@ import com.imn.iicnma.R
 import com.imn.iicnma.databinding.FragmentFavoritesBinding
 import com.imn.iicnma.domain.model.Movie
 import com.imn.iicnma.ui.widget.ListLoadStateAdapter
+import com.imn.iicnma.utils.navigateSafe
 import com.imn.iicnma.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -43,7 +44,7 @@ class FavoritesFragment : Fragment() {
             titleTextView to titleTextView.transitionName,
             dateTextView to dateTextView.transitionName,
         )
-        findNavController().navigate(
+        findNavController().navigateSafe(
             FavoritesFragmentDirections.actionNavigationFavoritesToMovieDetails(movie), extras
         )
     }

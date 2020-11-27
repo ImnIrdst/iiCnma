@@ -20,10 +20,7 @@ import com.imn.iicnma.R
 import com.imn.iicnma.databinding.FragmentSearchBinding
 import com.imn.iicnma.domain.model.Movie
 import com.imn.iicnma.ui.widget.ListLoadStateAdapter
-import com.imn.iicnma.utils.hideKeyboard
-import com.imn.iicnma.utils.setOnKeyActionListener
-import com.imn.iicnma.utils.showKeyboard
-import com.imn.iicnma.utils.showToast
+import com.imn.iicnma.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
@@ -48,7 +45,7 @@ class SearchFragment : Fragment() {
             titleTextView to titleTextView.transitionName,
             dateTextView to dateTextView.transitionName,
         )
-        findNavController().navigate(
+        findNavController().navigateSafe(
             SearchFragmentDirections.actionNavigationSearchToMovieDetails(movie), extras
         )
     }
