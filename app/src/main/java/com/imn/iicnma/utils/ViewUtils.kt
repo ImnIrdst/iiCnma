@@ -4,14 +4,15 @@ import android.app.Activity
 import android.view.KeyEvent
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.imn.iicnma.R
-import com.imn.iicnma.ui.widget.PageLoadStateView
+import com.imn.iicnma.domain.model.utils.getHumanReadableText
+import com.imn.iicnma.domain.model.utils.toIIError
+import com.imn.iicnma.ui.widget.ListLoadStateView
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
@@ -51,16 +52,16 @@ fun EditText.setOnKeyActionListener(actionId: Int, block: () -> Unit) {
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 suspend fun PagingDataAdapter<*, *>.listenOnLoadStates(
     recyclerView: RecyclerView,
-    loadStateView: PageLoadStateView,
-    topMessageTextView: TextView,
+    loadStateView: ListLoadStateView,
 ) {
     loadStateView.setOnRetryListener { this.retry() }
-    topMessageTextView.setOnClickListener { this.retry() }
 
     getLoadStateFlow().collectLatest { loadState ->
         loadState ?: return@collectLatest
 
-        val context = topMessageTextView.context
+        val context = loadStateView.context
+
+        loadStateView.hide()
 
         recyclerView.isVisible = loadState.refresh is LoadState.NotLoading
                 || loadState.source.refresh is LoadState.NotLoading
@@ -69,13 +70,18 @@ suspend fun PagingDataAdapter<*, *>.listenOnLoadStates(
         if (loadState.refresh is LoadState.Error) {
 
             val sourceErrorState = loadState.source.refresh as? LoadState.Error
+            val mediatorErrorState = loadState.mediator?.refresh as? LoadState.Error
 
             if (sourceErrorState != null) {
                 loadStateView.showErrorMessage(sourceErrorState.error.toString())
             } else {
                 recyclerView.isVisible = true
-                topMessageTextView.isVisible = true
-                loadStateView.hideErrorMessage()
+
+                if (mediatorErrorState != null) {
+                    loadStateView.showErrorMessage(
+                        mediatorErrorState.toIIError().getHumanReadableText(context)
+                    )
+                }
             }
 
             (loadState.mediator?.refresh as? LoadState.Error)?.let {
@@ -84,7 +90,6 @@ suspend fun PagingDataAdapter<*, *>.listenOnLoadStates(
                 )
             }
         } else {
-            topMessageTextView.isVisible = false
             loadStateView.hideErrorMessage()
         }
     }

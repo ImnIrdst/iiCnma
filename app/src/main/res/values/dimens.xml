@@ -11,4 +11,6 @@
     <dimen name="text_xxsmall">14sp</dimen>
     <dimen name="text_xsmall">12sp</dimen>
     <dimen name="spacing_line">2dp</dimen>
+
+    <dimen name="list_progress_bar">32dp</dimen>
 </resources>

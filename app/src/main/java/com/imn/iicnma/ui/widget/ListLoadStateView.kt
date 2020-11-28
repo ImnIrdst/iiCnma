@@ -7,7 +7,9 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.annotation.AttrRes
 import androidx.annotation.StyleRes
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import com.imn.iicnma.R
 import com.imn.iicnma.databinding.LayoutListLoadStateBinding
 
 class ListLoadStateView @JvmOverloads constructor(
@@ -27,7 +29,7 @@ class ListLoadStateView @JvmOverloads constructor(
 
     fun showErrorMessage(message: String, isRetryButtonVisible: Boolean = true) = with(binding) {
         root.isVisible = true
-        progressBar.isVisible = false
+        progressBar.isInvisible = true
         retryButton.isVisible = isRetryButtonVisible
         messageTextView.apply {
             isVisible = true
@@ -52,13 +54,17 @@ class ListLoadStateView @JvmOverloads constructor(
 
     fun showLoading() = with(binding) {
         root.isVisible = true
-        progressBar.isVisible = true
+        progressBar.isInvisible = false
         retryButton.isVisible = false
-        messageTextView.isVisible = false
+        messageTextView.apply {
+            isVisible = true
+            text = context.getString(R.string.loading)
+        }
+
     }
 
     fun hideLoading() = with(binding) {
-        progressBar.isVisible = false
+        progressBar.isInvisible = true
     }
 
     fun setOnRetryListener(listener: (View) -> Unit) {

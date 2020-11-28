@@ -1,6 +1,7 @@
 package com.imn.iicnma.domain.model.utils
 
 import android.content.Context
+import androidx.paging.LoadState
 import com.imn.iicnma.R
 import com.imn.iicnma.utils.isNetworkAvailable
 import retrofit2.HttpException
@@ -12,10 +13,13 @@ class UnknownError(cause: Throwable) : IIError(cause)
 
 fun Throwable.toIIError(): IIError =
     when (this) {
+        is IIError -> this
         is UnknownHostException -> NetworkError(this)
         is HttpException -> NetworkError(this)
         else -> UnknownError(this)
     }
+
+fun LoadState.Error.toIIError(): IIError = error.toIIError()
 
 fun IIError.getHumanReadableText(context: Context) =
     when (this) {

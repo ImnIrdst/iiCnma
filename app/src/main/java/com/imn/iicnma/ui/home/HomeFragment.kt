@@ -67,7 +67,6 @@ class HomeFragment : Fragment() {
                 homeAdapter.listenOnLoadStates(
                     recyclerView,
                     loadStateView,
-                    topMessageTextView,
                 )
             }
         }
