@@ -13,7 +13,6 @@
         android:layout_gravity="center"
         android:padding="@dimen/spacing_normal"
         android:textAlignment="center"
-        android:textColor="?android:textColorPrimary"
         android:textSize="@dimen/text_normal"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -53,18 +53,27 @@ fun EditText.setOnKeyActionListener(actionId: Int, block: () -> Unit) {
 suspend fun PagingDataAdapter<*, *>.listenOnLoadStates(
     recyclerView: RecyclerView,
     loadStateView: ListLoadStateView,
+    isEmpty: () -> Boolean,
+    emptyMessage: String,
 ) {
     loadStateView.setOnRetryListener { this.retry() }
 
     getLoadStateFlow().collectLatest { loadState ->
         loadState ?: return@collectLatest
 
+        iiDebugLog("${loadState.refresh}")
+        iiDebugLog("${loadState.source.refresh}")
+        iiDebugLog("${loadState.mediator?.refresh}")
+        iiDebugLog("---------")
+
         val context = loadStateView.context
 
         loadStateView.hide()
 
-        recyclerView.isVisible = loadState.refresh is LoadState.NotLoading
-                || loadState.source.refresh is LoadState.NotLoading
+        recyclerView.isVisible =
+            loadState.refresh is LoadState.NotLoading
+                    || loadState.source.refresh is LoadState.NotLoading
+
         loadStateView.isLoadingVisible = loadState.refresh is LoadState.Loading
 
         if (loadState.refresh is LoadState.Error) {
@@ -91,6 +100,11 @@ suspend fun PagingDataAdapter<*, *>.listenOnLoadStates(
             }
         } else {
             loadStateView.hideErrorMessage()
+        }
+
+        if (loadState.refresh is LoadState.NotLoading && isEmpty.invoke()) {
+            recyclerView.isVisible = false
+            loadStateView.showErrorMessage(emptyMessage, false)
         }
     }
 }

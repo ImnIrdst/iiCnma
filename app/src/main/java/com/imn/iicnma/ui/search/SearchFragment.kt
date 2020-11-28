@@ -7,13 +7,11 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
-import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager.VERTICAL
 import com.imn.iicnma.R
@@ -59,6 +57,17 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        lifecycleScope.launch {
+            with(binding) {
+                searchAdapter.listenOnLoadStates(
+                    recyclerView,
+                    loadStateView,
+                    { searchViewModel.isSearchedAnyThing && searchAdapter.itemCount == 0 },
+                    getString(R.string.no_search_results)
+                )
+            }
+        }
+
         searchViewModel.getSavedQuery().let {
             populateUI(it)
             search(it)
@@ -87,42 +96,6 @@ class SearchFragment : Fragment() {
         }
 
         loadStateView.setOnRetryListener { searchAdapter.retry() }
-        topMessageTextView.setOnClickListener { searchAdapter.retry() }
-
-        searchAdapter.addLoadStateListener { loadState ->
-
-            recyclerView.isVisible = loadState.refresh is LoadState.NotLoading
-            loadStateView.isLoadingVisible = loadState.refresh is LoadState.Loading
-
-            if (loadState.refresh is LoadState.Error) {
-
-                val sourceErrorState = loadState.source.refresh as? LoadState.Error
-
-                if (sourceErrorState != null) {
-                    loadStateView.showErrorMessage(sourceErrorState.error.toString())
-                } else {
-                    recyclerView.isVisible = true
-                    topMessageTextView.isVisible = true
-                    loadStateView.hideErrorMessage()
-                }
-
-                (loadState.mediator?.refresh as? LoadState.Error)?.let {
-                    showToast(getString(R.string.api_error_prefix) + it.error.toString())
-                }
-            } else {
-                topMessageTextView.isVisible = false
-                loadStateView.hideErrorMessage()
-            }
-
-            if (searchViewModel.isSearchedAnyThing
-                && loadState.refresh is LoadState.NotLoading
-                && searchAdapter.itemCount == 0
-            ) {
-                recyclerView.isVisible = false
-                loadStateView.showErrorMessage(getString(R.string.no_search_results), false)
-
-            }
-        }
     }
 
     private fun populateUI(query: String?) = with(binding) {

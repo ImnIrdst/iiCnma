@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
 import androidx.recyclerview.widget.RecyclerView
+import com.imn.iicnma.R
 import com.imn.iicnma.databinding.FragmentHomeBinding
 import com.imn.iicnma.domain.model.Movie
 import com.imn.iicnma.ui.widget.ListLoadStateAdapter
@@ -62,11 +63,14 @@ class HomeFragment : Fragment() {
         lifecycleScope.launch {
             homeViewModel.movies.collectLatest { homeAdapter.submitData(it) }
         }
+
         lifecycleScope.launch {
             with(binding) {
                 homeAdapter.listenOnLoadStates(
                     recyclerView,
                     loadStateView,
+                    { homeAdapter.itemCount == 0 },
+                    getString(R.string.no_popular_movies)
                 )
             }
         }

@@ -74,21 +74,14 @@
 
     </androidx.cardview.widget.CardView>
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/top_message_text_view"
+    <com.imn.iicnma.ui.widget.ListLoadStateView
+        android:id="@+id/load_state_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/orange_700"
-        android:gravity="center"
-        android:padding="@dimen/spacing_small"
-        android:text="@string/offline_mode"
-        android:textColor="@color/white"
-        android:visibility="gone"
+        android:layout_marginTop="@dimen/spacing_normal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/search_card_view"
-        tools:visibility="visible" />
-
+        app:layout_constraintTop_toBottomOf="@id/search_card_view" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -98,16 +91,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/top_message_text_view"
+        app:layout_constraintTop_toBottomOf="@id/load_state_view"
         tools:listitem="@layout/list_item_search" />
-
-    <com.imn.iicnma.ui.widget.PageLoadStateView
-        android:id="@+id/load_state_view"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

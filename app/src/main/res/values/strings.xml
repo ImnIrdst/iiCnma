@@ -16,4 +16,5 @@
     <string name="general_network_error">Cannot connect to server</string>
     <string name="unknown_error">Uknown error happened</string>
     <string name="loading">Loading …</string>
+    <string name="no_popular_movies">There is no popular movies at this time</string>
 </resources>

@@ -12,15 +12,14 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
-import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.imn.iicnma.R
 import com.imn.iicnma.databinding.FragmentFavoritesBinding
 import com.imn.iicnma.domain.model.Movie
 import com.imn.iicnma.ui.widget.ListLoadStateAdapter
+import com.imn.iicnma.utils.listenOnLoadStates
 import com.imn.iicnma.utils.navigateSafe
-import com.imn.iicnma.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -61,6 +60,16 @@ class FavoritesFragment : Fragment() {
         lifecycleScope.launch {
             favoritesViewModel.movies.collectLatest { favoritesAdapter.submitData(it) }
         }
+        lifecycleScope.launch {
+            with(binding) {
+                favoritesAdapter.listenOnLoadStates(
+                    recyclerView,
+                    loadStateView,
+                    { favoritesAdapter.itemCount == 0 },
+                    getString(R.string.no_favorite_movies)
+                )
+            }
+        }
     }
 
     private fun initUi() = with(binding) {
@@ -98,34 +107,5 @@ class FavoritesFragment : Fragment() {
         }
 
         loadStateView.setOnRetryListener { favoritesAdapter.retry() }
-        favoritesAdapter.addLoadStateListener { loadState ->
-
-            recyclerView.isVisible = loadState.refresh is LoadState.NotLoading
-            loadStateView.isLoadingVisible = loadState.refresh is LoadState.Loading
-
-            if (loadState.refresh is LoadState.Error) {
-
-                val sourceErrorState = loadState.source.refresh as? LoadState.Error
-
-                if (sourceErrorState != null) {
-                    loadStateView.showErrorMessage(sourceErrorState.error.toString())
-                } else {
-                    recyclerView.isVisible = true
-                    loadStateView.hideErrorMessage()
-                }
-
-                (loadState.mediator?.refresh as? LoadState.Error)?.let {
-                    showToast(getString(R.string.api_error_prefix) + it.error.toString())
-                }
-            } else {
-                loadStateView.hideErrorMessage()
-            }
-
-            if (loadState.refresh is LoadState.NotLoading && favoritesAdapter.itemCount == 0) {
-                recyclerView.isVisible = false
-                loadStateView.showErrorMessage(getString(R.string.no_favorite_movies), false)
-            }
-
-        }
     }
 }
