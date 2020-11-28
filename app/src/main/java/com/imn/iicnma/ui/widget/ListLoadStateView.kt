@@ -8,16 +8,16 @@ import android.widget.FrameLayout
 import androidx.annotation.AttrRes
 import androidx.annotation.StyleRes
 import androidx.core.view.isVisible
-import com.imn.iicnma.databinding.LayoutLoadStateBinding
+import com.imn.iicnma.databinding.LayoutListLoadStateBinding
 
-class LoadStateView @JvmOverloads constructor(
+class ListLoadStateView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     @Suppress("UNUSED_PARAMETER") @AttrRes defStyleAttr: Int = 0,
     @Suppress("UNUSED_PARAMETER") @StyleRes defStyleRes: Int = 0,
 ) : FrameLayout(context, attrs) {
 
-    private val binding = LayoutLoadStateBinding.inflate(
+    private val binding = LayoutListLoadStateBinding.inflate(
         LayoutInflater.from(context), this, true
     )
 

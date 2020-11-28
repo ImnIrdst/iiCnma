@@ -45,7 +45,7 @@
         tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         tools:listitem="@layout/list_item_home" />
 
-    <com.imn.iicnma.ui.widget.LoadStateView
+    <com.imn.iicnma.ui.widget.PageLoadStateView
         android:id="@+id/load_state_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

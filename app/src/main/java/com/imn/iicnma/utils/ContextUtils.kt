@@ -11,9 +11,11 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 
 fun Fragment.showToast(text: String?) {
-    context?.let {
-        Toast.makeText(it, text, Toast.LENGTH_LONG).apply { show() }
-    }
+    context?.let { it.showToast(text) }
+}
+
+fun Context.showToast(text: String?) {
+    Toast.makeText(this, text, Toast.LENGTH_LONG).apply { show() }
 }
 
 fun Fragment.getColorCompat(@ColorRes colorId: Int) =

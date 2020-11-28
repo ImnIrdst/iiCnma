@@ -12,15 +12,15 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
-import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
 import androidx.recyclerview.widget.RecyclerView
-import com.imn.iicnma.R
 import com.imn.iicnma.databinding.FragmentHomeBinding
 import com.imn.iicnma.domain.model.Movie
 import com.imn.iicnma.ui.widget.ListLoadStateAdapter
-import com.imn.iicnma.utils.*
+import com.imn.iicnma.utils.isPortrait
+import com.imn.iicnma.utils.listenOnLoadStates
+import com.imn.iicnma.utils.navigateSafe
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -63,7 +63,13 @@ class HomeFragment : Fragment() {
             homeViewModel.movies.collectLatest { homeAdapter.submitData(it) }
         }
         lifecycleScope.launch {
-            homeAdapter.listenOnLoadStates()
+            with(binding) {
+                homeAdapter.listenOnLoadStates(
+                    recyclerView,
+                    loadStateView,
+                    topMessageTextView,
+                )
+            }
         }
     }
 
@@ -104,39 +110,6 @@ class HomeFragment : Fragment() {
                     dySum += dy
                 }
             })
-        }
-
-        loadStateView.setOnRetryListener { homeAdapter.retry() }
-        topMessageTextView.setOnClickListener { homeAdapter.retry() }
-    }
-
-    private suspend fun HomeAdapter.listenOnLoadStates() = with(binding) {
-        getLoadStateFlow().collectLatest { loadState ->
-            loadState ?: return@collectLatest
-
-            recyclerView.isVisible = loadState.refresh is LoadState.NotLoading
-                    || loadState.source.refresh is LoadState.NotLoading
-            loadStateView.isLoadingVisible = loadState.refresh is LoadState.Loading
-
-            if (loadState.refresh is LoadState.Error) {
-
-                val sourceErrorState = loadState.source.refresh as? LoadState.Error
-
-                if (sourceErrorState != null) {
-                    loadStateView.showErrorMessage(sourceErrorState.error.toString())
-                } else {
-                    recyclerView.isVisible = true
-                    topMessageTextView.isVisible = true
-                    loadStateView.hideErrorMessage()
-                }
-
-                (loadState.mediator?.refresh as? LoadState.Error)?.let {
-                    showToast(getString(R.string.api_error_prefix) + it.error.toString())
-                }
-            } else {
-                topMessageTextView.isVisible = false
-                loadStateView.hideErrorMessage()
-            }
         }
     }
 

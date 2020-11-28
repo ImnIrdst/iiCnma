@@ -107,7 +107,7 @@
                 app:layout_constraintTop_toBottomOf="@id/heading_overview"
                 tools:text="Caught in the cross hairs of police corruption and Marseille’s warring gangs, a loyal cop must protect his squad by taking matters into his own hands." />
 
-            <com.imn.iicnma.ui.widget.LoadStateView
+            <com.imn.iicnma.ui.widget.PageLoadStateView
                 android:id="@+id/load_state_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
