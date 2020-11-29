@@ -61,11 +61,6 @@ suspend fun PagingDataAdapter<*, *>.listenOnLoadStates(
     getLoadStateFlow().collectLatest { loadState ->
         loadState ?: return@collectLatest
 
-        iiDebugLog("${loadState.refresh}")
-        iiDebugLog("${loadState.source.refresh}")
-        iiDebugLog("${loadState.mediator?.refresh}")
-        iiDebugLog("---------")
-
         val context = loadStateView.context
 
         loadStateView.hide()

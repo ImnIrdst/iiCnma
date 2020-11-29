@@ -20,7 +20,9 @@ interface PopularMoviesDao : CommonMovieListDao, PopularMoviesLocalDataSource {
     @Query("DELETE FROM popular_movies_keys")
     suspend fun clearRemoteKeys()
 
-    @Query("SELECT * FROM movies ORDER BY page ASC, popularity DESC, title ASC")
+    @Query("""SELECT * FROM movies
+        INNER JOIN popular_movies_keys  ON movies.id=popular_movies_keys.movieId
+        ORDER BY curKey ASC, popularity DESC, title ASC""")
     override fun getAll(): PagingSource<Int, MovieEntity>
 
     @Transaction
@@ -34,7 +36,7 @@ interface PopularMoviesDao : CommonMovieListDao, PopularMoviesLocalDataSource {
         }
         val prevKey = if (pageKey == STARTING_PAGE_INDEX) null else pageKey - 1
         val nextKey = if (pageKey >= response.totalPages) null else pageKey + 1
-        val keys = response.results.map { PopularMovieKeysEntity(it.id, prevKey, nextKey) }
+        val keys = response.results.map { PopularMovieKeysEntity(it.id, prevKey, pageKey, nextKey) }
         insertAll(keys)
         insertAllMovies(response.toMovieEntityList())
     }

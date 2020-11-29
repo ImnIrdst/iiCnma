@@ -22,8 +22,7 @@ data class MovieResponse(
         rate = rate,
         posterPath = posterPath,
         popularity = popularity,
-        genres = genreResponses.joinToString(", "),
-        page = -1,
+        genres = genreResponses.joinToString(", ")
     )
 }
 

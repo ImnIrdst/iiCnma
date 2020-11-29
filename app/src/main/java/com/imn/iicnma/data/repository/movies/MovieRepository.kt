@@ -19,9 +19,9 @@ class MovieRepository @Inject constructor(
 
             try { // TODO better error handling
                 if (localMovie == null || !localMovie.isDetailLoaded()) {
-                    var movieEntity = remote.getMovie(id).toMovieEntity()
-                    if (localMovie != null) movieEntity = movieEntity.copy(page = localMovie.page)
-                    local.insert(movieEntity)
+                    remote.getMovie(id).let {
+                        local.insert(it.toMovieEntity())
+                    }
                 }
             } catch (e: HttpException) {
                 Log.e("MovieRepository", "error happened when loading movie details", e)
