@@ -8,6 +8,6 @@ import com.google.gson.annotations.SerializedName
 data class PopularMovieKeysEntity(
     @PrimaryKey @field:SerializedName("movie_id") val movieId: Long,
     @field:SerializedName("prev_key") val prevKey: Int?,
-    @field:SerializedName("cur_key") val curKey: Int?,
+    @field:SerializedName("cur_key") val curKey: Int,
     @field:SerializedName("next_key") val nextKey: Int?,
 )

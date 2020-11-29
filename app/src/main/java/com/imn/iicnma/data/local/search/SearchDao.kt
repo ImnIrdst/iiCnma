@@ -21,9 +21,10 @@ interface SearchDao : SearchLocalDataSource, CommonMovieListDao {
     suspend fun clearRemoteKeys()
 
     @Query(
-        """SELECT * FROM movies WHERE
-                title LIKE :queryString OR overview LIKE :queryString 
-                ORDER BY popularity DESC, title ASC"""
+        """SELECT * FROM movies
+            INNER JOIN search_keys  ON movies.id=search_keys.movieId
+            WHERE title LIKE :queryString OR overview LIKE :queryString 
+            ORDER BY curKey ASC, popularity DESC, title ASC"""
     )
     override fun searchMovies(queryString: String): PagingSource<Int, MovieEntity>
 
@@ -38,7 +39,7 @@ interface SearchDao : SearchLocalDataSource, CommonMovieListDao {
         }
         val prevKey = if (pageKey == STARTING_PAGE_INDEX) null else pageKey - 1
         val nextKey = if (pageKey >= response.totalPages) null else pageKey + 1
-        val keys = response.results.map { SearchKeysEntity(it.id, prevKey, nextKey) }
+        val keys = response.results.map { SearchKeysEntity(it.id, prevKey, pageKey, nextKey) }
         insertAll(keys)
         insertAllMovies(response.toMovieEntityList())
     }
