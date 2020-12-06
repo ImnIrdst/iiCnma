@@ -105,7 +105,5 @@ class FavoritesFragment : Fragment() {
                 }
             })
         }
-
-        loadStateView.setOnRetryListener { favoritesAdapter.retry() }
     }
 }

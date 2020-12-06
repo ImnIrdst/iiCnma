@@ -8,6 +8,8 @@ import com.bumptech.glide.load.HttpException
 import com.imn.iicnma.data.local.movie.MovieEntity
 import com.imn.iicnma.data.local.search.SearchKeysEntity
 import com.imn.iicnma.data.remote.STARTING_PAGE_INDEX
+import com.imn.iicnma.domain.model.utils.NetworkError
+import com.imn.iicnma.domain.model.utils.UnknownError
 import java.io.IOException
 import java.io.InvalidObjectException
 
@@ -48,9 +50,9 @@ class SearchPagerMediator(
             local.cacheResponse(apiResponse, pageKey, loadType == LoadType.REFRESH)
             MediatorResult.Success(endOfPaginationReached = pageKey >= apiResponse.totalPages)
         } catch (exception: IOException) {
-            MediatorResult.Error(exception)
+            MediatorResult.Error(UnknownError(exception))
         } catch (exception: HttpException) {
-            MediatorResult.Error(exception)
+            MediatorResult.Error(NetworkError(exception))
         }
     }
 

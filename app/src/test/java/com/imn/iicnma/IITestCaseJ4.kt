@@ -21,6 +21,7 @@ open class IITestCase {
     }
 
     open fun tearDown() {
+        testScope.uncaughtExceptions.firstOrNull()?.let { throw it }
         unmockkAll()
         Dispatchers.resetMain()
     }

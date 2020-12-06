@@ -2,6 +2,8 @@ package com.imn.iicnma.data.repository.movies
 
 import com.google.common.truth.Truth.assertThat
 import com.imn.iicnma.*
+import com.imn.iicnma.domain.model.Movie
+import com.imn.iicnma.domain.model.utils.NetworkError
 import io.mockk.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
@@ -50,30 +52,33 @@ class MovieResponseRepositoryTest : IITestCase() {
             stateFlow.value = movieDetailEntity
             movieDetailResponse
         }
+        val result = mutableListOf<Movie?>()
 
         testScope.launch {
             movieRepository.getMovie(movieId)
-                .toList()
-                .also { assertThat(it).isEqualTo(listOf(movieItem, movieDetail)) }
+                .collect { result.add(it) }
         }
+
+        assertThat(result).isEqualTo(listOf(movieItem, movieDetail))
 
         coVerifySequence {
             local.getMovieFlow(movieId)
             remote.getMovie(movieId)
-            local.insert(any()) // TODO fix this after fixing paging
+            local.insert(movieDetailEntity)
         }
     }
 
     @Test
     fun `test get movie when network error happens`() = td.runBlockingTest {
         every { local.getMovieFlow(movieId) } returns MutableStateFlow(movieItemEntity)
-        coEvery { remote.getMovie(movieId) } throws httpException
+        coEvery { remote.getMovie(movieId) } throws unknownHostException
 
         testScope.launch {
             movieRepository.getMovie(movieId)
-                .catch { assertThat(it).isEqualTo(httpException) }
+                .catch {
+                    assertThat(it).isInstanceOf(NetworkError::class.java)
+                }
                 .collect()
-
         }
 
         coVerifySequence {
