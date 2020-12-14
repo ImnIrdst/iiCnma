@@ -72,6 +72,7 @@ class HomeFragment : Fragment() {
                     { homeAdapter.itemCount == 0 },
                     getString(R.string.no_popular_movies)
                 )
+                homeAdapter.loadStateFlow
             }
         }
     }

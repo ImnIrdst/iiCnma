@@ -4,9 +4,9 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 
-sealed class State<out V> {
+sealed class State<out R> {
     object Loading : State<Nothing>()
-    data class Success<V>(val value: V) : State<V>()
+    data class Success<out V>(val value: V) : State<V>()
     data class Failure(val error: IIError) : State<Nothing>()
 }
 

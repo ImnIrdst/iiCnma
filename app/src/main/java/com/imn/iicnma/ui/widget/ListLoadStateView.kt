@@ -52,7 +52,7 @@ class ListLoadStateView @JvmOverloads constructor(
             field = value
         }
 
-    fun showLoading() = with(binding) {
+    private fun showLoading() = with(binding) {
         root.isVisible = true
         progressBar.isInvisible = false
         retryButton.isVisible = false
@@ -60,10 +60,9 @@ class ListLoadStateView @JvmOverloads constructor(
             isVisible = true
             text = context.getString(R.string.loading)
         }
-
     }
 
-    fun hideLoading() = with(binding) {
+    private fun hideLoading() = with(binding) {
         progressBar.isInvisible = true
     }
 

@@ -5,7 +5,6 @@ import android.view.KeyEvent
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.core.view.isVisible
-import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -15,8 +14,6 @@ import com.imn.iicnma.domain.model.utils.toIIError
 import com.imn.iicnma.ui.widget.ListLoadStateView
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 
@@ -58,8 +55,7 @@ suspend fun PagingDataAdapter<*, *>.listenOnLoadStates(
 ) {
     loadStateView.setOnRetryListener { this.retry() }
 
-    getLoadStateFlow().collectLatest { loadState ->
-        loadState ?: return@collectLatest
+    loadStateFlow.debounce(500).collectLatest { loadState ->
 
         val context = loadStateView.context
 
@@ -102,16 +98,4 @@ suspend fun PagingDataAdapter<*, *>.listenOnLoadStates(
             loadStateView.showErrorMessage(emptyMessage, false)
         }
     }
-}
-
-@OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
-fun PagingDataAdapter<*, *>.getLoadStateFlow(): Flow<CombinedLoadStates?> {
-
-    val loadStateFlow = MutableStateFlow<CombinedLoadStates?>(null)
-
-    this.addLoadStateListener {
-        loadStateFlow.value = it
-    }
-
-    return loadStateFlow.debounce(500)
 }
