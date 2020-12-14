@@ -4,7 +4,7 @@ buildscript {
     ext {
         kotlin_version = "1.4.20"
         hilt_version = "2.28-alpha"
-        nav_version = "2.3.1"
+        nav_version = "2.3.2"
     }
 
     repositories {
