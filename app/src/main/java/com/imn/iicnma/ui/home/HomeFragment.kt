@@ -60,11 +60,11 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             homeViewModel.movies.collectLatest { homeAdapter.submitData(it) }
         }
 
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             with(binding) {
                 homeAdapter.listenOnLoadStates(
                     recyclerView,

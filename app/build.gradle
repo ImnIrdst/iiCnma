@@ -95,6 +95,8 @@ dependencies {
     def paging_version = "3.0.0-alpha10"
     implementation "androidx.paging:paging-runtime-ktx:$paging_version"
 
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.5'
+
     testImplementation 'junit:junit:4.13.1'
     testImplementation "io.mockk:mockk:1.10.0"
     testImplementation "com.google.truth:truth:1.1"

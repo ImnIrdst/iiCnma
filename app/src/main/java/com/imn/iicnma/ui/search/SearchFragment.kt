@@ -57,7 +57,7 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             with(binding) {
                 searchAdapter.listenOnLoadStates(
                     recyclerView,
@@ -120,7 +120,7 @@ class SearchFragment : Fragment() {
     private fun search(query: String?) {
         query ?: return
         searchJob?.cancel()
-        searchJob = lifecycleScope.launch {
+        searchJob = viewLifecycleOwner.lifecycleScope.launch {
             searchViewModel.search(query)?.collectLatest { searchAdapter.submitData(it) }
         }
     }

@@ -57,10 +57,10 @@ class FavoritesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             favoritesViewModel.movies.collectLatest { favoritesAdapter.submitData(it) }
         }
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             with(binding) {
                 favoritesAdapter.listenOnLoadStates(
                     recyclerView,
