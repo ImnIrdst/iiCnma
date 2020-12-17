@@ -25,7 +25,7 @@ class PageLoadStateView @JvmOverloads constructor(
         binding.root.isVisible = false
     }
 
-    fun showErrorMessage(message: String, isRetryButtonVisible: Boolean = true) = with(binding) {
+    fun showErrorMessage(message: String, isRetryButtonVisible: Boolean = true) = binding?.apply {
         root.isVisible = true
         progressBar.isVisible = false
         retryButton.isVisible = isRetryButtonVisible
@@ -35,7 +35,7 @@ class PageLoadStateView @JvmOverloads constructor(
         }
     }
 
-    fun hideErrorMessage() = with(binding) {
+    fun hideErrorMessage() = binding?.apply {
         retryButton.isVisible = false
         messageTextView.isVisible = true
     }
@@ -50,14 +50,14 @@ class PageLoadStateView @JvmOverloads constructor(
             field = value
         }
 
-    fun showLoading() = with(binding) {
+    fun showLoading() = binding?.apply {
         root.isVisible = true
         progressBar.isVisible = true
         retryButton.isVisible = false
         messageTextView.isVisible = false
     }
 
-    fun hideLoading() = with(binding) {
+    fun hideLoading() = binding?.apply {
         progressBar.isVisible = false
     }
 

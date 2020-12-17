@@ -48,9 +48,9 @@ class FavoritesFragment : BaseFragment<FragmentFavoritesBinding>() {
         viewLifecycleOwner.lifecycleScope.launch {
             favoritesViewModel.movies.collectLatest { favoritesAdapter.submitData(it) }
         }
-        
+
         viewLifecycleOwner.lifecycleScope.launch {
-            with(binding) {
+            binding?.apply {
                 favoritesAdapter.listenOnLoadStates(
                     recyclerView,
                     loadStateView,

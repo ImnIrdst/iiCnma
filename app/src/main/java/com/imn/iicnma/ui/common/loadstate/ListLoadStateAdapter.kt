@@ -15,8 +15,10 @@ class ListLoadStateAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, loadState: LoadState) =
         LoadStateViewHolder.create(parent, retry)
 
-    override fun onBindViewHolder(holder: LoadStateViewHolder, loadState: LoadState) =
+    override fun onBindViewHolder(holder: LoadStateViewHolder, loadState: LoadState) {
         holder.bind(loadState)
+    }
+
 }
 
 class LoadStateViewHolder(
@@ -28,7 +30,7 @@ class LoadStateViewHolder(
         binding.retryButton.setOnClickListener { retry.invoke() }
     }
 
-    fun bind(loadState: LoadState) = with(binding) {
+    fun bind(loadState: LoadState) = binding.apply {
         if (loadState is LoadState.Error) {
             messageTextView.text = loadState.error.localizedMessage
         }

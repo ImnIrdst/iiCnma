@@ -46,7 +46,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
         initUI()
 
         viewLifecycleOwner.lifecycleScope.launch {
-            with(binding) {
+            binding?.apply {
                 searchAdapter.listenOnLoadStates(
                     recyclerView,
                     loadStateView,
@@ -92,14 +92,14 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
         loadStateView.setOnRetryListener { searchAdapter.retry() }
     }
 
-    private fun populateUI(query: String?) = with(binding) {
+    private fun populateUI(query: String?) = binding?.apply {
         query?.let {
             editText.setText(it)
             updateSearchFromInput()
         }
     }
 
-    private fun updateSearchFromInput() = with(binding.editText) {
+    private fun updateSearchFromInput() = binding?.editText?.apply {
         text?.trim()?.let {
             hideKeyboard()
             isCursorVisible = false

@@ -47,7 +47,7 @@ class HomeItemViewHolder(
     private var _movie: Movie? = null
 
     init {
-        with(binding) {
+        binding?.apply {
             root.setOnClickListener {
                 _movie?.let {
                     onItemClick.invoke(
@@ -61,7 +61,7 @@ class HomeItemViewHolder(
         }
     }
 
-    fun onBind(movie: Movie) = with(binding) {
+    fun onBind(movie: Movie) = binding?.apply {
         _movie = movie
 
         titleTextView.text = movie.title

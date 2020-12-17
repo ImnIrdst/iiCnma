@@ -52,7 +52,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            with(binding) {
+            binding?.apply {
                 homeAdapter.listenOnLoadStates(
                     recyclerView,
                     loadStateView,

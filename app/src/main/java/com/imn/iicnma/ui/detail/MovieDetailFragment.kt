@@ -57,7 +57,7 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>() {
         }
     }
 
-    private fun initUI() = with(binding) {
+    private fun initUI() = binding?.apply {
         val movie = args.movie
 
         sharedElementEnterTransition = DetailsTransition()
@@ -82,7 +82,7 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>() {
         favoriteButton.setOnClickListener { viewModel.toggleFavorite(movie.id) }
     }
 
-    private fun populateUi(movie: Movie) = with(binding) {
+    private fun populateUi(movie: Movie) = binding?.apply {
 
         loadStateView.hide()
 
@@ -113,21 +113,21 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>() {
 
     }
 
-    private fun populateFavoriteButton(state: Boolean) {
+    private fun populateFavoriteButton(state: Boolean) = binding?.apply {
         val fabColor = if (state) {
             getColorCompat(R.color.orange_200)
         } else {
             getColorCompat(R.color.gray)
         }
-        binding.favoriteButton.backgroundTintList = ColorStateList.valueOf(fabColor)
+        favoriteButton.backgroundTintList = ColorStateList.valueOf(fabColor)
     }
 
-    private fun populateError(error: IIError) = with(binding) {
+    private fun populateError(error: IIError) = binding?.apply {
         startPostponedEnterTransition()
         loadStateView.showErrorMessage(error.getHumanReadableText(requireContext()))
     }
 
-    private fun showLoading() = with(binding) {
+    private fun showLoading() = binding?.apply {
         loadStateView.showLoading()
     }
 }
