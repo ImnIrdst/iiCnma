@@ -1,4 +1,4 @@
-package com.imn.iicnma.ui.widget
+package com.imn.iicnma.ui.common.loadstate
 
 import android.content.Context
 import android.util.AttributeSet
@@ -7,19 +7,17 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.annotation.AttrRes
 import androidx.annotation.StyleRes
-import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
-import com.imn.iicnma.R
-import com.imn.iicnma.databinding.LayoutListLoadStateBinding
+import com.imn.iicnma.databinding.LayoutPageLoadStateBinding
 
-class ListLoadStateView @JvmOverloads constructor(
+class PageLoadStateView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     @Suppress("UNUSED_PARAMETER") @AttrRes defStyleAttr: Int = 0,
     @Suppress("UNUSED_PARAMETER") @StyleRes defStyleRes: Int = 0,
 ) : FrameLayout(context, attrs) {
 
-    private val binding = LayoutListLoadStateBinding.inflate(
+    private val binding = LayoutPageLoadStateBinding.inflate(
         LayoutInflater.from(context), this, true
     )
 
@@ -29,7 +27,7 @@ class ListLoadStateView @JvmOverloads constructor(
 
     fun showErrorMessage(message: String, isRetryButtonVisible: Boolean = true) = with(binding) {
         root.isVisible = true
-        progressBar.isInvisible = true
+        progressBar.isVisible = false
         retryButton.isVisible = isRetryButtonVisible
         messageTextView.apply {
             isVisible = true
@@ -52,18 +50,15 @@ class ListLoadStateView @JvmOverloads constructor(
             field = value
         }
 
-    private fun showLoading() = with(binding) {
+    fun showLoading() = with(binding) {
         root.isVisible = true
-        progressBar.isInvisible = false
+        progressBar.isVisible = true
         retryButton.isVisible = false
-        messageTextView.apply {
-            isVisible = true
-            text = context.getString(R.string.loading)
-        }
+        messageTextView.isVisible = false
     }
 
-    private fun hideLoading() = with(binding) {
-        progressBar.isInvisible = true
+    fun hideLoading() = with(binding) {
+        progressBar.isVisible = false
     }
 
     fun setOnRetryListener(listener: (View) -> Unit) {

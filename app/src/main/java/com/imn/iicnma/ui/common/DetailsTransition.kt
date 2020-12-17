@@ -1,4 +1,4 @@
-package com.imn.iicnma.ui
+package com.imn.iicnma.ui.common
 
 import android.content.Context
 import android.transition.ChangeBounds

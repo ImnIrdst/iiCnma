@@ -1,4 +1,4 @@
-package com.imn.iicnma.ui.widget
+package com.imn.iicnma.ui.common.loadstate
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

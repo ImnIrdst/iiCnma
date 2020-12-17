@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigatorExtras
@@ -17,7 +16,8 @@ import androidx.recyclerview.widget.LinearLayoutManager.VERTICAL
 import com.imn.iicnma.R
 import com.imn.iicnma.databinding.FragmentSearchBinding
 import com.imn.iicnma.domain.model.Movie
-import com.imn.iicnma.ui.widget.ListLoadStateAdapter
+import com.imn.iicnma.ui.common.base.BaseFragment
+import com.imn.iicnma.ui.common.loadstate.ListLoadStateAdapter
 import com.imn.iicnma.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
@@ -25,37 +25,21 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class SearchFragment : Fragment() {
+class SearchFragment : BaseFragment<FragmentSearchBinding>() {
 
-    private lateinit var binding: FragmentSearchBinding
     private val searchViewModel: SearchViewModel by viewModels()
 
     private val searchAdapter = SearchAdapter(::onMovieClicked)
 
-    private fun onMovieClicked(
-        movie: Movie,
-        posterImageView: ImageView,
-        titleTextView: TextView,
-        dateTextView: TextView,
-    ) {
-        val extras = FragmentNavigatorExtras(
-            posterImageView to posterImageView.transitionName,
-            titleTextView to titleTextView.transitionName,
-            dateTextView to dateTextView.transitionName,
-        )
-        findNavController().navigateSafe(
-            SearchFragmentDirections.actionNavigationSearchToMovieDetails(movie), extras
-        )
-    }
-
-    override fun onCreateView(
+    override fun inflateBinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ) = FragmentSearchBinding.inflate(inflater).also { binding = it; initUI() }.root
+    ) = FragmentSearchBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        initUI()
 
         viewLifecycleOwner.lifecycleScope.launch {
             with(binding) {
@@ -123,5 +107,21 @@ class SearchFragment : Fragment() {
         searchJob = viewLifecycleOwner.lifecycleScope.launch {
             searchViewModel.search(query)?.collectLatest { searchAdapter.submitData(it) }
         }
+    }
+
+    private fun onMovieClicked(
+        movie: Movie,
+        posterImageView: ImageView,
+        titleTextView: TextView,
+        dateTextView: TextView,
+    ) {
+        val extras = FragmentNavigatorExtras(
+            posterImageView to posterImageView.transitionName,
+            titleTextView to titleTextView.transitionName,
+            dateTextView to dateTextView.transitionName,
+        )
+        findNavController().navigateSafe(
+            SearchFragmentDirections.actionNavigationSearchToMovieDetails(movie), extras
+        )
     }
 }

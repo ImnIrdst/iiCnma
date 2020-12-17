@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
@@ -17,22 +16,22 @@ import com.imn.iicnma.domain.model.Movie
 import com.imn.iicnma.domain.model.utils.IIError
 import com.imn.iicnma.domain.model.utils.State
 import com.imn.iicnma.domain.model.utils.getHumanReadableText
-import com.imn.iicnma.ui.DetailsTransition
+import com.imn.iicnma.ui.common.DetailsTransition
+import com.imn.iicnma.ui.common.base.BaseFragment
 import com.imn.iicnma.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MovieDetailFragment : Fragment() {
+class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>() {
 
-    private lateinit var binding: FragmentMovieDetailBinding
 
     private val viewModel: MovieDetailViewModel by viewModels()
     private val args: MovieDetailFragmentArgs by navArgs()
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ) = FragmentMovieDetailBinding.inflate(inflater).also { binding = it; initUI() }.root
+    override fun inflateBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+    ) = FragmentMovieDetailBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -40,6 +39,9 @@ class MovieDetailFragment : Fragment() {
     }
 
     private fun loadData() {
+
+        initUI()
+
         viewModel.apply {
             loadMovie(args.movie.id).observe(viewLifecycleOwner) { state ->
                 when (state) {

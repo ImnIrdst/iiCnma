@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.imn.iicnma.R
 import com.imn.iicnma.domain.model.utils.getHumanReadableText
 import com.imn.iicnma.domain.model.utils.toIIError
-import com.imn.iicnma.ui.widget.ListLoadStateView
+import com.imn.iicnma.ui.common.loadstate.ListLoadStateView
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest

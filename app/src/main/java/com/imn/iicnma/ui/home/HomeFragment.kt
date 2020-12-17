@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigatorExtras
@@ -18,7 +17,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.imn.iicnma.R
 import com.imn.iicnma.databinding.FragmentHomeBinding
 import com.imn.iicnma.domain.model.Movie
-import com.imn.iicnma.ui.widget.ListLoadStateAdapter
+import com.imn.iicnma.ui.common.base.BaseFragment
+import com.imn.iicnma.ui.common.loadstate.ListLoadStateAdapter
 import com.imn.iicnma.utils.isPortrait
 import com.imn.iicnma.utils.listenOnLoadStates
 import com.imn.iicnma.utils.navigateSafe
@@ -27,38 +27,21 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class HomeFragment : Fragment() {
-
-    private lateinit var binding: FragmentHomeBinding
+class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
     private val homeViewModel: HomeViewModel by viewModels()
 
     private val homeAdapter = HomeAdapter(::onMovieClicked)
 
-    private fun onMovieClicked(
-        movie: Movie,
-        posterImageView: ImageView,
-        titleTextView: TextView,
-        dateTextView: TextView,
-    ) {
-        val extras = FragmentNavigatorExtras(
-            posterImageView to posterImageView.transitionName,
-            titleTextView to titleTextView.transitionName,
-            dateTextView to dateTextView.transitionName,
-        )
-        findNavController().navigateSafe(
-            HomeFragmentDirections.actionNavigationHomeToMovieDetails(movie), extras
-        )
-    }
-
-    override fun onCreateView(
+    override fun inflateBinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ) = FragmentHomeBinding.inflate(inflater).also { binding = it; initUI() }.root
+    ) = FragmentHomeBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        initUI()
 
         viewLifecycleOwner.lifecycleScope.launch {
             homeViewModel.movies.collectLatest { homeAdapter.submitData(it) }
@@ -118,4 +101,20 @@ class HomeFragment : Fragment() {
     }
 
     private fun getSpansCount() = if (isPortrait()) 2 else 4
+
+    private fun onMovieClicked(
+        movie: Movie,
+        posterImageView: ImageView,
+        titleTextView: TextView,
+        dateTextView: TextView,
+    ) {
+        val extras = FragmentNavigatorExtras(
+            posterImageView to posterImageView.transitionName,
+            titleTextView to titleTextView.transitionName,
+            dateTextView to dateTextView.transitionName,
+        )
+        findNavController().navigateSafe(
+            HomeFragmentDirections.actionNavigationHomeToMovieDetails(movie), extras
+        )
+    }
 }

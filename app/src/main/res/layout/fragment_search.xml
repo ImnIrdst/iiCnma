@@ -74,7 +74,7 @@
 
     </androidx.cardview.widget.CardView>
 
-    <com.imn.iicnma.ui.widget.ListLoadStateView
+    <com.imn.iicnma.ui.common.loadstate.ListLoadStateView
         android:id="@+id/load_state_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

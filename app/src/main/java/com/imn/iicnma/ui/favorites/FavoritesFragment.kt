@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigatorExtras
@@ -17,7 +16,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.imn.iicnma.R
 import com.imn.iicnma.databinding.FragmentFavoritesBinding
 import com.imn.iicnma.domain.model.Movie
-import com.imn.iicnma.ui.widget.ListLoadStateAdapter
+import com.imn.iicnma.ui.common.base.BaseFragment
+import com.imn.iicnma.ui.common.loadstate.ListLoadStateAdapter
 import com.imn.iicnma.utils.listenOnLoadStates
 import com.imn.iicnma.utils.navigateSafe
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,41 +25,26 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class FavoritesFragment : Fragment() {
+class FavoritesFragment : BaseFragment<FragmentFavoritesBinding>() {
 
-    private lateinit var binding: FragmentFavoritesBinding
     private val favoritesViewModel: FavoritesViewModel by viewModels()
 
     private val favoritesAdapter = FavoritesAdapter(::onMovieClicked)
 
-    private fun onMovieClicked(
-        movie: Movie,
-        posterImageView: ImageView,
-        titleTextView: TextView,
-        dateTextView: TextView,
-    ) {
-        val extras = FragmentNavigatorExtras(
-            posterImageView to posterImageView.transitionName,
-            titleTextView to titleTextView.transitionName,
-            dateTextView to dateTextView.transitionName,
-        )
-        findNavController().navigateSafe(
-            FavoritesFragmentDirections.actionNavigationFavoritesToMovieDetails(movie), extras
-        )
-    }
-
-    override fun onCreateView(
+    override fun inflateBinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ) = FragmentFavoritesBinding.inflate(inflater).also { binding = it; initUi() }.root
+    ) = FragmentFavoritesBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initUi()
+
         viewLifecycleOwner.lifecycleScope.launch {
             favoritesViewModel.movies.collectLatest { favoritesAdapter.submitData(it) }
         }
+        
         viewLifecycleOwner.lifecycleScope.launch {
             with(binding) {
                 favoritesAdapter.listenOnLoadStates(
@@ -106,4 +91,21 @@ class FavoritesFragment : Fragment() {
             })
         }
     }
+
+    private fun onMovieClicked(
+        movie: Movie,
+        posterImageView: ImageView,
+        titleTextView: TextView,
+        dateTextView: TextView,
+    ) {
+        val extras = FragmentNavigatorExtras(
+            posterImageView to posterImageView.transitionName,
+            titleTextView to titleTextView.transitionName,
+            dateTextView to dateTextView.transitionName,
+        )
+        findNavController().navigateSafe(
+            FavoritesFragmentDirections.actionNavigationFavoritesToMovieDetails(movie), extras
+        )
+    }
+
 }
