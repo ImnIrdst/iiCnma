@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigatorExtras
@@ -76,7 +77,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
                 footer = ListLoadStateAdapter { searchAdapter.retry() }
             )
             layoutManager = LinearLayoutManager(requireContext(), VERTICAL, false)
-            viewTreeObserver.addOnPreDrawListener { startPostponedEnterTransition(); true }
+            doOnPreDraw { startPostponedEnterTransition() }
         }
 
         loadStateView.setOnRetryListener { searchAdapter.retry() }

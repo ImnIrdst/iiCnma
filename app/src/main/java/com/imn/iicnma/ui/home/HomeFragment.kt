@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.doOnPreDraw
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -75,7 +76,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                     }
                 }
             }
-            viewTreeObserver.addOnPreDrawListener { startPostponedEnterTransition(); true }
+            doOnPreDraw { startPostponedEnterTransition() }
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
                 private var dySum = 0
