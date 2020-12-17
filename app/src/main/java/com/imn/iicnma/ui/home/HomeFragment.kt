@@ -32,7 +32,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
     private val homeViewModel: HomeViewModel by viewModels()
 
-    private val homeAdapter = HomeAdapter(::onMovieClicked)
+    private var _homeAdapter: HomeAdapter? = null
+    private val homeAdapter: HomeAdapter get() = _homeAdapter!!
 
     override fun inflateBinding(
         inflater: LayoutInflater,
@@ -41,6 +42,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        _homeAdapter = HomeAdapter(::onMovieClicked)
 
         initUI()
 
@@ -61,7 +64,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         }
     }
 
-    private fun initUI() = with(binding) {
+    override fun onDestroyView() {
+        _homeAdapter = null
+        binding?.recyclerView?.adapter = null
+        super.onDestroyView()
+    }
+
+    private fun initUI() = binding?.apply {
         postponeEnterTransition()
 
         recyclerView.apply {

@@ -30,7 +30,8 @@ class FavoritesFragment : BaseFragment<FragmentFavoritesBinding>() {
 
     private val favoritesViewModel: FavoritesViewModel by viewModels()
 
-    private val favoritesAdapter = FavoritesAdapter(::onMovieClicked)
+    private var _favoritesAdapter: FavoritesAdapter? = null
+    private val favoritesAdapter: FavoritesAdapter get() = _favoritesAdapter!!
 
     override fun inflateBinding(
         inflater: LayoutInflater,
@@ -39,6 +40,8 @@ class FavoritesFragment : BaseFragment<FragmentFavoritesBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        _favoritesAdapter = FavoritesAdapter(::onMovieClicked)
 
         initUi()
 
@@ -58,7 +61,13 @@ class FavoritesFragment : BaseFragment<FragmentFavoritesBinding>() {
         }
     }
 
-    private fun initUi() = with(binding) {
+    override fun onDestroyView() {
+        _favoritesAdapter = null
+        binding?.recyclerView?.adapter = null
+        super.onDestroyView()
+    }
+
+    private fun initUi() = binding?.apply {
         postponeEnterTransition()
 
         recyclerView.apply {

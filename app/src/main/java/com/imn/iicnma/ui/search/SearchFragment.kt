@@ -30,7 +30,8 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
 
     private val searchViewModel: SearchViewModel by viewModels()
 
-    private val searchAdapter = SearchAdapter(::onMovieClicked)
+    private var _searchAdapter: SearchAdapter? = null
+    private val searchAdapter: SearchAdapter get() = _searchAdapter!!
 
     override fun inflateBinding(
         inflater: LayoutInflater,
@@ -39,6 +40,8 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        _searchAdapter = SearchAdapter(::onMovieClicked)
 
         initUI()
 
@@ -59,7 +62,13 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
         }
     }
 
-    private fun initUI() = with(binding) {
+    override fun onDestroyView() {
+        _searchAdapter = null
+        binding?.recyclerView?.adapter = null
+        super.onDestroyView()
+    }
+
+    private fun initUI() = binding?.apply {
         searchButton.setOnClickListener { updateSearchFromInput() }
         backButton.setOnClickListener { findNavController().navigateUp() }
 
