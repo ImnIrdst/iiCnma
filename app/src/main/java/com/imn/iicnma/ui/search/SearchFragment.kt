@@ -30,8 +30,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
 
     private val searchViewModel: SearchViewModel by viewModels()
 
-    private var _searchAdapter: SearchAdapter? = null
-    private val searchAdapter: SearchAdapter get() = _searchAdapter!!
+    private val searchAdapter by ViewLifecycleDelegate { SearchAdapter(::onMovieClicked) }
 
     override fun inflateBinding(
         inflater: LayoutInflater,
@@ -40,8 +39,6 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        _searchAdapter = SearchAdapter(::onMovieClicked)
 
         initUI()
 
@@ -63,7 +60,6 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
     }
 
     override fun onDestroyView() {
-        _searchAdapter = null
         binding?.recyclerView?.adapter = null
         super.onDestroyView()
     }

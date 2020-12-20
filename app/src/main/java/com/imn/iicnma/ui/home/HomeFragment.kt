@@ -20,6 +20,7 @@ import com.imn.iicnma.databinding.FragmentHomeBinding
 import com.imn.iicnma.domain.model.Movie
 import com.imn.iicnma.ui.common.base.BaseFragment
 import com.imn.iicnma.ui.common.loadstate.ListLoadStateAdapter
+import com.imn.iicnma.utils.ViewLifecycleDelegate
 import com.imn.iicnma.utils.isPortrait
 import com.imn.iicnma.utils.listenOnLoadStates
 import com.imn.iicnma.utils.navigateSafe
@@ -32,8 +33,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
     private val homeViewModel: HomeViewModel by viewModels()
 
-    private var _homeAdapter: HomeAdapter? = null
-    private val homeAdapter: HomeAdapter get() = _homeAdapter!!
+    private val homeAdapter by ViewLifecycleDelegate { HomeAdapter(::onMovieClicked) }
 
     override fun inflateBinding(
         inflater: LayoutInflater,
@@ -42,8 +42,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        _homeAdapter = HomeAdapter(::onMovieClicked)
 
         initUI()
 
@@ -65,7 +63,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     }
 
     override fun onDestroyView() {
-        _homeAdapter = null
         binding?.recyclerView?.adapter = null
         super.onDestroyView()
     }

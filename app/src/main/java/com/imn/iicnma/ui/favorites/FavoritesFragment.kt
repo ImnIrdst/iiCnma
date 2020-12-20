@@ -19,6 +19,7 @@ import com.imn.iicnma.databinding.FragmentFavoritesBinding
 import com.imn.iicnma.domain.model.Movie
 import com.imn.iicnma.ui.common.base.BaseFragment
 import com.imn.iicnma.ui.common.loadstate.ListLoadStateAdapter
+import com.imn.iicnma.utils.ViewLifecycleDelegate
 import com.imn.iicnma.utils.listenOnLoadStates
 import com.imn.iicnma.utils.navigateSafe
 import dagger.hilt.android.AndroidEntryPoint
@@ -30,8 +31,7 @@ class FavoritesFragment : BaseFragment<FragmentFavoritesBinding>() {
 
     private val favoritesViewModel: FavoritesViewModel by viewModels()
 
-    private var _favoritesAdapter: FavoritesAdapter? = null
-    private val favoritesAdapter: FavoritesAdapter get() = _favoritesAdapter!!
+    private val favoritesAdapter by ViewLifecycleDelegate { FavoritesAdapter(::onMovieClicked) }
 
     override fun inflateBinding(
         inflater: LayoutInflater,
@@ -40,8 +40,6 @@ class FavoritesFragment : BaseFragment<FragmentFavoritesBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        _favoritesAdapter = FavoritesAdapter(::onMovieClicked)
 
         initUi()
 
@@ -62,7 +60,6 @@ class FavoritesFragment : BaseFragment<FragmentFavoritesBinding>() {
     }
 
     override fun onDestroyView() {
-        _favoritesAdapter = null
         binding?.recyclerView?.adapter = null
         super.onDestroyView()
     }
