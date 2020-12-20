@@ -43,7 +43,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
         initUI()
 
         viewLifecycleOwner.lifecycleScope.launch {
-            binding?.apply {
+            with(binding) {
                 searchAdapter.listenOnLoadStates(
                     recyclerView,
                     loadStateView,
@@ -64,7 +64,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
         super.onDestroyView()
     }
 
-    private fun initUI() = binding?.apply {
+    private fun initUI() = with(binding) {
         searchButton.setOnClickListener { updateSearchFromInput() }
         backButton.setOnClickListener { findNavController().navigateUp() }
 
@@ -88,7 +88,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
         loadStateView.setOnRetryListener { searchAdapter.retry() }
     }
 
-    private fun populateUI(query: String?) = binding?.apply {
+    private fun populateUI(query: String?) = with(binding) {
         query?.let {
             editText.setText(it)
             updateSearchFromInput()

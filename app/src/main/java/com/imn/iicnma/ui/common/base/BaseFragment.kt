@@ -5,10 +5,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
+import com.imn.iicnma.utils.ViewLifecycleDelegateMutable
 
 abstract class BaseFragment<T : ViewBinding> : Fragment() {
 
-    protected var binding: T? = null
+    protected var binding: T by ViewLifecycleDelegateMutable()
 
     abstract fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?): T
 
@@ -17,9 +18,4 @@ abstract class BaseFragment<T : ViewBinding> : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ) = inflateBinding(inflater, container).also { binding = it; }.root
-
-    override fun onDestroyView() {
-        binding = null
-        super.onDestroyView()
-    }
 }

@@ -48,7 +48,7 @@ class FavoritesFragment : BaseFragment<FragmentFavoritesBinding>() {
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            binding?.apply {
+            with(binding) {
                 favoritesAdapter.listenOnLoadStates(
                     recyclerView,
                     loadStateView,
@@ -64,7 +64,7 @@ class FavoritesFragment : BaseFragment<FragmentFavoritesBinding>() {
         super.onDestroyView()
     }
 
-    private fun initUi() = binding?.apply {
+    private fun initUi() = with(binding) {
         postponeEnterTransition()
 
         recyclerView.apply {

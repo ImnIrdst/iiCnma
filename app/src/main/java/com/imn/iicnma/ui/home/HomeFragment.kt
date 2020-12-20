@@ -50,7 +50,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            binding?.apply {
+            with(binding) {
                 homeAdapter.listenOnLoadStates(
                     recyclerView,
                     loadStateView,
@@ -67,7 +67,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         super.onDestroyView()
     }
 
-    private fun initUI() = binding?.apply {
+    private fun initUI() = with(binding) {
         postponeEnterTransition()
 
         recyclerView.apply {

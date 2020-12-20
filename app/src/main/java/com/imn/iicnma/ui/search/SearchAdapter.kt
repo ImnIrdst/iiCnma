@@ -47,7 +47,7 @@ class SearchItemViewHolder(
     private var _movie: Movie? = null
 
     init {
-        binding?.apply {
+        with(binding) {
             root.setOnClickListener {
                 _movie?.let {
                     onItemClick.invoke(
@@ -62,7 +62,7 @@ class SearchItemViewHolder(
 
     }
 
-    fun onBind(movie: Movie) = binding?.apply {
+    fun onBind(movie: Movie) = with(binding) {
         _movie = movie
 
         titleTextView.text = movie.title

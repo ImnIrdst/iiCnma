@@ -4,12 +4,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
-import kotlin.properties.ReadOnlyProperty
+import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
-class ViewLifecycleDelegate<T>(
-    private val initializer: () -> T,
-) : ReadOnlyProperty<Fragment, T>, LifecycleObserver {
+class ViewLifecycleDelegateMutable<T> : ReadWriteProperty<Fragment, T>, LifecycleObserver {
 
     private var value: T? = null
     private var isObserverAdded = false
@@ -18,16 +16,15 @@ class ViewLifecycleDelegate<T>(
         thisRef: Fragment,
         property: KProperty<*>,
     ): T {
+        return value!!
+    }
 
+    override fun setValue(thisRef: Fragment, property: KProperty<*>, value: T) {
         if (!isObserverAdded) {
             thisRef.viewLifecycleOwner.lifecycle.addObserver(this)
             isObserverAdded = true
         }
-
-        if (value == null) {
-            value = initializer.invoke()
-        }
-        return value!!
+        this.value = value
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
