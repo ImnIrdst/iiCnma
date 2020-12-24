@@ -18,6 +18,7 @@ import com.imn.iicnma.R
 import com.imn.iicnma.databinding.FragmentSearchBinding
 import com.imn.iicnma.domain.model.Movie
 import com.imn.iicnma.ui.common.base.BaseFragment
+import com.imn.iicnma.ui.common.base.FragmentCleaner
 import com.imn.iicnma.ui.common.loadstate.ListLoadStateAdapter
 import com.imn.iicnma.utils.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,7 +27,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class SearchFragment : BaseFragment<FragmentSearchBinding>() {
+class SearchFragment : BaseFragment<FragmentSearchBinding>(), FragmentCleaner {
 
     private val searchViewModel: SearchViewModel by viewModels()
 
@@ -59,9 +60,8 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
         }
     }
 
-    override fun onDestroyView() {
-        binding?.recyclerView?.adapter = null
-        super.onDestroyView()
+    override fun cleanViews() = with(binding) {
+        recyclerView.adapter = null
     }
 
     private fun initUI() = with(binding) {
@@ -95,7 +95,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
         }
     }
 
-    private fun updateSearchFromInput() = binding?.editText?.apply {
+    private fun updateSearchFromInput() = with(binding.editText) {
         text?.trim()?.let {
             hideKeyboard()
             isCursorVisible = false

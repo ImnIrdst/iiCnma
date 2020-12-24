@@ -19,6 +19,7 @@ import com.imn.iicnma.R
 import com.imn.iicnma.databinding.FragmentHomeBinding
 import com.imn.iicnma.domain.model.Movie
 import com.imn.iicnma.ui.common.base.BaseFragment
+import com.imn.iicnma.ui.common.base.FragmentCleaner
 import com.imn.iicnma.ui.common.loadstate.ListLoadStateAdapter
 import com.imn.iicnma.utils.ViewLifecycleDelegate
 import com.imn.iicnma.utils.isPortrait
@@ -29,7 +30,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class HomeFragment : BaseFragment<FragmentHomeBinding>() {
+class HomeFragment : BaseFragment<FragmentHomeBinding>(), FragmentCleaner {
 
     private val homeViewModel: HomeViewModel by viewModels()
 
@@ -62,9 +63,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         }
     }
 
-    override fun onDestroyView() {
-        binding?.recyclerView?.adapter = null
-        super.onDestroyView()
+    override fun cleanViews() = with(binding) {
+        recyclerView.adapter = null
     }
 
     private fun initUI() = with(binding) {

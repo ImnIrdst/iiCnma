@@ -32,6 +32,7 @@ class ViewLifecycleDelegate<T>(
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     private fun onViewDestroyed() {
+        isObserverAdded = false
         value = null
     }
 }

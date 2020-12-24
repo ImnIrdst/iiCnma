@@ -18,6 +18,7 @@ import com.imn.iicnma.R
 import com.imn.iicnma.databinding.FragmentFavoritesBinding
 import com.imn.iicnma.domain.model.Movie
 import com.imn.iicnma.ui.common.base.BaseFragment
+import com.imn.iicnma.ui.common.base.FragmentCleaner
 import com.imn.iicnma.ui.common.loadstate.ListLoadStateAdapter
 import com.imn.iicnma.utils.ViewLifecycleDelegate
 import com.imn.iicnma.utils.listenOnLoadStates
@@ -27,7 +28,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class FavoritesFragment : BaseFragment<FragmentFavoritesBinding>() {
+class FavoritesFragment : BaseFragment<FragmentFavoritesBinding>(), FragmentCleaner {
 
     private val favoritesViewModel: FavoritesViewModel by viewModels()
 
@@ -57,11 +58,6 @@ class FavoritesFragment : BaseFragment<FragmentFavoritesBinding>() {
                 )
             }
         }
-    }
-
-    override fun onDestroyView() {
-        binding?.recyclerView?.adapter = null
-        super.onDestroyView()
     }
 
     private fun initUi() = with(binding) {
@@ -115,4 +111,7 @@ class FavoritesFragment : BaseFragment<FragmentFavoritesBinding>() {
         )
     }
 
+    override fun cleanViews() = with(binding) {
+        recyclerView.adapter = null
+    }
 }
