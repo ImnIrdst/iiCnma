@@ -43,20 +43,22 @@ class FavoritesFragment : BaseFragment<FragmentFavoritesBinding>(), FragmentClea
         super.onViewCreated(view, savedInstanceState)
 
         initUi()
+        listenOnPagedData()
+        listenOnPagerLoadStates()
+    }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            favoritesViewModel.movies.collectLatest { favoritesAdapter.submitData(it) }
-        }
+    private fun listenOnPagedData() = viewLifecycleOwner.lifecycleScope.launch {
+        favoritesViewModel.movies.collectLatest { favoritesAdapter.submitData(it) }
+    }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            with(binding) {
-                favoritesAdapter.listenOnLoadStates(
-                    recyclerView,
-                    loadStateView,
-                    { favoritesAdapter.itemCount == 0 },
-                    getString(R.string.no_favorite_movies)
-                )
-            }
+    private fun listenOnPagerLoadStates() = viewLifecycleOwner.lifecycleScope.launch {
+        with(binding) {
+            favoritesAdapter.listenOnLoadStates(
+                recyclerView,
+                loadStateView,
+                { favoritesAdapter.itemCount == 0 },
+                getString(R.string.no_favorite_movies)
+            )
         }
     }
 

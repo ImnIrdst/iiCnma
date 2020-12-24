@@ -35,26 +35,22 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initUI()
         loadData()
     }
 
-    private fun loadData() {
-
-        initUI()
-
-        viewModel.apply {
-            loadMovie(args.movie.id).observe(viewLifecycleOwner) { state ->
-                when (state) {
-                    is State.Success -> state.value?.let { populateUi(it) }
-                    is State.Loading -> showLoading()
-                    is State.Failure -> populateError(state.error)
-                    else -> throw IllegalStateException("bad state for load movie")
-                }
+    private fun loadData() = viewModel.apply {
+        loadMovie(args.movie.id).observe(viewLifecycleOwner) { state ->
+            when (state) {
+                is State.Success -> state.value?.let { populateUi(it) }
+                is State.Loading -> showLoading()
+                is State.Failure -> populateError(state.error)
+                else -> throw IllegalStateException("bad state for load movie")
             }
-            isFavoredStatus(args.movie.id).observe(viewLifecycleOwner, {
-                it?.let { populateFavoriteButton(it) }
-            })
         }
+        isFavoredStatus(args.movie.id).observe(viewLifecycleOwner, {
+            it?.let { populateFavoriteButton(it) }
+        })
     }
 
     private fun initUI() = with(binding) {

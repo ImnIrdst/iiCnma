@@ -45,26 +45,23 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), FragmentCleaner {
         super.onViewCreated(view, savedInstanceState)
 
         initUI()
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            homeViewModel.movies.collectLatest { homeAdapter.submitData(it) }
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            with(binding) {
-                homeAdapter.listenOnLoadStates(
-                    recyclerView,
-                    loadStateView,
-                    { homeAdapter.itemCount == 0 },
-                    getString(R.string.no_popular_movies)
-                )
-                homeAdapter.loadStateFlow
-            }
-        }
+        listenOnMoviesPagedData()
+        listenOnPagerLoadStates()
     }
 
-    override fun cleanViews() = with(binding) {
-        recyclerView.adapter = null
+    private fun listenOnMoviesPagedData() = viewLifecycleOwner.lifecycleScope.launch {
+        homeViewModel.movies.collectLatest { homeAdapter.submitData(it) }
+    }
+
+    private fun listenOnPagerLoadStates() = viewLifecycleOwner.lifecycleScope.launch {
+        with(binding) {
+            homeAdapter.listenOnLoadStates(
+                recyclerView,
+                loadStateView,
+                { homeAdapter.itemCount == 0 },
+                getString(R.string.no_popular_movies)
+            )
+        }
     }
 
     private fun initUI() = with(binding) {
@@ -123,5 +120,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), FragmentCleaner {
         findNavController().navigateSafe(
             HomeFragmentDirections.actionNavigationHomeToMovieDetails(movie), extras
         )
+    }
+
+    override fun cleanViews() = with(binding) {
+        recyclerView.adapter = null
     }
 }

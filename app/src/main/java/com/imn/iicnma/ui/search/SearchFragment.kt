@@ -42,29 +42,30 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(), FragmentCleaner {
         super.onViewCreated(view, savedInstanceState)
 
         initUI()
+        listenOnPagerLoadStates()
+    }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            with(binding) {
-                searchAdapter.listenOnLoadStates(
-                    recyclerView,
-                    loadStateView,
-                    { searchViewModel.isSearchedAnyThing && searchAdapter.itemCount == 0 },
-                    getString(R.string.no_search_results)
-                )
-            }
+    private fun listenOnPagedData(query: String) = viewLifecycleOwner.lifecycleScope.launch {
+        searchViewModel.search(query)?.collectLatest { searchAdapter.submitData(it) }
+    }
+
+    private fun listenOnPagerLoadStates() = viewLifecycleOwner.lifecycleScope.launch {
+        with(binding) {
+            searchAdapter.listenOnLoadStates(
+                recyclerView,
+                loadStateView,
+                { searchViewModel.isSearchedAnyThing && searchAdapter.itemCount == 0 },
+                getString(R.string.no_search_results)
+            )
         }
+    }
 
+    private fun initUI() = with(binding) {
         searchViewModel.getSavedQuery().let {
             populateUI(it)
             search(it)
         }
-    }
 
-    override fun cleanViews() = with(binding) {
-        recyclerView.adapter = null
-    }
-
-    private fun initUI() = with(binding) {
         searchButton.setOnClickListener { updateSearchFromInput() }
         backButton.setOnClickListener { findNavController().navigateUp() }
 
@@ -110,9 +111,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(), FragmentCleaner {
     private fun search(query: String?) {
         query ?: return
         searchJob?.cancel()
-        searchJob = viewLifecycleOwner.lifecycleScope.launch {
-            searchViewModel.search(query)?.collectLatest { searchAdapter.submitData(it) }
-        }
+        searchJob = listenOnPagedData(query)
     }
 
     private fun onMovieClicked(
@@ -129,5 +128,9 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(), FragmentCleaner {
         findNavController().navigateSafe(
             SearchFragmentDirections.actionNavigationSearchToMovieDetails(movie), extras
         )
+    }
+
+    override fun cleanViews() = with(binding) {
+        recyclerView.adapter = null
     }
 }
