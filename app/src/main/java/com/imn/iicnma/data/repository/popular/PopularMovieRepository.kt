@@ -1,5 +1,6 @@
 package com.imn.iicnma.data.repository.popular
 
+import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.map
@@ -12,6 +13,7 @@ class PopularMovieRepository @Inject constructor(
     private val remoteDS: PopularMoviesRemoteDataSource,
 ) {
 
+    @OptIn(ExperimentalPagingApi::class)
     fun getPopularMovies() = Pager(
         config = PagingConfig(
             pageSize = NETWORK_PAGE_SIZE,

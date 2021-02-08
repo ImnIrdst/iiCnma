@@ -1,5 +1,6 @@
 package com.imn.iicnma.data.repository.favorites
 
+import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.map
@@ -20,6 +21,7 @@ class FavoritesRepository @Inject constructor(
         local.delete(movieId)
     }
 
+    @OptIn(ExperimentalPagingApi::class)
     fun getFavoriteMovies() = Pager(
         config = PagingConfig(pageSize = NETWORK_PAGE_SIZE, enablePlaceholders = false),
         pagingSourceFactory = { local.getAllFavoredMovies() }, // TODO test this on large data

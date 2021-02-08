@@ -1,9 +1,6 @@
 package com.imn.iicnma.data.repository.search
 
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
-import androidx.paging.map
+import androidx.paging.*
 import com.imn.iicnma.data.remote.NETWORK_PAGE_SIZE
 import com.imn.iicnma.domain.model.Movie
 import kotlinx.coroutines.flow.Flow
@@ -15,6 +12,7 @@ class SearchRepository @Inject constructor(
     private val remote: SearchRemoteDataSource,
 ) {
 
+    @OptIn(ExperimentalPagingApi::class)
     fun search(query: String): Flow<PagingData<Movie>> {
         val dbQuery = "%${query.replace(' ', '%')}%"
         val pagingSourceFactory = { local.searchMovies(dbQuery) }
