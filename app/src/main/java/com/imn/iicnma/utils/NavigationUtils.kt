@@ -1,9 +1,9 @@
 package com.imn.iicnma.utils
 
-import android.util.Log
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import androidx.navigation.Navigator
+import timber.log.Timber
 
 fun NavController.navigateSafe(
     directions: NavDirections,
@@ -17,6 +17,6 @@ fun NavController.navigateSafe(
         }
 
     } else {
-        Log.w("navigateSafe", Throwable("trying to navigate to a unknown destination"))
+        Timber.w(Throwable("trying to navigate to a unknown destination"))
     }
 }

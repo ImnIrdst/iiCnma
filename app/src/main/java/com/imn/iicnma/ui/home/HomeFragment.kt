@@ -28,6 +28,7 @@ import com.imn.iicnma.utils.navigateSafe
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(), FragmentCleaner {
@@ -65,6 +66,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), FragmentCleaner {
     }
 
     private fun initUI() = with(binding) {
+        Timber.v("before postponeEnterTransition")
         postponeEnterTransition()
 
         recyclerView.apply {
@@ -79,7 +81,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), FragmentCleaner {
                     }
                 }
             }
-            doOnPreDraw { startPostponedEnterTransition() }
+            doOnPreDraw { startPostponedEnterTransition(); Timber.v("startPostponedEnterTransition called") }
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
                 private var dySum = 0

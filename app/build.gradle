@@ -95,6 +95,9 @@ dependencies {
     def paging_version = "3.0.0-alpha10"
     implementation "androidx.paging:paging-runtime-ktx:$paging_version"
 
+    def timber_version = "4.7.1"
+    implementation "com.jakewharton.timber:timber:$timber_version"
+
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.5'
 
     testImplementation 'junit:junit:4.13.1'

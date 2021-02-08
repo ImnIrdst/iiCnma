@@ -8,14 +8,15 @@ import java.net.UnknownHostException
 val httpException = Throwable("404")
 val unknownHostException = UnknownHostException()
 
-val pagedListResponse = Gson().fromJson(pagedListJson, MoviePagedListResponse::class.java)
+val pagedListResponse: MoviePagedListResponse =
+    Gson().fromJson(pagedListJson, MoviePagedListResponse::class.java)
 val movieEntityList = pagedListResponse.toMovieEntityList()
 
 val movieItemEntity = movieEntityList[0]
 val movieItem = movieItemEntity.toMovie()
 
 
-val movieDetailResponse = Gson().fromJson(movieDetailJson, MovieResponse::class.java)
+val movieDetailResponse: MovieResponse = Gson().fromJson(movieDetailJson, MovieResponse::class.java)
 val movieDetailEntity = movieDetailResponse.toMovieEntity()
 val movieDetail = movieDetailEntity.toMovie()
 val movieId = movieDetailResponse.id

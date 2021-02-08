@@ -30,6 +30,6 @@ This architecture allows app to be offline first. It gets data from the network 
 # Build
 Clone the repository and get an [API key](https://www.themoviedb.org/settings/api) from the Movie Database and put it in the `local.properties` file as below:
 
-```JSON
+```properties
 apikey="YOUR_API_KEY"
 ```
