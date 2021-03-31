@@ -1,5 +1,5 @@
 # iiCnma
-A playground android app, showcasing the latest technologies and architecture using the [Movie Database](https://www.themoviedb.org/) APIs.
+A playground android app, showcasing the latest technologies and architecture patterns using the [Movie Database](https://www.themoviedb.org/) APIs.
 
 # Demo
 <span><img src="https://github.com/ImnIrdst/iiCnma/blob/main/demo/iicnma-home-detail.gif" width="170" height="320"></span>
