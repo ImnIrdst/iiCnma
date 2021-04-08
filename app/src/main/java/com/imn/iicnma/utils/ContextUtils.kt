@@ -35,7 +35,9 @@ fun Context.isNetworkAvailable(): Boolean {
             else -> false
         }
     } else {
+        @Suppress("DEPRECATION")
         val nwInfo = cm.activeNetworkInfo ?: return false
+        @Suppress("DEPRECATION")
         return nwInfo.isConnected
     }
 }
