@@ -1,3 +1,5 @@
+@file:Suppress("SpellCheckingInspection")
+
 package com.imn.iicnma
 
 import org.intellij.lang.annotations.Language

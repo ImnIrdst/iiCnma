@@ -40,7 +40,7 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun providesFavoratesDataSource(
+    fun providesFavoritesDataSource(
         database: MovieDatabase,
     ): FavoritesLocalDataSource = database.favoritesDao()
 

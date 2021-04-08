@@ -10,6 +10,8 @@ import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 
+
+@Suppress("unused")
 fun Fragment.showToast(text: String?) = context?.showToast(text)
 
 fun Context.showToast(text: String?) {

@@ -5,7 +5,6 @@ import com.imn.iicnma.data.remote.model.MoviePagedListResponse
 import com.imn.iicnma.data.remote.model.MovieResponse
 import java.net.UnknownHostException
 
-val httpException = Throwable("404")
 val unknownHostException = UnknownHostException()
 
 val pagedListResponse: MoviePagedListResponse =

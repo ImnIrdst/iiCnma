@@ -23,6 +23,7 @@ interface PopularMoviesDao : CommonMovieListDao, PopularMoviesLocalDataSource {
     @Query("""SELECT * FROM movies
         INNER JOIN popular_movies_keys  ON movies.id=popular_movies_keys.movieId
         ORDER BY curKey ASC, popularity DESC, title ASC""")
+    @RewriteQueriesToDropUnusedColumns
     override fun getAll(): PagingSource<Int, MovieEntity>
 
     @Transaction

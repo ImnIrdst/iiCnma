@@ -21,6 +21,7 @@ class DetailsTransition : TransitionSet {
     /**
      * This constructor allows us to use this transition in XML
      */
+    @Suppress("unused")
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
         init()
     }

@@ -50,14 +50,14 @@ class PageLoadStateView @JvmOverloads constructor(
             field = value
         }
 
-    fun showLoading() = with(binding) {
+    private fun showLoading() = with(binding) {
         root.isVisible = true
         progressBar.isVisible = true
         retryButton.isVisible = false
         messageTextView.isVisible = false
     }
 
-    fun hideLoading() = with(binding) {
+    private fun hideLoading() = with(binding) {
         progressBar.isVisible = false
     }
 

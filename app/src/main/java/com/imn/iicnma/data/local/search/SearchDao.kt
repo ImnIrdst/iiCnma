@@ -26,6 +26,7 @@ interface SearchDao : SearchLocalDataSource, CommonMovieListDao {
             WHERE title LIKE :queryString OR overview LIKE :queryString 
             ORDER BY curKey ASC, popularity DESC, title ASC"""
     )
+    @RewriteQueriesToDropUnusedColumns
     override fun searchMovies(queryString: String): PagingSource<Int, MovieEntity>
 
     @Transaction

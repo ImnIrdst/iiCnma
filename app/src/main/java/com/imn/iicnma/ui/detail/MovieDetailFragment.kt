@@ -107,6 +107,7 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>() {
             }
         )
 
+        loadStateView.hideErrorMessage()
     }
 
     private fun populateFavoriteButton(state: Boolean) = with(binding) {
@@ -124,6 +125,7 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>() {
     }
 
     private fun showLoading() = with(binding) {
-        loadStateView.showLoading()
+        loadStateView.isLoadingVisible = true
+        loadStateView.hideErrorMessage()
     }
 }

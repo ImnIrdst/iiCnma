@@ -22,6 +22,7 @@ interface FavoritesDao : FavoritesLocalDataSource {
     override suspend fun getMovie(id: Long): MovieEntity?
 
     @Transaction // TODO can order by favored date
+    @RewriteQueriesToDropUnusedColumns
     @Query("SELECT * FROM movies INNER JOIN favorites ON movies.id=favorites.movieId")
     override fun getAllFavoredMovies(): PagingSource<Int, FavoriteMovieRelation>
 }
