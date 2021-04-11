@@ -1,7 +1,5 @@
 package com.imn.iicnma.ui.search
 
-import androidx.hilt.Assisted
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,13 +7,16 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.imn.iicnma.data.repository.search.SearchRepository
 import com.imn.iicnma.domain.model.Movie
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
 @OptIn(FlowPreview::class)
-class SearchViewModel @ViewModelInject constructor(
+@HiltViewModel
+class SearchViewModel @Inject constructor(
     private val searchRepository: SearchRepository,
-    @Assisted private val savedStateHandle: SavedStateHandle,
+    private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
     private var currentQueryValue: String? = null
