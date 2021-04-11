@@ -1,19 +1,21 @@
 package com.imn.iicnma.ui.detail
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.imn.iicnma.data.repository.favorites.FavoritesRepository
 import com.imn.iicnma.data.repository.movies.MovieRepository
 import com.imn.iicnma.domain.model.utils.withStates
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
-class MovieDetailViewModel @ViewModelInject constructor(
+@HiltViewModel
+class MovieDetailViewModel @Inject constructor(
     private val movieRepository: MovieRepository,
     private val favoritesRepository: FavoritesRepository,
 ) : ViewModel() {
