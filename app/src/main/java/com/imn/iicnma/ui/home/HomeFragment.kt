@@ -19,7 +19,6 @@ import com.imn.iicnma.R
 import com.imn.iicnma.databinding.FragmentHomeBinding
 import com.imn.iicnma.domain.model.Movie
 import com.imn.iicnma.ui.common.base.BaseFragment
-import com.imn.iicnma.ui.common.base.FragmentCleaner
 import com.imn.iicnma.ui.common.loadstate.ListLoadStateAdapter
 import com.imn.iicnma.utils.ViewLifecycleDelegate
 import com.imn.iicnma.utils.isPortrait
@@ -31,7 +30,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @AndroidEntryPoint
-class HomeFragment : BaseFragment<FragmentHomeBinding>(), FragmentCleaner {
+class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
     private val homeViewModel: HomeViewModel by viewModels()
 
@@ -122,9 +121,5 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), FragmentCleaner {
         findNavController().navigateSafe(
             HomeFragmentDirections.actionNavigationHomeToMovieDetails(movie), extras
         )
-    }
-
-    override fun cleanViews() = with(binding) {
-        recyclerView.adapter = null
     }
 }
