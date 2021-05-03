@@ -11,7 +11,6 @@ import com.imn.iicnma.data.remote.STARTING_PAGE_INDEX
 import com.imn.iicnma.domain.model.utils.NetworkError
 import com.imn.iicnma.domain.model.utils.UnknownError
 import java.io.IOException
-import java.io.InvalidObjectException
 
 // TODO this can leverage inheritance
 
@@ -33,14 +32,12 @@ class SearchPagerMediator(
             }
             LoadType.PREPEND -> {
                 val remoteKey = getRemoteKeyForFirstItem(state)
-                    ?: throw InvalidObjectException("Remote key and the prevKey should not be null")
-                remoteKey.prevKey
+                remoteKey?.prevKey
                     ?: return MediatorResult.Success(endOfPaginationReached = true)
             }
             LoadType.APPEND -> {
                 val remoteKey = getRemoteKeyForLastItem(state)
-                    ?: throw InvalidObjectException("Remote key and the nextKey should not be null")
-                remoteKey.nextKey
+                remoteKey?.nextKey
                     ?: return MediatorResult.Success(endOfPaginationReached = true)
             }
         }
