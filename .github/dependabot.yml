@@ -1,0 +1,53 @@
+version: 2
+updates:
+- package-ecosystem: gradle
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "01:30"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: com.google.dagger:hilt-compiler
+    versions:
+    - 2.34.1-beta
+    - "2.35"
+  - dependency-name: com.google.dagger:hilt-android
+    versions:
+    - 2.33-beta
+    - 2.34.1-beta
+    - "2.35"
+  - dependency-name: com.google.dagger:hilt-android-gradle-plugin
+    versions:
+    - 2.33-beta
+    - 2.34.1-beta
+    - "2.35"
+  - dependency-name: com.google.dagger:hilt-android-compiler
+    versions:
+    - 2.33-beta
+  - dependency-name: androidx.navigation:navigation-ui-ktx
+    versions:
+    - 2.3.4
+  - dependency-name: androidx.navigation:navigation-fragment-ktx
+    versions:
+    - 2.3.4
+  - dependency-name: androidx.navigation:navigation-safe-args-gradle-plugin
+    versions:
+    - 2.3.4
+  - dependency-name: org.jetbrains.kotlinx:kotlinx-coroutines-test
+    versions:
+    - 1.4.2-native-mt
+  - dependency-name: androidx.room:room-compiler
+    versions:
+    - 2.3.0-SNAPSHOT
+  - dependency-name: androidx.room:room-ktx
+    versions:
+    - 2.3.0-SNAPSHOT
+  - dependency-name: androidx.room:room-runtime
+    versions:
+    - 2.3.0-SNAPSHOT
+  - dependency-name: org.jetbrains.kotlinx:kotlinx-coroutines-android
+    versions:
+    - 1.4.2-native-mt
+  - dependency-name: org.jetbrains.kotlinx:kotlinx-coroutines-core
+    versions:
+    - 1.4.2-native-mt
