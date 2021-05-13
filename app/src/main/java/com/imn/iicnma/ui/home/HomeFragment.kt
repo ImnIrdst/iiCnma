@@ -13,7 +13,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
 import androidx.recyclerview.widget.RecyclerView
 import com.imn.iicnma.R
 import com.imn.iicnma.databinding.FragmentHomeBinding
@@ -69,12 +68,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         postponeEnterTransition()
 
         recyclerView.apply {
-            adapter = homeAdapter.withLoadStateHeaderAndFooter(
-                header = ListLoadStateAdapter { homeAdapter.retry() },
+            adapter = homeAdapter.withLoadStateFooter(
                 footer = ListLoadStateAdapter { homeAdapter.retry() }
             )
             layoutManager = GridLayoutManager(context, getSpansCount()).apply {
-                spanSizeLookup = object : SpanSizeLookup() {
+                spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                     override fun getSpanSize(position: Int): Int {
                         return if (position >= homeAdapter.itemCount) getSpansCount() else 1
                     }

@@ -20,10 +20,11 @@ interface PopularMoviesDao : CommonMovieListDao, PopularMoviesLocalDataSource {
     @Query("DELETE FROM popular_movies_keys")
     suspend fun clearRemoteKeys()
 
-    @Query("""SELECT * FROM movies
-        INNER JOIN popular_movies_keys  ON movies.id=popular_movies_keys.movieId
-        ORDER BY curKey ASC, popularity DESC, title ASC""")
-    @RewriteQueriesToDropUnusedColumns
+    @Query(
+        """SELECT movies.* FROM movies
+        INNER JOIN popular_movies_keys ON movies.id=popular_movies_keys.movieId
+        ORDER BY curKey ASC, popularity DESC, title ASC"""
+    )
     override fun getAll(): PagingSource<Int, MovieEntity>
 
     @Transaction

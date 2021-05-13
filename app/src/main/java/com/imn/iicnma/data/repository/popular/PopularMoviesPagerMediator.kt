@@ -10,8 +10,8 @@ import com.imn.iicnma.data.local.popular.PopularMovieKeysEntity
 import com.imn.iicnma.data.remote.STARTING_PAGE_INDEX
 import com.imn.iicnma.domain.model.utils.NetworkError
 import com.imn.iicnma.domain.model.utils.UnknownError
+import timber.log.Timber
 import java.io.IOException
-import java.io.InvalidObjectException
 
 @OptIn(ExperimentalPagingApi::class)
 class PopularMoviesPagerMediator(
@@ -23,6 +23,7 @@ class PopularMoviesPagerMediator(
         loadType: LoadType,
         state: PagingState<Int, MovieEntity>,
     ): MediatorResult {
+        Timber.v("loadType: $loadType, state: $state")
         val pageKey = when (loadType) {
             LoadType.REFRESH -> {
                 val remoteKey = getRemoteKeyClosestToCurrentPosition(state)
@@ -30,20 +31,21 @@ class PopularMoviesPagerMediator(
             }
             LoadType.PREPEND -> {
                 val remoteKey = getRemoteKeyForFirstItem(state)
-                    ?: throw InvalidObjectException("Remote key and the prevKey should not be null")
-                remoteKey.prevKey
-                    ?: return MediatorResult.Success(endOfPaginationReached = true)
+                remoteKey?.prevKey
+                    ?: return MediatorResult.Success(endOfPaginationReached = remoteKey != null)
             }
             LoadType.APPEND -> {
                 val remoteKey = getRemoteKeyForLastItem(state)
-                    ?: throw InvalidObjectException("Remote key and the nextKey should not be null")
-                remoteKey.nextKey
-                    ?: return MediatorResult.Success(endOfPaginationReached = true)
+                remoteKey?.nextKey
+                    ?: return MediatorResult.Success(endOfPaginationReached = remoteKey != null)
             }
         }
+        Timber.v("page: $pageKey")
 
         return try {
             val apiResponse = remote.getPopularMovies(pageKey)
+            Timber.v("apiResponseResults ${apiResponse.results.size}")
+
             local.cacheResponse(apiResponse, pageKey, loadType == LoadType.REFRESH)
             MediatorResult.Success(endOfPaginationReached = pageKey >= apiResponse.totalPages)
         } catch (exception: IOException) {

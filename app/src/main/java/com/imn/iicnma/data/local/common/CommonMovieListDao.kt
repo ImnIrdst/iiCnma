@@ -6,5 +6,5 @@ import com.imn.iicnma.data.local.movie.MovieEntity
 
 interface CommonMovieListDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAllMovies(remoteKey: List<MovieEntity>)
+    suspend fun insertAllMovies(movies: List<MovieEntity>)
 }

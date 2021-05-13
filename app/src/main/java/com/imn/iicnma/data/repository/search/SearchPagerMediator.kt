@@ -33,12 +33,12 @@ class SearchPagerMediator(
             LoadType.PREPEND -> {
                 val remoteKey = getRemoteKeyForFirstItem(state)
                 remoteKey?.prevKey
-                    ?: return MediatorResult.Success(endOfPaginationReached = true)
+                    ?: return MediatorResult.Success(endOfPaginationReached = remoteKey != null)
             }
             LoadType.APPEND -> {
                 val remoteKey = getRemoteKeyForLastItem(state)
                 remoteKey?.nextKey
-                    ?: return MediatorResult.Success(endOfPaginationReached = true)
+                    ?: return MediatorResult.Success(endOfPaginationReached = remoteKey != null)
             }
         }
 

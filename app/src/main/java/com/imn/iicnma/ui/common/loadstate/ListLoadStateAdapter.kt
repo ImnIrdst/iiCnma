@@ -7,6 +7,7 @@ import androidx.paging.LoadState
 import androidx.paging.LoadStateAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.imn.iicnma.databinding.LayoutPageLoadStateBinding
+import timber.log.Timber
 
 class ListLoadStateAdapter(
     private val retry: () -> Unit
@@ -14,9 +15,11 @@ class ListLoadStateAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, loadState: LoadState) =
         LoadStateViewHolder.create(parent, retry)
+            .also { Timber.v("loadState $loadState") }
 
     override fun onBindViewHolder(holder: LoadStateViewHolder, loadState: LoadState) {
         holder.bind(loadState)
+            .also { Timber.v("loadState: $loadState") }
     }
 
 }
