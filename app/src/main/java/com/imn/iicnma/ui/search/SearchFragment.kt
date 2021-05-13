@@ -77,8 +77,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
 
         postponeEnterTransition()
         recyclerView.apply {
-            adapter = searchAdapter.withLoadStateHeaderAndFooter(
-                header = ListLoadStateAdapter { searchAdapter.retry() },
+            adapter = searchAdapter.withLoadStateFooter(
                 footer = ListLoadStateAdapter { searchAdapter.retry() }
             )
             layoutManager = LinearLayoutManager(requireContext(), VERTICAL, false)

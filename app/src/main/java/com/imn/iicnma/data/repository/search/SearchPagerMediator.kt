@@ -12,8 +12,6 @@ import com.imn.iicnma.domain.model.utils.NetworkError
 import com.imn.iicnma.domain.model.utils.UnknownError
 import java.io.IOException
 
-// TODO this can leverage inheritance
-
 @OptIn(ExperimentalPagingApi::class)
 class SearchPagerMediator(
     private val query: String,
@@ -45,6 +43,7 @@ class SearchPagerMediator(
         return try {
             val apiResponse = remote.searchMovies(query, pageKey)
             local.cacheResponse(apiResponse, pageKey, loadType == LoadType.REFRESH)
+
             MediatorResult.Success(endOfPaginationReached = pageKey >= apiResponse.totalPages)
         } catch (exception: IOException) {
             MediatorResult.Error(UnknownError(exception))
