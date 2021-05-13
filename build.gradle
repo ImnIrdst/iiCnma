@@ -2,14 +2,14 @@
 buildscript {
 
     ext {
-        kotlin_version = "1.4.32"
+        kotlin_version = "1.5.0"
         hilt_version = "2.35.1"
         nav_version = "2.3.5"
     }
 
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
     dependencies {
         classpath "com.android.tools.build:gradle:4.2.0"
@@ -25,10 +25,7 @@ buildscript {
 allprojects {
     repositories {
         google()
-        jcenter()
-        maven {
-            url "https://androidx.dev/snapshots/builds/6543454/artifacts/repository/"
-        }
+        mavenCentral()
     }
 }
 

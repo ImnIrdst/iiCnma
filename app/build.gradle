@@ -12,7 +12,6 @@ localProperties.load(new FileInputStream(rootProject.file("local.properties")))
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "29.0.3"
 
     defaultConfig {
         applicationId "com.imn.iicnma"
