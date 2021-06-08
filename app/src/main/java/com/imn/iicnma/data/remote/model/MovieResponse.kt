@@ -8,7 +8,7 @@ data class MovieResponse(
     @SerializedName("title") val title: String,
     @SerializedName("overview") val overview: String,
     @SerializedName("vote_average") val rate: Float,
-    @SerializedName("release_date") val releaseDate: String, // TODO format date
+    @SerializedName("release_date") val releaseDate: String?, // TODO format date
     @SerializedName("poster_path") val posterPath: String,
     @SerializedName("genres") val genreResponses: List<GenreResponse>,
     @SerializedName("popularity") val popularity: Float,
