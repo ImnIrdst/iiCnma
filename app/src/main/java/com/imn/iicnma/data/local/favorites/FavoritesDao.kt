@@ -2,7 +2,6 @@ package com.imn.iicnma.data.local.favorites
 
 import androidx.paging.PagingSource
 import androidx.room.*
-import com.imn.iicnma.data.local.movie.MovieEntity
 import com.imn.iicnma.data.repository.favorites.FavoritesLocalDataSource
 import kotlinx.coroutines.flow.Flow
 
@@ -17,9 +16,6 @@ interface FavoritesDao : FavoritesLocalDataSource {
 
     @Query("SELECT * FROM favorites WHERE movieId=:id")
     override fun getFavoriteFlow(id: Long): Flow<FavoritesEntity?>
-
-    @Query("SELECT * FROM movies WHERE id=:id")
-    override suspend fun getMovie(id: Long): MovieEntity?
 
     @Transaction
     @Query("SELECT movies.* FROM movies INNER JOIN favorites ON movies.id=favorites.movieId")
