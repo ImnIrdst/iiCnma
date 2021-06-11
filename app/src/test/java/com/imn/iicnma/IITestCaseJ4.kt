@@ -24,5 +24,7 @@ open class IITestCase {
         testScope.uncaughtExceptions.firstOrNull()?.let { throw it }
         unmockkAll()
         Dispatchers.resetMain()
+        td.cleanupTestCoroutines()
+        testScope.cleanupTestCoroutines()
     }
 }

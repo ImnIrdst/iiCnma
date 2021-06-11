@@ -2,7 +2,6 @@ package com.imn.iicnma.data.local.movie
 
 import androidx.test.filters.MediumTest
 import com.google.common.truth.Truth.assertThat
-import com.imn.iicnma.data.repository.movies.MoviesLocalDataSource
 import com.imn.iicnma.utils.IITestCase
 import com.imn.iicnma.utils.movieId
 import com.imn.iicnma.utils.movieItemEntity
@@ -21,7 +20,7 @@ import javax.inject.Inject
 class MovieDaoTest : IITestCase() {
 
     @Inject
-    lateinit var movieDao: MoviesLocalDataSource
+    lateinit var movieDao: MovieDao
 
     @Before
     override fun setUp() = super.setUp()

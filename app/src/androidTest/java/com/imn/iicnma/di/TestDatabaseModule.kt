@@ -3,7 +3,6 @@ package com.imn.iicnma.di
 import android.content.Context
 import androidx.room.Room
 import com.imn.iicnma.data.local.MovieDatabase
-import com.imn.iicnma.data.local.movie.MovieDao
 import com.imn.iicnma.data.repository.favorites.FavoritesLocalDataSource
 import com.imn.iicnma.data.repository.movies.MoviesLocalDataSource
 import com.imn.iicnma.data.repository.popular.PopularMoviesLocalDataSource
@@ -21,9 +20,12 @@ import javax.inject.Singleton
     replaces = [DatabaseModule::class]
 )
 object TestDatabaseModule {
+
     @Provides
     @Singleton
-    fun provideMovieDatabase(@ApplicationContext context: Context): MovieDatabase =
+    fun provideMovieDatabase(
+        @ApplicationContext context: Context
+    ): MovieDatabase =
         Room.inMemoryDatabaseBuilder(
             context.applicationContext,
             MovieDatabase::class.java
@@ -55,7 +57,9 @@ object TestDatabaseModule {
 
     @Provides
     @Singleton
-    fun providesMovieDao(
-        database: MovieDatabase,
-    ): MovieDao = database.moviesDao()
+    fun providesMovieDao(database: MovieDatabase) = database.moviesDao()
+
+    @Provides
+    @Singleton
+    fun providesFavoritesDao(database: MovieDatabase) = database.favoritesDao()
 }

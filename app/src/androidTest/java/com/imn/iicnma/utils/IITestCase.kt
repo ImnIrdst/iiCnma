@@ -26,8 +26,8 @@ open class IITestCase {
 
 
     open fun setUp() {
-        Dispatchers.setMain(td)
         hiltRule.inject()
+        Dispatchers.setMain(td)
     }
 
     open fun tearDown() {
