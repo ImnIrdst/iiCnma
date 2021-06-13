@@ -2,6 +2,7 @@ package com.imn.iicnma.di
 
 import android.content.Context
 import androidx.room.Room
+import com.bumptech.glide.util.Executors
 import com.imn.iicnma.data.local.MovieDatabase
 import com.imn.iicnma.data.repository.favorites.FavoritesLocalDataSource
 import com.imn.iicnma.data.repository.movies.MoviesLocalDataSource
@@ -24,12 +25,16 @@ object TestDatabaseModule {
     @Provides
     @Singleton
     fun provideMovieDatabase(
-        @ApplicationContext context: Context
+        @ApplicationContext context: Context,
     ): MovieDatabase =
         Room.inMemoryDatabaseBuilder(
             context.applicationContext,
-            MovieDatabase::class.java
-        ).allowMainThreadQueries().build()
+            MovieDatabase::class.java,
+        )
+            .allowMainThreadQueries()
+            .setTransactionExecutor(Executors.mainThreadExecutor())
+            .setQueryExecutor(Executors.mainThreadExecutor())
+            .build()
 
     @Provides
     @Singleton
@@ -62,4 +67,9 @@ object TestDatabaseModule {
     @Provides
     @Singleton
     fun providesFavoritesDao(database: MovieDatabase) = database.favoritesDao()
+
+    @Provides
+    @Singleton
+    fun providesPopularDao(database: MovieDatabase) = database.popularMoviesDao()
+
 }

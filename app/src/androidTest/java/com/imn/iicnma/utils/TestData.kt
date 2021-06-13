@@ -11,10 +11,13 @@ val unknownHostException = UnknownHostException()
 
 val pagedListResponse: MoviePagedListResponse =
     Gson().fromJson(pagedListJson, MoviePagedListResponse::class.java)
-val movieEntityList = pagedListResponse.toMovieEntityList()
+val page1Response: MoviePagedListResponse =
+    Gson().fromJson(page1Json, MoviePagedListResponse::class.java)
+val page2Response: MoviePagedListResponse =
+    Gson().fromJson(page2Json, MoviePagedListResponse::class.java)
 
-val movieItemEntity = movieEntityList[0]
-val movieItemEntity2 = movieEntityList[1]
+val movieItemEntity = page1Response.toMovieEntityList()[0]
+val movieItemEntity2 = page2Response.toMovieEntityList()[0]
 val movieItem = movieItemEntity.toMovie()
 
 val favoriteItemEntity = FavoritesEntity(movieItemEntity.id)
@@ -22,6 +25,9 @@ val favoriteItemEntity2 = FavoritesEntity(movieItemEntity2.id)
 
 val favoriteRelation = FavoriteMovieRelation(movieItemEntity, favoriteItemEntity)
 val favoriteRelation2 = FavoriteMovieRelation(movieItemEntity2, favoriteItemEntity2)
+
+//val popularMovie = PopularMovieKeysEntity(movieItemEntity.id, null, 1, 2)
+//val popularMovie2 = PopularMovieKeysEntity(movieItemEntity2.id, 1, 2, null)
 
 val movieDetailResponse: MovieResponse = Gson().fromJson(movieDetailJson, MovieResponse::class.java)
 val movieDetailEntity = movieDetailResponse.toMovieEntity()

@@ -178,3 +178,62 @@ val pagedListJson = """{
   ]
 }
 """.trimIndent()
+
+@Language("JSON")
+val page1Json = """{
+  "total_results": 10000,
+  "page": 1,
+  "total_pages": 500,
+  "results": [
+    {
+      "release_date": "2020-10-01",
+      "adult": false,
+      "backdrop_path": "/5UkzNSOK561c2QRy2Zr4AkADzLT.jpg",
+      "vote_count": 356,
+      "genre_ids": [
+        878,
+        53,
+        18
+      ],
+      "id": 528085,
+      "original_language": "en",
+      "original_title": "2067",
+      "poster_path": "/7D430eqZj8y3oVkLFfsWXGRcpEG.jpg",
+      "title": "2067",
+      "video": false,
+      "vote_average": 4.8,
+      "popularity": 1545.946,
+      "overview": "A lowly utility worker is called to the future by a mysterious radio signal, he must leave his dying wife to embark on a journey that will force him to face his deepest fears in an attempt to change the fabric of reality and save humankind from its greatest environmental crisis yet."
+    }
+  ]
+}
+""".trimIndent()
+
+@Language("JSON")
+val page2Json = """{
+  "total_results": 10000,
+  "page": 2,
+  "total_pages": 500,
+  "results": [
+    {
+      "release_date": "2020-10-23",
+      "adult": false,
+      "backdrop_path": "/86L8wqGMDbwURPni2t7FQ0nDjsH.jpg",
+      "id": 724989,
+      "genre_ids": [
+        28,
+        53
+      ],
+      "overview": "The work of billionaire tech CEO Donovan Chalmers is so valuable that he hires mercenaries to protect it, and a terrorist group kidnaps his daughter just to get it.",
+      "original_language": "en",
+      "original_title": "Hard Kill",
+      "poster_path": "/ugZW8ocsrfgI95pnQ7wrmKDxIe.jpg",
+      "title": "Hard Kill",
+      "video": false,
+      "vote_average": 5,
+      "popularity": 1316.819,
+      "vote_count": 163
+    }
+  ]
+}
+""".trimIndent()

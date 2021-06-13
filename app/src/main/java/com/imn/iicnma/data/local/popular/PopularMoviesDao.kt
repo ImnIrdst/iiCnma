@@ -33,6 +33,7 @@ interface PopularMoviesDao : CommonMovieListDao, PopularMoviesLocalDataSource {
         pageKey: Int,
         isRefresh: Boolean,
     ) {
+        println("imnimn here 11")
         if (isRefresh) {
             clearRemoteKeys()
         }
@@ -41,5 +42,6 @@ interface PopularMoviesDao : CommonMovieListDao, PopularMoviesLocalDataSource {
         val keys = response.results.map { PopularMovieKeysEntity(it.id, prevKey, pageKey, nextKey) }
         insertAll(keys)
         insertAllMovies(response.toMovieEntityList())
+        println("imnimn here 12")
     }
 }
