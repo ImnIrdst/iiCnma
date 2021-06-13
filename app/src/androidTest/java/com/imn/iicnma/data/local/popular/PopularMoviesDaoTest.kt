@@ -3,7 +3,6 @@ package com.imn.iicnma.data.local.popular
 import androidx.paging.PagingSource
 import androidx.test.filters.MediumTest
 import com.google.common.truth.Truth.assertThat
-import com.imn.iicnma.data.local.movie.MovieDao
 import com.imn.iicnma.utils.*
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -23,14 +22,11 @@ class PopularMoviesDaoTest : IITestCase() {
     @Inject
     lateinit var popularMoviesDao: PopularMoviesDao
 
-    @Inject
-    lateinit var movieDao: MovieDao
-
     @Before
     override fun setUp() = super.setUp()
 
     @Test
-    fun insertDeleteAndRetrieveTest() = td.runBlockingTest {
+    fun insertAndRetrieveTest() = td.runBlockingTest {
 
         val latch = CountDownLatch(1)
         val job = testScope.launch {

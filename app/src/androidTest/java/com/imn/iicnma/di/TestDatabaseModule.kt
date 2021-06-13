@@ -72,4 +72,8 @@ object TestDatabaseModule {
     @Singleton
     fun providesPopularDao(database: MovieDatabase) = database.popularMoviesDao()
 
+    @Provides
+    @Singleton
+    fun providesSearchDao(database: MovieDatabase) = database.searchDao()
+
 }

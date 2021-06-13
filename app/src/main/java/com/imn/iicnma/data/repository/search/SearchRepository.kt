@@ -14,8 +14,7 @@ class SearchRepository @Inject constructor(
 
     @OptIn(ExperimentalPagingApi::class)
     fun search(query: String): Flow<PagingData<Movie>> {
-        val dbQuery = "%${query.replace(' ', '%')}%"
-        val pagingSourceFactory = { local.searchMovies(dbQuery) }
+        val pagingSourceFactory = { local.searchMovies(query.toSearchQuery()) }
 
         return Pager(
             config = PagingConfig(pageSize = NETWORK_PAGE_SIZE, enablePlaceholders = false),
@@ -24,5 +23,9 @@ class SearchRepository @Inject constructor(
         ).flow.map { pagingData ->
             pagingData.map { it.toMovie() }
         }
+    }
+
+    companion object {
+        fun String.toSearchQuery() = "%${this.replace(' ', '%')}%"
     }
 }
