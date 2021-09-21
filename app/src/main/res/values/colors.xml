@@ -2,7 +2,7 @@
 <resources>
     <color name="orange_200">#ffc947</color>
     <color name="orange_500">#ff9800</color>
-    <color name="orange_700">#c66900</color>
+    <color name="orange_700">#F57C00</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="ripple_color">#7F717171</color>
