@@ -3,7 +3,7 @@ buildscript {
 
     ext {
         kotlin_version = "1.5.31"
-        hilt_version = "2.36"
+        hilt_version = "2.40.4"
         nav_version = "2.3.5"
     }
 
